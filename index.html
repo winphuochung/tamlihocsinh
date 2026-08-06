@@ -284,8 +284,17 @@
           <div class="chat-box">
             <div class="chat-messages" id="chat-messages">
               <div class="chat-bubble bot">
-                👋 Chào em! Xin tự giới thiệu, tớ là Trợ lý AI Tư vấn Tâm lý của Trường THCS Phước Hưng. Tớ ở đây để lắng nghe mọi lo lắng, tâm sự hay câu hỏi của em một cách hoàn toàn riêng tư. Em đang cảm thấy thế nào hôm nay? 🌿
+                👋 Chào em! Tớ là Trợ Lý AI Tư Vấn Tâm Lý Học Đường của Trường THCS Phước Hưng. Tớ ở đây để lắng nghe, thấu cảm và cùng em giải quyết những khó khăn tâm lý một cách <strong>hoàn toàn riêng tư và bảo mật</strong>. Em hãy chọn hoặc gõ điều em đang trăn trở nhé! 🌿
               </div>
+            </div>
+
+            <!-- QUICK SUGGESTION CHIPS -->
+            <div style="padding: 10px 16px; background: #FFFFFF; border-top: 1px solid #F0EBFA; display: flex; gap: 8px; overflow-x: auto; flex-wrap: wrap;">
+              <button class="btn-clay-secondary" style="font-size: 11px; padding: 6px 12px;" onclick="sendQuickQuery('Tớ bị áp lực học tập và thi cử quá')">📚 Áp lực thi cử</button>
+              <button class="btn-clay-secondary" style="font-size: 11px; padding: 6px 12px;" onclick="sendQuickQuery('Tớ bị bạn bắt nạt và đe dọa ở trường')">🛡️ Bị bắt nạt ở trường</button>
+              <button class="btn-clay-secondary" style="font-size: 11px; padding: 6px 12px;" onclick="sendQuickQuery('Có người đăng ảnh xấu và chửi tớ trên Facebook')">🌐 Bắt nạt trên mạng</button>
+              <button class="btn-clay-secondary" style="font-size: 11px; padding: 6px 12px;" onclick="sendQuickQuery('Làm sao để bơi an toàn vùng sông nước Nhơn Hội?')">🏊 An toàn sông nước</button>
+              <button class="btn-clay-secondary" style="font-size: 11px; padding: 6px 12px;" onclick="sendQuickQuery('Tớ thấy buồn và cô đơn quá')">💖 Cảm thấy cô đơn</button>
             </div>
 
             <div class="chat-input-area">
