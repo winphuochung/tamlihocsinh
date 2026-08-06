@@ -1,0 +1,16 @@
+{
+  "name": "tamlihocsinh-thcs-phuochung",
+  "version": "1.0.0",
+  "description": "Hệ thống Tư vấn Tâm lý Học sinh THCS Phước Hưng - Cô Nguyễn Thị Ngọc Nga",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
@@ -16,6 +15,13 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server Tư vấn Tâm lý THCS Phước Hưng đang chạy tại: http://localhost:${PORT}`);
-});
+// Chạy server khi ở môi trường Local (không ở Vercel Serverless)
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server đang chạy tại http://localhost:${PORT}`);
+  });
+}
+
+// Xuất app để Vercel Serverless Function gọi trực tiếp
+module.exports = app;
