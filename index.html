@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tư Vấn Tâm Lý Học Sinh - THCS Phước Hưng An Giang</title>
+  <meta name="description" content="Trang web tư vấn tâm lý ẩn danh, phòng chống bạo lực học đường, đuối nước và bắt nạt trên không gian mạng của Liên Đội Trường THCS Phước Hưng, Cô Nguyễn Thị Ngọc Nga.">
+  <link rel="stylesheet" href="css/claymorphic-theme.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- LEFT SIDEBAR (Matching Layout Image 2) -->
+    <aside class="sidebar">
+      <div>
+        <div class="profile-card">
+          <div class="avatar-3d">🏫</div>
+          <div class="profile-info">
+            <h3>THCS Phước Hưng</h3>
+            <p>Liên Đội Nhơn Hội</p>
+          </div>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item active" onclick="switchTab('dashboard')">
+            <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+            <span>Trang Chủ</span>
+          </li>
+          <li class="nav-item" onclick="switchTab('games')">
+            <span class="nav-icon"><i class="fa-solid fa-gamepad"></i></span>
+            <span>Trò Chơi Kỹ Năng</span>
+          </li>
+          <li class="nav-item" onclick="switchTab('ai-counselor')">
+            <span class="nav-icon"><i class="fa-solid fa-robot"></i></span>
+            <span>Tư Vấn AI 24/7</span>
+          </li>
+          <li class="nav-item" onclick="switchTab('booking')">
+            <span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span>
+            <span>Hẹn Gặp Cô TPT</span>
+          </li>
+          <li class="nav-item" onclick="switchTab('lookup')">
+            <span class="nav-icon"><i class="fa-solid fa-key"></i></span>
+            <span>Tra Cứu Bí Mật</span>
+          </li>
+          <li class="nav-item" onclick="switchTab('resources')">
+            <span class="nav-icon"><i class="fa-solid fa-book-open-reader"></i></span>
+            <span>Thư Viện Tâm Lý</span>
+          </li>
+          <li class="nav-item" onclick="window.location.href='admin.html'">
+            <span class="nav-icon"><i class="fa-solid fa-user-shield"></i></span>
+            <span>Cổng Giáo Viên</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer-card">
+        <div class="bunny-icon">🌿🐰</div>
+        <p>"Mỗi ngày một niềm vui nhỏ, bạn luôn được yêu thương & bảo vệ!"</p>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-wrapper">
+      
+      <!-- TOP HEADER BAR -->
+      <header class="top-bar">
+        <div class="greeting-text">
+          <h1>Chào mừng em đến Trạm Trú Ẩn An Toàn! ☁️</h1>
+          <p>TPT Đội: Cô Nguyễn Thị Ngọc Nga • Đồng hành cùng học sinh THCS Phước Hưng</p>
+        </div>
+
+        <div class="top-bar-actions">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+            <input type="text" placeholder="Tìm trò chơi, bài viết...">
+          </div>
+          <button class="icon-btn">
+            <i class="fa-solid fa-bell" style="color: var(--primary-lavender);"></i>
+            <span class="badge-dot"></span>
+          </button>
+          <div class="avatar-3d" style="width:40px; height:40px; font-size:20px;">🌸</div>
+        </div>
+      </header>
+
+      <!-- TAB 1: DASHBOARD OVERVIEW -->
+      <section id="tab-dashboard" class="tab-view active">
+        <!-- 4 TOP STAT CARDS -->
+        <div class="dashboard-grid">
+          <div class="stat-card">
+            <div class="stat-icon-box" style="background: var(--primary-pink-light); color: var(--primary-pink);">🎮</div>
+            <div class="stat-info">
+              <div class="number" id="stat-games">5/5</div>
+              <div class="label">Thử Thách Kỹ Năng</div>
+              <div class="trend positive">✦ Hoàn toàn miễn phí</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-box" style="background: var(--primary-lavender-light); color: var(--primary-lavender);">🤖</div>
+            <div class="stat-info">
+              <div class="number">24/7</div>
+              <div class="label">Trợ Lý AI Thấu Cảm</div>
+              <div class="trend positive">✦ Phản hồi tức thì</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-box" style="background: var(--primary-mint-light); color: var(--primary-mint);">🔒</div>
+            <div class="stat-info">
+              <div class="number">100%</div>
+              <div class="label">Bảo Mật Ẩn Danh</div>
+              <div class="trend positive">✦ Không sợ dán nhãn</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-box" style="background: var(--primary-yellow-light); color: var(--primary-yellow);">👩‍🏫</div>
+            <div class="stat-info">
+              <div class="number">Cô Ngô Nga</div>
+              <div class="label">Giáo Viên TPT Đội</div>
+              <div class="trend pink">✦ Sẵn sàng lắng nghe</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px;" class="content-grid">
+          <!-- MAIN GAMES BANNER & QUICK ACTIONS -->
+          <div class="card-section">
+            <div class="card-header">
+              <h2><i class="fa-solid fa-shield-cat" style="color: var(--primary-pink);"></i> Trò Chơi Kỹ Năng Nổi Bật</h2>
+              <button class="btn-clay-secondary" onclick="switchTab('games')">Xem Tất Cả ➔</button>
+            </div>
+
+            <div class="games-grid">
+              <div class="game-card" onclick="startGame('school_violence')">
+                <div class="game-card-icon">🛡️</div>
+                <h3>Phòng Chống Bạo Lực</h3>
+                <p>Nhận biết và xử lý thông minh các tình huống xung đột học đường.</p>
+                <span class="btn-clay-secondary">Chơi Ngay 🎮</span>
+              </div>
+
+              <div class="game-card" onclick="startGame('cyberbullying')">
+                <div class="game-card-icon">🌐</div>
+                <h3>Bắt Nạt Mạng (Cyber)</h3>
+                <p>Kỹ năng bảo vệ bản thân trước bình luận tiêu cực & tin đồn trực tuyến.</p>
+                <span class="btn-clay-secondary">Chơi Ngay 🎮</span>
+              </div>
+
+              <div class="game-card" onclick="startGame('drowning_prevention')">
+                <div class="game-card-icon">🏊</div>
+                <h3>Phòng Chống Đuối Nước</h3>
+                <p>Kỹ năng an toàn vùng sông nước An Giang & ứng phó tai nạn thương tích.</p>
+                <span class="btn-clay-secondary">Chơi Ngay 🎮</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px; background: linear-gradient(135deg, #FFF6E5 0%, #FFEBEF 100%); padding: 20px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <h3 style="font-size: 16px; font-weight: 800; color: #D97706; margin-bottom: 4px;">Em đang gặp thắc mắc hay lo âu? 💌</h3>
+                <p style="font-size: 13px; color: #78350F;">Hãy gửi lời nhắn bí mật tới Cô Nguyễn Thị Ngọc Nga. Không ai biết em là ai!</p>
+              </div>
+              <button class="btn-clay" onclick="switchTab('booking')">Đặt Lịch Ẩn Danh ✍️</button>
+            </div>
+          </div>
+
+          <!-- RIGHT SIDEBAR WIDGETS -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <!-- CALENDAR MINI WIDGET -->
+            <div class="card-section">
+              <div class="card-header">
+                <h2><i class="fa-solid fa-calendar-day" style="color: var(--primary-lavender);"></i> Lịch Tư Vấn Tuần Này</h2>
+              </div>
+              <div class="calendar-mini">
+                <div class="calendar-header">
+                  <span>Tháng 8, 2026</span>
+                  <span style="color: var(--primary-lavender);">THCS Phước Hưng</span>
+                </div>
+                <div class="calendar-days">
+                  <div class="calendar-day-head">T2</div>
+                  <div class="calendar-day-head">T3</div>
+                  <div class="calendar-day-head">T4</div>
+                  <div class="calendar-day-head">T5</div>
+                  <div class="calendar-day-head">T6</div>
+                  <div class="calendar-day-head">T7</div>
+                  <div class="calendar-day-head">CN</div>
+
+                  <div class="calendar-day-num">3</div>
+                  <div class="calendar-day-num">4</div>
+                  <div class="calendar-day-num has-event">5</div>
+                  <div class="calendar-day-num active">6</div>
+                  <div class="calendar-day-num has-event">7</div>
+                  <div class="calendar-day-num">8</div>
+                  <div class="calendar-day-num">9</div>
+                </div>
+              </div>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px; text-align: center;">
+                <span style="color: var(--primary-pink);">●</span> Có lịch tiếp nhận tư vấn trực tiếp
+              </p>
+            </div>
+
+            <!-- ANONYMOUS LOOKUP WIDGET -->
+            <div class="card-section" style="background: linear-gradient(135deg, #F0EBFA 0%, #E2DBF8 100%);">
+              <h3 style="font-size: 15px; font-weight: 800; color: var(--primary-lavender); margin-bottom: 8px;">🔑 Em đã có Mã Tra Cứu?</h3>
+              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Nhập mã bí mật để xem Cô Ngọc Nga đã trả lời chưa nhé!</p>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="quick-lookup-code" class="form-control" placeholder="Ví dụ: PH-8839" style="font-size: 12px; text-transform: uppercase;">
+                <button class="btn-clay" onclick="quickLookup()">Tra cứu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: GAMIFIED SCENARIOS -->
+      <section id="tab-games" class="tab-view">
+        <div class="card-section">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-gamepad" style="color: var(--primary-pink);"></i> Trò Chơi Kỹ Năng Tương Tác</h2>
+            <p style="font-size: 13px; color: var(--text-muted);">Vừa chơi vừa rèn luyện kỹ năng ứng phó tình huống thực tế</p>
+          </div>
+
+          <div class="games-grid">
+            <div class="game-card" onclick="startGame('school_violence')">
+              <div class="game-card-icon">🛡️</div>
+              <h3>1. Phòng Chống Bạo Lực Học Đường</h3>
+              <p>Học cách hóa giải mâu thuẫn, từ chối tham gia xô xát và tìm sự trợ giúp an toàn.</p>
+              <button class="btn-clay-secondary">Chơi Thử Thách 🎯</button>
+            </div>
+
+            <div class="game-card" onclick="startGame('cyberbullying')">
+              <div class="game-card-icon">🌐</div>
+              <h3>2. Phòng Chống Bắt Nạt Mạng</h3>
+              <p>Ứng phó khi bị nói xấu trực tuyến, bảo mật tài khoản mạng xã hội.</p>
+              <button class="btn-clay-secondary">Chơi Thử Thách 🎯</button>
+            </div>
+
+            <div class="game-card" onclick="startGame('child_abuse')">
+              <div class="game-card-icon">🦺</div>
+              <h3>3. Phòng Chống Xâm Hại Trẻ Em</h3>
+              <p>Quy tắc 5 ngón tay bảo vệ cơ thể, nhận diện hành vi nguy hiểm.</p>
+              <button class="btn-clay-secondary">Chơi Thử Thách 🎯</button>
+            </div>
+
+            <div class="game-card" onclick="startGame('drowning_prevention')">
+              <div class="game-card-icon">🏊</div>
+              <h3>4. Phòng Chống Đuối Nước & Thương Tích</h3>
+              <p>Kỹ năng sông nước an toàn tại xã Nhơn Hội, An Giang & sơ cứu tai nạn.</p>
+              <button class="btn-clay-secondary">Chơi Thử Thách 🎯</button>
+            </div>
+
+            <div class="game-card" onclick="startGame('mental_health')">
+              <div class="game-card-icon">💖</div>
+              <h3>5. Giải Tỏa Áp Lực Học Tập</h3>
+              <p>Phương pháp điều hòa cảm xúc, giải tỏa căng thẳng trước kỳ thi.</p>
+              <button class="btn-clay-secondary">Chơi Thử Thách 🎯</button>
+            </div>
+          </div>
+
+          <!-- GAME PLAY MODAL / CONTAINER -->
+          <div id="game-container" style="display: none; margin-top: 24px; background: #FFFFFF; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-clay); border: 3px solid var(--primary-lavender-light);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 id="game-title" style="font-size: 18px; font-weight: 800; color: var(--primary-lavender);">Tên Trò Chơi</h3>
+              <button class="btn-clay-secondary" onclick="closeGame()">X Thoát Trò Chơi</button>
+            </div>
+
+            <div id="game-body">
+              <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.5;"></p>
+              <div id="game-options" style="display: flex; flex-direction: column; gap: 12px;"></div>
+              <div id="game-feedback" style="margin-top: 20px; padding: 16px; border-radius: var(--radius-md); display: none;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: AI COUNSELOR 24/7 -->
+      <section id="tab-ai-counselor" class="tab-view">
+        <div class="card-section">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-robot" style="color: var(--primary-lavender);"></i> Trợ Lý AI Tư Vấn Tâm Lý 24/7</h2>
+            <span class="badge-status badge-approved">● Trực tuyến - Thấu cảm & Bí mật</span>
+          </div>
+
+          <div class="chat-box">
+            <div class="chat-messages" id="chat-messages">
+              <div class="chat-bubble bot">
+                👋 Chào em! Xin tự giới thiệu, tớ là Trợ lý AI Tư vấn Tâm lý của Trường THCS Phước Hưng. Tớ ở đây để lắng nghe mọi lo lắng, tâm sự hay câu hỏi của em một cách hoàn toàn riêng tư. Em đang cảm thấy thế nào hôm nay? 🌿
+              </div>
+            </div>
+
+            <div class="chat-input-area">
+              <input type="text" id="chat-input" placeholder="Nhập tâm sự hoặc câu hỏi của em ở đây..." onkeypress="handleChatKeyPress(event)">
+              <button class="btn-clay" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i> Gửi</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: ANONYMOUS DIRECT BOOKING WITH TEACHER NGA -->
+      <section id="tab-booking" class="tab-view">
+        <div class="card-section" style="max-width: 720px; margin: 0 auto;">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-calendar-plus" style="color: var(--primary-pink);"></i> Đăng Ký Gặp Trực Tiếp Cô TPT</h2>
+          </div>
+          
+          <div style="background: var(--primary-pink-light); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; color: var(--primary-pink); font-size: 13px; font-weight: 600;">
+            🔒 <strong>Bảo mật 100%:</strong> Em KHÔNG cần nhập họ tên hay SĐT. Sau khi đăng ký, hệ thống sẽ tự động cấp một <strong>Mã Bí Mật</strong> duy nhất để em tra cứu câu trả lời của Cô Nguyễn Thị Ngọc Nga.
+          </div>
+
+          <form id="anonymous-form" onsubmit="handleAnonymousBooking(event)">
+            <div class="form-group">
+              <label>1. Chủ đề em muốn tư vấn / chia sẻ:</label>
+              <select id="book-topic" class="form-control" required>
+                <option value="Phòng chống Bạo lực học đường">🛡️ Phòng chống Bạo lực học đường</option>
+                <option value="Phòng chống Bắt nạt không gian mạng">🌐 Phòng chống Bắt nạt không gian mạng</option>
+                <option value="Phòng chống Tai nạn thương tích & Đuối nước">🏊 Phòng chống Tai nạn thương tích & Đuối nước</option>
+                <option value="Phòng chống Xâm hại trẻ em">🦺 Phòng chống Xâm hại trẻ em</option>
+                <option value="Áp lực học tập & Thi cử">📚 Áp lực học tập & Thi cử</option>
+                <option value="Mâu thuẫn bạn bè / Gia đình">🤝 Mâu thuẫn bạn bè / Gia đình</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>2. Em đang là học sinh Khối lớp nào?</label>
+              <select id="book-grade" class="form-control" required>
+                <option value="Khối 6">Khối 6</option>
+                <option value="Khối 7">Khối 7</option>
+                <option value="Khối 8">Khối 8</option>
+                <option value="Khối 9">Khối 9</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>3. Ngày em muốn gặp Cô Nguyễn Thị Ngọc Nga:</label>
+              <input type="date" id="book-date" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label>4. Giờ hẹn mong muốn (Giờ ra chơi hoặc sau buổi học):</label>
+              <input type="text" id="book-time" class="form-control" placeholder="Ví dụ: Giờ ra chơi buổi sáng (9:15 - 9:30)" required>
+            </div>
+
+            <div class="form-group">
+              <label>5. Nội dung em muốn tâm sự hoặc nhờ cô tư vấn hỗ trợ:</label>
+              <textarea id="book-content" class="form-control" rows="4" placeholder="Hãy viết thoải mái những lo âu, hoàn cảnh hoặc câu hỏi của em nhé..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-clay" style="width: 100%; justify-content: center; padding: 14px; font-size: 15px;">
+              <i class="fa-solid fa-lock"></i> Gửi Yêu Cầu Ẩn Danh & Lấy Mã Bí Mật
+            </button>
+          </form>
+
+          <!-- SECRET RESULT DISPLAY -->
+          <div id="booking-success-card" style="display: none;" class="secret-code-box">
+            <h3 style="color: var(--text-main); font-size: 18px;">✅ Đăng Ký Thành Công!</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Đây là <strong>Mã Tra Cứu Bí Mật</strong> duy nhất của em. Hãy lưu lại mã này nhé!</p>
+            <div class="secret-code-value" id="generated-secret-code">PH-8839-X</div>
+            <p style="font-size: 12px; color: var(--primary-pink); font-weight: 700;">⚠️ Em hãy chụp màn hình hoặc ghi lại mã này để tra cứu kết quả từ Cô Nga!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: SECRET LOOKUP VIEW -->
+      <section id="tab-lookup" class="tab-view">
+        <div class="card-section" style="max-width: 640px; margin: 0 auto;">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-key" style="color: var(--primary-lavender);"></i> Tra Cứu Phản Hồi Bí Mật Từ Cô TPT</h2>
+          </div>
+
+          <div class="form-group">
+            <label>Nhập Mã Bí Mật Của Em (Ví dụ: PH-9821):</label>
+            <div style="display: flex; gap: 10px;">
+              <input type="text" id="lookup-input-code" class="form-control" placeholder="PH-XXXX" style="font-size: 16px; font-weight: 700; text-transform: uppercase;">
+              <button class="btn-clay" onclick="executeLookup()">Tra Cứu</button>
+            </div>
+          </div>
+
+          <div id="lookup-result-area" style="margin-top: 20px; display: none;"></div>
+        </div>
+      </section>
+
+      <!-- TAB 6: MENTAL HEALTH RESOURCES -->
+      <section id="tab-resources" class="tab-view">
+        <div class="card-section">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-book-open-reader" style="color: var(--primary-mint);"></i> Thư Viện Kỹ Năng Sống & Tâm Lý</h2>
+          </div>
+
+          <div class="games-grid">
+            <div class="game-card" style="text-align: left;">
+              <div style="font-size: 32px; margin-bottom: 8px;">🏊‍♂️</div>
+              <span class="badge-status badge-approved">An toàn sông nước</span>
+              <h3 style="margin-top: 8px;">Cẩm nang An toàn Phòng chống Đuối nước An Giang</h3>
+              <p>Các nguyên tắc sinh tồn khi hoạt động gần vùng sông nước, cách dùng phao cứu sinh tự chế.</p>
+              <p style="font-size: 11px; color: var(--primary-lavender); font-weight: 700;">Tác giả: Cô Nguyễn Thị Ngọc Nga</p>
+            </div>
+
+            <div class="game-card" style="text-align: left;">
+              <div style="font-size: 32px; margin-bottom: 8px;">🛡️</div>
+              <span class="badge-status badge-pending">Kỹ năng ứng xử</span>
+              <h3 style="margin-top: 8px;">Xử Lý Khi Bị Bắt Nạt Trực Tuyến</h3>
+              <p>Cách chụp màn hình bằng chứng, chặn tài khoản xấu và nhờ sự can thiệp của nhà trường.</p>
+              <p style="font-size: 11px; color: var(--primary-lavender); font-weight: 700;">Tác giả: Liên Đội THCS Phước Hưng</p>
+            </div>
+
+            <div class="game-card" style="text-align: left;">
+              <div style="font-size: 32px; margin-bottom: 8px;">🧘‍♀️</div>
+              <span class="badge-status badge-completed">Sức khỏe tinh thần</span>
+              <h3 style="margin-top: 8px;">5 Bài Tập Thở Giúp Giảm Căng Thắng Thi Cử</h3>
+              <p>Phương pháp hít thở sâu 4-7-8 cân bằng cảm xúc chỉ trong 3 phút trước khi bước vào phòng thi.</p>
+              <p style="font-size: 11px; color: var(--primary-lavender); font-weight: 700;">Tác giả: Chuyên gia Tâm lý Học đường</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/games-engine.js"></script>
+  <script src="js/ai-chat.js"></script>
+  <script src="js/anonymous-booking.js"></script>
+</body>
+</html>

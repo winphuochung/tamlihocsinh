@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Tư Vấn & CSDL - THCS Phước Hưng</title>
+  <link rel="stylesheet" href="css/claymorphic-theme.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- LOGIN LOCK SCREEN FOR TEACHER NGA -->
+  <div id="admin-login-modal" style="position: fixed; inset: 0; background: rgba(52, 46, 72, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div style="background: #FFFFFF; width: 420px; padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-clay); text-align: center;">
+      <div class="avatar-3d" style="width: 72px; height: 72px; font-size: 36px; margin: 0 auto 16px;">👩‍🏫</div>
+      <h2 style="font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Cổng Quản Lý Giáo Viên TPT</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;">Giáo viên Tổng phụ trách: <strong>Cô Nguyễn Thị Ngọc Nga</strong></p>
+
+      <div class="form-group" style="text-align: left;">
+        <label>Tên tài khoản:</label>
+        <input type="text" id="admin-username" class="form-control" value="nguyenthithuongnga" readonly>
+      </div>
+
+      <div class="form-group" style="text-align: left;">
+        <label>Mật khẩu quản trị:</label>
+        <input type="password" id="admin-password" class="form-control" value="123456" placeholder="Nhập mật khẩu...">
+      </div>
+
+      <button class="btn-clay" style="width: 100%; justify-content: center; padding: 12px;" onclick="authenticateAdmin()">
+        <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Quản Trị
+      </button>
+
+      <p style="font-size: 11px; color: var(--text-light); margin-top: 16px;">THCS Phước Hưng - Xã Nhơn Hội - Tỉnh An Giang</p>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div>
+        <div class="profile-card">
+          <div class="avatar-3d">👩‍🏫</div>
+          <div class="profile-info">
+            <h3>Cô Ngọc Nga</h3>
+            <p>TPT Đội THCS Phước Hưng</p>
+          </div>
+        </div>
+
+        <ul class="nav-menu">
+          <li class="nav-item active" onclick="switchAdminTab('bookings')">
+            <span class="nav-icon"><i class="fa-solid fa-list-check"></i></span>
+            <span>Duyệt Lịch Hẹn Ẩn Danh</span>
+          </li>
+          <li class="nav-item" onclick="switchAdminTab('analytics')">
+            <span class="nav-icon"><i class="fa-solid fa-chart-pie"></i></span>
+            <span>Thống Kê & Báo Cáo</span>
+          </li>
+          <li class="nav-item" onclick="switchAdminTab('database')">
+            <span class="nav-icon"><i class="fa-solid fa-database"></i></span>
+            <span>Xuất Cơ Sở Dữ Liệu</span>
+          </li>
+          <li class="nav-item" onclick="window.location.href='index.html'">
+            <span class="nav-icon"><i class="fa-solid fa-arrow-left"></i></span>
+            <span>Trở Về Trang Học Sinh</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer-card">
+        <div class="bunny-icon">📊🏫</div>
+        <p>Hệ thống CSDL Bảo mật & Theo dõi Tư vấn Tâm lý Học đường</p>
+      </div>
+    </aside>
+
+    <!-- MAIN ADMIN CONTENT -->
+    <main class="main-wrapper">
+      <header class="top-bar">
+        <div class="greeting-text">
+          <h1>Hệ Thống Quản Lý & Xuất Cơ Sở Dữ Liệu 📋</h1>
+          <p>Trường THCS Phước Hưng • Xã Nhơn Hội, Tỉnh An Giang</p>
+        </div>
+
+        <div class="top-bar-actions">
+          <button class="btn-clay-secondary" onclick="exportFullDatabase('excel')">
+            <i class="fa-solid fa-file-excel"></i> Xuất Excel / CSV
+          </button>
+          <button class="btn-clay" onclick="logoutAdmin()">Đăng Xuất</button>
+        </div>
+      </header>
+
+      <!-- ADMIN TAB 1: DUYỆT LỊCH HẸN ẨN DANH -->
+      <section id="admin-tab-bookings" class="tab-view active">
+        <div class="card-section">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-clipboard-list" style="color: var(--primary-lavender);"></i> Danh Sách Lịch Hẹn Tư Vấn Ẩn Danh</h2>
+            <div>
+              <span class="badge-status badge-pending" id="count-pending">Chờ duyệt: 0</span>
+              <span class="badge-status badge-completed" id="count-completed">Đã tiếp nhận: 0</span>
+            </div>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Mã Tra Cứu</th>
+                  <th>Chủ Đề</th>
+                  <th>Khối</th>
+                  <th>Ngày/Giờ Hẹn</th>
+                  <th>Nội Dung Tâm Sự</th>
+                  <th>Trạng Thái</th>
+                  <th>Hành Động Cô Nga</th>
+                </tr>
+              </thead>
+              <tbody id="admin-booking-tbody">
+                <!-- Dynamic items rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN TAB 2: THỐNG KÊ & BÁO CÁO -->
+      <section id="admin-tab-analytics" class="tab-view">
+        <div class="dashboard-grid" style="margin-bottom: 20px;">
+          <div class="stat-card">
+            <div class="stat-icon-box" style="background: var(--primary-lavender-light); color: var(--primary-lavender);">📩</div>
+            <div class="stat-info">
+              <div class="number" id="analytic-total-bookings">18</div>
+              <div class="label">Tổng Lịch Hẹn Đã Nhận</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-box" style="background: var(--primary-pink-light); color: var(--primary-pink);">🛡️</div>
+            <div class="stat-info">
+              <div class="number">42%</div>
+              <div class="label">Chủ đề Bạo Lực & Mạng</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-box" style="background: var(--primary-mint-light); color: var(--primary-mint);">🏊</div>
+            <div class="stat-info">
+              <div class="number">35%</div>
+              <div class="label">Chủ đề Đuối Nước</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-box" style="background: var(--primary-yellow-light); color: var(--primary-yellow);">⭐</div>
+            <div class="stat-info">
+              <div class="number">124</div>
+              <div class="label">Lượt Chơi Game Kỹ Năng</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-chart-column" style="color: var(--primary-pink);"></i> Biểu Đồ Thống Kê Theo Chủ Đề Tâm Lý (Học Sinh THCS Phước Hưng)</h2>
+          </div>
+          
+          <div style="background: var(--bg-card-alt); padding: 24px; border-radius: var(--radius-md); border: 2px solid #F0EBFA;">
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;">
+                  <span>🛡️ Phòng chống Bạo lực học đường</span>
+                  <span>38%</span>
+                </div>
+                <div style="width: 100%; height: 12px; background: #EAE3F7; border-radius: var(--radius-pill); overflow: hidden;">
+                  <div style="width: 38%; height: 100%; background: var(--primary-lavender); border-radius: var(--radius-pill);"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;">
+                  <span>🏊 Phòng chống Đuối nước & Tai nạn thương tích (An Giang)</span>
+                  <span>32%</span>
+                </div>
+                <div style="width: 100%; height: 12px; background: #EAE3F7; border-radius: var(--radius-pill); overflow: hidden;">
+                  <div style="width: 32%; height: 100%; background: var(--primary-mint); border-radius: var(--radius-pill);"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;">
+                  <span>🌐 Bắt nạt trên không gian mạng (Cyberbullying)</span>
+                  <span>18%</span>
+                </div>
+                <div style="width: 100%; height: 12px; background: #EAE3F7; border-radius: var(--radius-pill); overflow: hidden;">
+                  <div style="width: 18%; height: 100%; background: var(--primary-pink); border-radius: var(--radius-pill);"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;">
+                  <span>📚 Áp lực học tập & Thi cử</span>
+                  <span>12%</span>
+                </div>
+                <div style="width: 100%; height: 12px; background: #EAE3F7; border-radius: var(--radius-pill); overflow: hidden;">
+                  <div style="width: 12%; height: 100%; background: var(--primary-yellow); border-radius: var(--radius-pill);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN TAB 3: XUẤT CƠ SỞ DỮ LIỆU -->
+      <section id="admin-tab-database" class="tab-view">
+        <div class="card-section">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-database" style="color: var(--primary-mint);"></i> Hệ Thống Theo Dõi & Xuất Cơ Sở Dữ Liệu</h2>
+          </div>
+
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+            Cho phép Cô Nguyễn Thị Ngọc Nga và Ban Giám hiệu xuất toàn bộ dữ liệu thống kê tư vấn, nhật ký chơi game kỹ năng và báo cáo tổng hợp ra định dạng Excel, CSV hoặc JSON phục vụ báo cáo Liên Đội Huyện/Tỉnh.
+          </p>
+
+          <div class="games-grid">
+            <div class="game-card" style="text-align: left;">
+              <div class="game-card-icon">📊</div>
+              <h3>1. Xuất CSDL Lịch Hẹn Tư Vấn</h3>
+              <p>Chứa danh sách mã tra cứu, chủ đề, khối lớp, ngày hẹn và phản hồi của Cô Nga.</p>
+              <button class="btn-clay" onclick="exportFullDatabase('csv_bookings')">Tải File CSV / Excel 📥</button>
+            </div>
+
+            <div class="game-card" style="text-align: left;">
+              <div class="game-card-icon">🎮</div>
+              <h3>2. Xuất CSDL Game Kỹ Năng</h3>
+              <p>Chứa thống kê lượt chơi các trò bạo lực, đuối nước, cyberbullying và huy hiệu đạt được.</p>
+              <button class="btn-clay" onclick="exportFullDatabase('csv_games')">Tải File CSV / Excel 📥</button>
+            </div>
+
+            <div class="game-card" style="text-align: left;">
+              <div class="game-card-icon">🗄️</div>
+              <h3>3. Sao Lưu CSDL Hệ Thống (Backup)</h3>
+              <p>Tải toàn bộ file CSDL dưới dạng JSON định dạng chuẩn để khôi phục khi cần thiết.</p>
+              <button class="btn-clay-secondary" onclick="exportFullDatabase('json_backup')">Tải Backup JSON 💾</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- REPLY MODAL FOR TEACHER NGA -->
+  <div id="reply-modal" style="position: fixed; inset: 0; background: rgba(52, 46, 72, 0.6); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 9999;">
+    <div style="background: #FFFFFF; width: 500px; padding: 28px; border-radius: var(--radius-lg); box-shadow: var(--shadow-clay);">
+      <h3 style="font-size: 18px; font-weight: 800; color: var(--primary-lavender); margin-bottom: 12px;">Phản Hồi Lịch Hẹn Bí Mật</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Mã Tra Cứu: <strong id="reply-secret-code" style="color: var(--primary-pink);">PH-8839</strong></p>
+
+      <div class="form-group">
+        <label>Nội dung phản hồi / Hướng dẫn của Cô Nga dành cho học sinh:</label>
+        <textarea id="reply-text" class="form-control" rows="5" placeholder="Ví dụ: Chào em, cô đã nhận được tâm sự. Em hãy đến phòng TPT Đội vào đúng 9:15 thứ Sáu tuần này nhé. Cô rất vui được hỗ trợ em!"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn-clay-secondary" onclick="closeReplyModal()">Hủy Bỏ</button>
+        <button class="btn-clay" onclick="submitReply()">Gửi Phản Hồi Bí Mật</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin-dashboard.js"></script>
+</body>
+</html>
