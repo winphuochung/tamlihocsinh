@@ -22,7 +22,7 @@ const AI_KNOWLEDGE = [
   },
   {
     keywords: ["xâm hại", "đụng chạm", "bí mật", "sờ"],
-    reply: "🦺 Em hãy nhớ kỹ: Cơ thể em là của em! Không một ai có quyền chạm vào vùng đồ lót hay ép em giữ những bí mật khiến em cảm thấy sợ hãi/khó chịu. Hãy hét to 'KHÔNG', chạy đến nơi an toàn và kể ngay với Cô Ngô Nga hoặc Tổng đài Bảo vệ Trẻ em 111 nhé!"
+    reply: "🦺 Em hãy nhớ kỹ: Cơ thể em là của em! Không một ai có quyền chạm vào vùng đồ lót hay ép em giữ những bí mật khiến em cảm thấy sợ hãi/khó chịu. Hãy hét to 'KHÔNG', chạy đến nơi an toàn và kể ngay với Cô Ngọc Nga hoặc Tổng đài Bảo vệ Trẻ em 111 nhé!"
   }
 ];
 

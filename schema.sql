@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS anonymous_bookings (
     secret_code VARCHAR(30) UNIQUE NOT NULL,      -- Mã tra cứu bí mật (VD: PH-8839-X)
     topic VARCHAR(150) NOT NULL,                  -- Chủ đề tư vấn
     student_grade VARCHAR(30) NOT NULL,            -- Khối lớp (Khối 6, 7, 8, 9)
-    preferred_date DATE NOT NULL,                 -- Ngày hẹn gặp Cô Ngô Nga
+    preferred_date DATE NOT NULL,                 -- Ngày hẹn gặp Cô Ngọc Nga
     preferred_time VARCHAR(100) NOT NULL,         -- Giờ hẹn gặp
     content TEXT NOT NULL,                        -- Nội dung chia sẻ / tâm sự
     status VARCHAR(30) DEFAULT 'PENDING',         -- PENDING, APPROVED, COMPLETED
