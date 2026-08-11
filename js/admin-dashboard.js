@@ -1,15 +1,17 @@
 /* ==========================================================================
-   Admin Dashboard & Database Exporter Engine
+   Admin Dashboard & Database Exporter Engine (Supabase Cloud Synced)
    Dành cho Giáo viên TPT Đội: Cô Nguyễn Thị Ngọc Nga
    ========================================================================== */
 
 let activeReplyCode = null;
+let realtimeSubscription = null;
 
 function authenticateAdmin() {
   const pass = document.getElementById('admin-password').value;
   if (pass === '123456' || pass === 'admin') {
     document.getElementById('admin-login-modal').style.display = 'none';
     renderAdminBookings();
+    initRealtimeSupabaseListener();
   } else {
     alert('Mật khẩu quản trị chưa đúng. Vui lòng kiểm tra lại!');
   }
@@ -38,12 +40,46 @@ function switchAdminTab(tabId) {
   }
 }
 
-function renderAdminBookings() {
-  const data = localStorage.getItem('thcs_phuochung_bookings');
-  const bookings = data ? JSON.parse(data) : [];
-
+/**
+ * ĐỒNG BỘ & RENDER TẤT CẢ LỊCH HẸN TỪ SUPABASE CLOUD & LOCALSTORAGE
+ */
+async function renderAdminBookings() {
   const tbody = document.getElementById('admin-booking-tbody');
   if (!tbody) return;
+
+  let bookings = [];
+
+  // 1. Tải dữ liệu thời gian thực từ Supabase Cloud
+  if (window.supabaseClient) {
+    try {
+      const { data, error } = await window.supabaseClient
+        .from('anonymous_bookings')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (data && data.length > 0) {
+        bookings = data.map(b => ({
+          secret_code: b.secret_code,
+          topic: b.topic,
+          grade: b.student_grade || b.grade || 'Khối 8',
+          date: b.preferred_date || b.date,
+          time: b.preferred_time || b.time,
+          content: b.content,
+          status: b.status,
+          reply: b.teacher_reply || b.reply,
+          created_at: b.created_at
+        }));
+      }
+    } catch (err) {
+      console.warn("⚠️ Không thể tải Supabase, sử dụng bộ nhớ Local:", err);
+    }
+  }
+
+  // 2. Dự phòng nếu Supabase trống/chưa tạo bảng
+  if (bookings.length === 0) {
+    const localData = localStorage.getItem('thcs_phuochung_bookings');
+    bookings = localData ? JSON.parse(localData) : [];
+  }
 
   tbody.innerHTML = '';
 
@@ -86,15 +122,35 @@ function renderAdminBookings() {
   document.getElementById('analytic-total-bookings').innerText = bookings.length;
 }
 
+/**
+ * THỜI GIỜ THỰC (REALTIME SUBSCRIPTION TỪ SUPABASE CLOUD)
+ */
+function initRealtimeSupabaseListener() {
+  if (window.supabaseClient && !realtimeSubscription) {
+    try {
+      realtimeSubscription = window.supabaseClient
+        .channel('public:anonymous_bookings')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'anonymous_bookings' }, (payload) => {
+          console.log("🔔 Có dữ liệu mới từ học sinh gửi lên Supabase Realtime!", payload);
+          renderAdminBookings();
+        })
+        .subscribe();
+    } catch (err) {
+      console.warn("⚠️ Lỗi khởi tạo Realtime Supabase:", err);
+    }
+  }
+}
+
 function openReplyModal(secretCode) {
   activeReplyCode = secretCode;
   document.getElementById('reply-secret-code').innerText = secretCode;
 
-  const data = localStorage.getItem('thcs_phuochung_bookings');
-  const bookings = data ? JSON.parse(data) : [];
+  // Lấy câu trả lời hiện tại từ bảng UI
+  const localData = localStorage.getItem('thcs_phuochung_bookings');
+  const bookings = localData ? JSON.parse(localData) : [];
   const match = bookings.find(b => b.secret_code === secretCode);
 
-  document.getElementById('reply-text').value = match ? (match.reply || '') : '';
+  document.getElementById('reply-text').value = match ? (match.reply || match.teacher_reply || '') : '';
   document.getElementById('reply-modal').style.display = 'flex';
 }
 
@@ -102,13 +158,35 @@ function closeReplyModal() {
   document.getElementById('reply-modal').style.display = 'none';
 }
 
-function submitReply() {
+/**
+ * GỬI PHẢN HỒI BÍ MẬT TỚI HỌC SINH TẠI SUPABASE CLOUD & LOCALSTORAGE
+ */
+async function submitReply() {
   const replyText = document.getElementById('reply-text').value.trim();
   if (!replyText) {
     alert('Vui lòng nhập nội dung phản hồi dành cho học sinh!');
     return;
   }
 
+  // 1. Cập nhật Supabase Cloud Database
+  if (window.supabaseClient) {
+    try {
+      const { error } = await window.supabaseClient
+        .from('anonymous_bookings')
+        .update({
+          teacher_reply: replyText,
+          status: 'APPROVED'
+        })
+        .eq('secret_code', activeReplyCode);
+
+      if (error) console.warn("⚠️ Lỗi cập nhật Supabase:", error.message);
+      else console.log("🟢 Đã cập nhật phản hồi của Cô Nga lên Supabase!");
+    } catch (err) {
+      console.warn("⚠️ Lỗi kết nối Supabase:", err);
+    }
+  }
+
+  // 2. Cập nhật LocalStorage dự phòng
   const data = localStorage.getItem('thcs_phuochung_bookings');
   let bookings = data ? JSON.parse(data) : [];
 
@@ -117,6 +195,7 @@ function submitReply() {
       return {
         ...b,
         reply: replyText,
+        teacher_reply: replyText,
         status: 'APPROVED'
       };
     }
@@ -126,13 +205,27 @@ function submitReply() {
   localStorage.setItem('thcs_phuochung_bookings', JSON.stringify(bookings));
   closeReplyModal();
   renderAdminBookings();
-  alert('Đã gửi phản hồi ẩn danh thành công cho học sinh!');
+  alert('Đã gửi phản hồi ẩn danh thành công cho học sinh trên Supabase Cloud!');
 }
 
 /* DATABASE EXPORTER ENGINE (Excel/CSV/JSON) */
-function exportFullDatabase(format) {
-  const data = localStorage.getItem('thcs_phuochung_bookings');
-  const bookings = data ? JSON.parse(data) : [];
+async function exportFullDatabase(format) {
+  let bookings = [];
+
+  // Tải toàn bộ dữ liệu mới nhất từ Supabase Cloud
+  if (window.supabaseClient) {
+    try {
+      const { data } = await window.supabaseClient.from('anonymous_bookings').select('*');
+      if (data && data.length > 0) {
+        bookings = data;
+      }
+    } catch (err) {}
+  }
+
+  if (bookings.length === 0) {
+    const data = localStorage.getItem('thcs_phuochung_bookings');
+    bookings = data ? JSON.parse(data) : [];
+  }
 
   if (format === 'csv_bookings' || format === 'excel') {
     let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
@@ -142,12 +235,12 @@ function exportFullDatabase(format) {
       const row = [
         `"${b.secret_code}"`,
         `"${b.topic}"`,
-        `"${b.grade}"`,
-        `"${b.date}"`,
-        `"${b.time}"`,
-        `"${b.content.replace(/"/g, '""')}"`,
+        `"${b.student_grade || b.grade || ''}"`,
+        `"${b.preferred_date || b.date || ''}"`,
+        `"${b.preferred_time || b.time || ''}"`,
+        `"${(b.content || '').replace(/"/g, '""')}"`,
         `"${b.status}"`,
-        `"${(b.reply || '').replace(/"/g, '""')}"`,
+        `"${(b.teacher_reply || b.reply || '').replace(/"/g, '""')}"`,
         `"${b.created_at}"`
       ].join(",");
       csvContent += row + "\n";
@@ -156,7 +249,7 @@ function exportFullDatabase(format) {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `CSDL_TuVan_TamLy_THCS_PhuocHung_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute("download", `CSDL_Supabase_TuVan_TamLy_THCS_PhuocHung_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -167,7 +260,7 @@ function exportFullDatabase(format) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `CSDL_Backup_THCS_PhuocHung_${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `CSDL_Backup_Supabase_THCS_PhuocHung_${new Date().toISOString().split('T')[0]}.json`;
     link.click();
     URL.revokeObjectURL(url);
   }
