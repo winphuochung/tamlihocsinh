@@ -12,6 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
+ * LẤY CLIENT SUPABASE AN TOÀN TUYỆT ĐỐI
+ */
+function getActiveSupabaseClient() {
+  if (typeof getSupabaseClient === 'function') {
+    const client = getSupabaseClient();
+    if (client) return client;
+  }
+  return window.supabaseClient || null;
+}
+
+/**
  * CHUYỂN ĐỔI CHẾ ĐỘ ĐĂNG NHẬP (PASSWORD VS OTP/EMAIL MAGIC LINK)
  */
 function switchAuthMode(mode) {
@@ -21,7 +32,7 @@ function switchAuthMode(mode) {
   const tabOtp = document.getElementById('auth-tab-otp');
   const msgBox = document.getElementById('auth-message-box');
 
-  msgBox.style.display = 'none';
+  if (msgBox) msgBox.style.display = 'none';
 
   if (mode === 'pass') {
     formPass.style.display = 'block';
@@ -37,13 +48,14 @@ function switchAuthMode(mode) {
 }
 
 /**
- * KIỂM TRA SESSINO ĐĂNG NHẬP SUPABASE AUTH KHI MỞ TRANG
+ * KIỂM TRA SESSION ĐĂNG NHẬP SUPABASE AUTH KHI MỞ TRANG
  */
 async function checkSupabaseAuthSession() {
-  if (!window.supabaseClient) return;
+  const client = getActiveSupabaseClient();
+  if (!client) return;
 
   try {
-    const { data: { session } } = await window.supabaseClient.auth.getSession();
+    const { data: { session } } = await client.auth.getSession();
     if (session && session.user) {
       currentAdminUser = session.user;
       document.getElementById('admin-login-modal').style.display = 'none';
@@ -52,8 +64,7 @@ async function checkSupabaseAuthSession() {
       console.log("🟢 Đã đăng nhập tự động qua Supabase Auth Session:", session.user.email);
     }
 
-    // Lắng nghe sự thay đổi Auth State (Ví dụ khi click Magic Link từ Email)
-    window.supabaseClient.auth.onAuthStateChange((event, session) => {
+    client.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
         currentAdminUser = session.user;
         document.getElementById('admin-login-modal').style.display = 'none';
@@ -75,7 +86,6 @@ async function checkSupabaseAuthSession() {
 async function authenticateAdminWithPassword() {
   const email = document.getElementById('admin-email').value.trim();
   const password = document.getElementById('admin-password').value;
-  const msgBox = document.getElementById('auth-message-box');
 
   if (!email || !password) {
     alert("Vui lòng nhập đầy đủ Email và Mật khẩu!");
@@ -93,28 +103,27 @@ async function authenticateAdminWithPassword() {
       initRealtimeSupabaseListener();
     }, 400);
 
-    // Thử tạo tài khoản Supabase Auth song song nếu có Client
-    if (window.supabaseClient) {
-      window.supabaseClient.auth.signInWithPassword({ email, password }).catch(async () => {
-        // Tự tạo tài khoản mới nếu chưa tồn tại
-        await window.supabaseClient.auth.signUp({ email, password });
+    const client = getActiveSupabaseClient();
+    if (client) {
+      client.auth.signInWithPassword({ email, password }).catch(async () => {
+        await client.auth.signUp({ email, password });
       });
     }
     return;
   }
 
   // B. Thử Đăng nhập chính thức qua Supabase Auth API
-  if (window.supabaseClient) {
+  const client = getActiveSupabaseClient();
+  if (client) {
     try {
-      const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+      const { data, error } = await client.auth.signInWithPassword({
         email: email,
         password: password
       });
 
       if (error) {
-        // Nếu người dùng chưa có tài khoản, tự động đăng ký mới
         if (error.message.includes("Invalid login credentials")) {
-          const { data: signUpData, error: signUpError } = await window.supabaseClient.auth.signUp({
+          const { data: signUpData, error: signUpError } = await client.auth.signUp({
             email: email,
             password: password
           });
@@ -143,6 +152,8 @@ async function authenticateAdminWithPassword() {
     } catch (err) {
       showAuthMsg(`⚠️ Lỗi kết nối: ${err.message}`, "#EF4444");
     }
+  } else {
+    showAuthMsg("⚠️ Chưa kết nối Supabase SDK. Sử dụng mật khẩu 123456 để vào hệ thống!", "#D97706");
   }
 }
 
@@ -159,9 +170,10 @@ async function sendSupabaseOtp() {
 
   showAuthMsg("⏳ Đang gửi Mã OTP / Magic Link tới Email...", "#3B82F6");
 
-  if (window.supabaseClient) {
+  const client = getActiveSupabaseClient();
+  if (client) {
     try {
-      const { error } = await window.supabaseClient.auth.signInWithOtp({
+      const { error } = await client.auth.signInWithOtp({
         email: email,
         options: {
           emailRedirectTo: window.location.href
@@ -177,24 +189,28 @@ async function sendSupabaseOtp() {
       showAuthMsg(`⚠️ Lỗi kết nối Supabase Auth: ${err.message}`, "#EF4444");
     }
   } else {
-    showAuthMsg("⚠️ Supabase Client chưa sẵn sàng. Vui lòng thử phương thức Mật Khẩu!", "#EF4444");
+    showAuthMsg("⚠️ Đang tự động kết nối Supabase Client... Vui lòng bấm gửi lại sau 2 giây!", "#D97706");
+    if (typeof getSupabaseClient === 'function') getSupabaseClient();
   }
 }
 
 function showAuthMsg(msg, color) {
   const msgBox = document.getElementById('auth-message-box');
-  msgBox.style.display = 'block';
-  msgBox.style.color = color;
-  msgBox.innerHTML = msg;
+  if (msgBox) {
+    msgBox.style.display = 'block';
+    msgBox.style.color = color;
+    msgBox.innerHTML = msg;
+  }
 }
 
 /**
  * ĐĂNG XUẤT SUPABASE AUTH
  */
 async function logoutAdmin() {
-  if (window.supabaseClient) {
+  const client = getActiveSupabaseClient();
+  if (client) {
     try {
-      await window.supabaseClient.auth.signOut();
+      await client.auth.signOut();
     } catch (err) {}
   }
   currentAdminUser = null;
@@ -229,9 +245,10 @@ async function renderAdminBookings() {
 
   let bookings = [];
 
-  if (window.supabaseClient) {
+  const client = getActiveSupabaseClient();
+  if (client) {
     try {
-      const { data, error } = await window.supabaseClient
+      const { data, error } = await client
         .from('anonymous_bookings')
         .select('*')
         .order('created_at', { ascending: false });
@@ -304,9 +321,10 @@ async function renderAdminBookings() {
  * THỜI GIỜ THỰC (REALTIME SUBSCRIPTION TỪ SUPABASE CLOUD)
  */
 function initRealtimeSupabaseListener() {
-  if (window.supabaseClient && !realtimeSubscription) {
+  const client = getActiveSupabaseClient();
+  if (client && !realtimeSubscription) {
     try {
-      realtimeSubscription = window.supabaseClient
+      realtimeSubscription = client
         .channel('public:anonymous_bookings')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'anonymous_bookings' }, (payload) => {
           console.log("🔔 Có dữ liệu mới từ học sinh gửi lên Supabase Realtime!", payload);
@@ -345,9 +363,10 @@ async function submitReply() {
     return;
   }
 
-  if (window.supabaseClient) {
+  const client = getActiveSupabaseClient();
+  if (client) {
     try {
-      const { error } = await window.supabaseClient
+      const { error } = await client
         .from('anonymous_bookings')
         .update({
           teacher_reply: replyText,
@@ -387,9 +406,10 @@ async function submitReply() {
 async function exportFullDatabase(format) {
   let bookings = [];
 
-  if (window.supabaseClient) {
+  const client = getActiveSupabaseClient();
+  if (client) {
     try {
-      const { data } = await window.supabaseClient.from('anonymous_bookings').select('*');
+      const { data } = await client.from('anonymous_bookings').select('*');
       if (data && data.length > 0) {
         bookings = data;
       }

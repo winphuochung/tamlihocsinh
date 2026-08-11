@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Supabase Database Connection & Client Config
+   Supabase Database Connection & Client Config (Bulletproof Client Init)
    Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
    ========================================================================== */
 
@@ -8,10 +8,25 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 let supabaseClient = null;
 
-// Khởi tạo Supabase JS SDK Client
-if (window.supabase) {
-  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  console.log("🟢 Đã kết nối Supabase Cloud Database thành công!");
-} else {
-  console.warn("⚠️ Chưa tải Supabase CDN JS SDK. Hệ thống sẽ sử dụng LocalStorage làm bộ nhớ dự phòng.");
+function getSupabaseClient() {
+  if (supabaseClient) return supabaseClient;
+  if (window.supabaseClient) return window.supabaseClient;
+
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    window.supabaseClient = supabaseClient;
+    console.log("🟢 Đã kết nối Supabase Cloud Database thành công!");
+    return supabaseClient;
+  }
+
+  console.warn("⚠️ Chưa sẵn sàng Supabase CDN JS SDK.");
+  return null;
 }
+
+// Tự động khởi tạo ngay khi script load
+document.addEventListener('DOMContentLoaded', () => {
+  getSupabaseClient();
+});
+
+// Thử khởi tạo ngay lập tức
+getSupabaseClient();
