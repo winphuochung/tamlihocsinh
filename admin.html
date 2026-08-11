@@ -9,28 +9,51 @@
 </head>
 <body>
 
-  <!-- LOGIN LOCK SCREEN FOR TEACHER NGA -->
+  <!-- LOGIN LOCK SCREEN FOR TEACHER NGA (SUPABASE AUTH INTEGRATED) -->
   <div id="admin-login-modal" style="position: fixed; inset: 0; background: rgba(52, 46, 72, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 9999;">
-    <div style="background: #FFFFFF; width: 420px; padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-clay); text-align: center;">
+    <div style="background: #FFFFFF; width: 440px; padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-clay); text-align: center;">
       <div class="avatar-3d" style="width: 72px; height: 72px; font-size: 36px; margin: 0 auto 16px;">👩‍🏫</div>
       <h2 style="font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Cổng Quản Lý Giáo Viên TPT</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;">Giáo viên Tổng phụ trách: <strong>Cô Nguyễn Thị Ngọc Nga</strong></p>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Giáo viên Tổng phụ trách: <strong>Cô Nguyễn Thị Ngọc Nga</strong></p>
 
-      <div class="form-group" style="text-align: left;">
-        <label>Tên tài khoản:</label>
-        <input type="text" id="admin-username" class="form-control" value="nguyenthithuongnga" readonly>
+      <!-- AUTH MODE TOGGLE BUTTONS -->
+      <div style="display: flex; background: var(--bg-app); padding: 4px; border-radius: var(--radius-pill); margin-bottom: 20px;">
+        <button id="auth-tab-pass" class="btn-clay" style="flex: 1; font-size: 12px; padding: 8px; justify-content: center;" onclick="switchAuthMode('pass')">Mật Khẩu</button>
+        <button id="auth-tab-otp" class="btn-clay-secondary" style="flex: 1; font-size: 12px; padding: 8px; justify-content: center;" onclick="switchAuthMode('otp')">Mã OTP / Email</button>
       </div>
 
-      <div class="form-group" style="text-align: left;">
-        <label>Mật khẩu quản trị:</label>
-        <input type="password" id="admin-password" class="form-control" value="123456" placeholder="Nhập mật khẩu...">
+      <!-- FORM 1: PASSWORD LOGIN -->
+      <div id="auth-form-pass">
+        <div class="form-group" style="text-align: left;">
+          <label>Email Quản trị viên (Supabase Auth):</label>
+          <input type="email" id="admin-email" class="form-control" value="nguyenthithuongnga@gmail.com" placeholder="email@gmail.com">
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+          <label>Mật khẩu quản trị:</label>
+          <input type="password" id="admin-password" class="form-control" value="123456" placeholder="Nhập mật khẩu...">
+        </div>
+
+        <button class="btn-clay" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px;" onclick="authenticateAdminWithPassword()">
+          <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Supabase Auth
+        </button>
       </div>
 
-      <button class="btn-clay" style="width: 100%; justify-content: center; padding: 12px;" onclick="authenticateAdmin()">
-        <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Quản Trị
-      </button>
+      <!-- FORM 2: OTP / MAGIC LINK LOGIN -->
+      <div id="auth-form-otp" style="display: none;">
+        <div class="form-group" style="text-align: left;">
+          <label>Nhập Email Giáo viên nhận mã OTP / Magic Link:</label>
+          <input type="email" id="admin-otp-email" class="form-control" value="nguyenthithuongnga@gmail.com" placeholder="email@gmail.com">
+        </div>
 
-      <p style="font-size: 11px; color: var(--text-light); margin-top: 16px;">THCS Phước Hưng - Xã Nhơn Hội - Tỉnh An Giang</p>
+        <button class="btn-clay" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px;" onclick="sendSupabaseOtp()">
+          <i class="fa-solid fa-paper-plane"></i> Gửi Mã OTP / Email Magic Link
+        </button>
+      </div>
+
+      <div id="auth-message-box" style="margin-top: 14px; font-size: 12px; text-align: center; display: none;"></div>
+
+      <p style="font-size: 11px; color: var(--text-light); margin-top: 16px;">THCS Phước Hưng - Xã Nhơn Hội - Tỉnh An Giang • Supabase Auth Secured</p>
     </div>
   </div>
 

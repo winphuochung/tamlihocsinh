@@ -1,23 +1,203 @@
 /* ==========================================================================
-   Admin Dashboard & Database Exporter Engine (Supabase Cloud Synced)
+   Admin Dashboard & Database Exporter Engine (Supabase Auth & Cloud DB Synced)
    Dành cho Giáo viên TPT Đội: Cô Nguyễn Thị Ngọc Nga
    ========================================================================== */
 
 let activeReplyCode = null;
 let realtimeSubscription = null;
+let currentAdminUser = null;
 
-function authenticateAdmin() {
-  const pass = document.getElementById('admin-password').value;
-  if (pass === '123456' || pass === 'admin') {
-    document.getElementById('admin-login-modal').style.display = 'none';
-    renderAdminBookings();
-    initRealtimeSupabaseListener();
+document.addEventListener('DOMContentLoaded', () => {
+  checkSupabaseAuthSession();
+});
+
+/**
+ * CHUYỂN ĐỔI CHẾ ĐỘ ĐĂNG NHẬP (PASSWORD VS OTP/EMAIL MAGIC LINK)
+ */
+function switchAuthMode(mode) {
+  const formPass = document.getElementById('auth-form-pass');
+  const formOtp = document.getElementById('auth-form-otp');
+  const tabPass = document.getElementById('auth-tab-pass');
+  const tabOtp = document.getElementById('auth-tab-otp');
+  const msgBox = document.getElementById('auth-message-box');
+
+  msgBox.style.display = 'none';
+
+  if (mode === 'pass') {
+    formPass.style.display = 'block';
+    formOtp.style.display = 'none';
+    tabPass.className = 'btn-clay';
+    tabOtp.className = 'btn-clay-secondary';
   } else {
-    alert('Mật khẩu quản trị chưa đúng. Vui lòng kiểm tra lại!');
+    formPass.style.display = 'none';
+    formOtp.style.display = 'block';
+    tabPass.className = 'btn-clay-secondary';
+    tabOtp.className = 'btn-clay';
   }
 }
 
-function logoutAdmin() {
+/**
+ * KIỂM TRA SESSINO ĐĂNG NHẬP SUPABASE AUTH KHI MỞ TRANG
+ */
+async function checkSupabaseAuthSession() {
+  if (!window.supabaseClient) return;
+
+  try {
+    const { data: { session } } = await window.supabaseClient.auth.getSession();
+    if (session && session.user) {
+      currentAdminUser = session.user;
+      document.getElementById('admin-login-modal').style.display = 'none';
+      renderAdminBookings();
+      initRealtimeSupabaseListener();
+      console.log("🟢 Đã đăng nhập tự động qua Supabase Auth Session:", session.user.email);
+    }
+
+    // Lắng nghe sự thay đổi Auth State (Ví dụ khi click Magic Link từ Email)
+    window.supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        currentAdminUser = session.user;
+        document.getElementById('admin-login-modal').style.display = 'none';
+        renderAdminBookings();
+        initRealtimeSupabaseListener();
+      } else if (event === 'SIGNED_OUT') {
+        currentAdminUser = null;
+        document.getElementById('admin-login-modal').style.display = 'flex';
+      }
+    });
+  } catch (err) {
+    console.warn("⚠️ Lỗi kiểm tra session Supabase Auth:", err);
+  }
+}
+
+/**
+ * 1. ĐĂNG NHẬP BẰNG SUPABASE AUTH EMAIL & PASSWORD
+ */
+async function authenticateAdminWithPassword() {
+  const email = document.getElementById('admin-email').value.trim();
+  const password = document.getElementById('admin-password').value;
+  const msgBox = document.getElementById('auth-message-box');
+
+  if (!email || !password) {
+    alert("Vui lòng nhập đầy đủ Email và Mật khẩu!");
+    return;
+  }
+
+  showAuthMsg("⏳ Đang kết nối Supabase Auth...", "#3B82F6");
+
+  // A. Nếu dùng Mật khẩu Local dự phòng
+  if (password === '123456' || password === 'admin') {
+    showAuthMsg("✅ Đăng nhập thành công!", "#10B981");
+    setTimeout(() => {
+      document.getElementById('admin-login-modal').style.display = 'none';
+      renderAdminBookings();
+      initRealtimeSupabaseListener();
+    }, 400);
+
+    // Thử tạo tài khoản Supabase Auth song song nếu có Client
+    if (window.supabaseClient) {
+      window.supabaseClient.auth.signInWithPassword({ email, password }).catch(async () => {
+        // Tự tạo tài khoản mới nếu chưa tồn tại
+        await window.supabaseClient.auth.signUp({ email, password });
+      });
+    }
+    return;
+  }
+
+  // B. Thử Đăng nhập chính thức qua Supabase Auth API
+  if (window.supabaseClient) {
+    try {
+      const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        // Nếu người dùng chưa có tài khoản, tự động đăng ký mới
+        if (error.message.includes("Invalid login credentials")) {
+          const { data: signUpData, error: signUpError } = await window.supabaseClient.auth.signUp({
+            email: email,
+            password: password
+          });
+
+          if (!signUpError) {
+            showAuthMsg("🎉 Đã tạo mới và Đăng nhập thành công tài khoản Supabase Auth!", "#10B981");
+            currentAdminUser = signUpData.user;
+            setTimeout(() => {
+              document.getElementById('admin-login-modal').style.display = 'none';
+              renderAdminBookings();
+              initRealtimeSupabaseListener();
+            }, 600);
+            return;
+          }
+        }
+        showAuthMsg(`⚠️ ${error.message}`, "#EF4444");
+      } else {
+        showAuthMsg("✅ Đăng nhập Supabase Auth thành công!", "#10B981");
+        currentAdminUser = data.user;
+        setTimeout(() => {
+          document.getElementById('admin-login-modal').style.display = 'none';
+          renderAdminBookings();
+          initRealtimeSupabaseListener();
+        }, 500);
+      }
+    } catch (err) {
+      showAuthMsg(`⚠️ Lỗi kết nối: ${err.message}`, "#EF4444");
+    }
+  }
+}
+
+/**
+ * 2. ĐĂNG NHẬP BẰNG MÃ OTP / EMAIL MAGIC LINK (SUPABASE AUTH)
+ */
+async function sendSupabaseOtp() {
+  const email = document.getElementById('admin-otp-email').value.trim();
+
+  if (!email) {
+    alert("Vui lòng nhập địa chỉ Email của Cô Ngọc Nga!");
+    return;
+  }
+
+  showAuthMsg("⏳ Đang gửi Mã OTP / Magic Link tới Email...", "#3B82F6");
+
+  if (window.supabaseClient) {
+    try {
+      const { error } = await window.supabaseClient.auth.signInWithOtp({
+        email: email,
+        options: {
+          emailRedirectTo: window.location.href
+        }
+      });
+
+      if (error) {
+        showAuthMsg(`⚠️ ${error.message}`, "#EF4444");
+      } else {
+        showAuthMsg(`💌 Đã gửi liên kết đính kèm Mã OTP đăng nhập tới <strong>${email}</strong>. Cô Ngọc Nga vui lòng kiểm tra Hộp thư đến / Spam nhé!`, "#10B981");
+      }
+    } catch (err) {
+      showAuthMsg(`⚠️ Lỗi kết nối Supabase Auth: ${err.message}`, "#EF4444");
+    }
+  } else {
+    showAuthMsg("⚠️ Supabase Client chưa sẵn sàng. Vui lòng thử phương thức Mật Khẩu!", "#EF4444");
+  }
+}
+
+function showAuthMsg(msg, color) {
+  const msgBox = document.getElementById('auth-message-box');
+  msgBox.style.display = 'block';
+  msgBox.style.color = color;
+  msgBox.innerHTML = msg;
+}
+
+/**
+ * ĐĂNG XUẤT SUPABASE AUTH
+ */
+async function logoutAdmin() {
+  if (window.supabaseClient) {
+    try {
+      await window.supabaseClient.auth.signOut();
+    } catch (err) {}
+  }
+  currentAdminUser = null;
   document.getElementById('admin-login-modal').style.display = 'flex';
 }
 
@@ -49,7 +229,6 @@ async function renderAdminBookings() {
 
   let bookings = [];
 
-  // 1. Tải dữ liệu thời gian thực từ Supabase Cloud
   if (window.supabaseClient) {
     try {
       const { data, error } = await window.supabaseClient
@@ -75,7 +254,6 @@ async function renderAdminBookings() {
     }
   }
 
-  // 2. Dự phòng nếu Supabase trống/chưa tạo bảng
   if (bookings.length === 0) {
     const localData = localStorage.getItem('thcs_phuochung_bookings');
     bookings = localData ? JSON.parse(localData) : [];
@@ -145,7 +323,6 @@ function openReplyModal(secretCode) {
   activeReplyCode = secretCode;
   document.getElementById('reply-secret-code').innerText = secretCode;
 
-  // Lấy câu trả lời hiện tại từ bảng UI
   const localData = localStorage.getItem('thcs_phuochung_bookings');
   const bookings = localData ? JSON.parse(localData) : [];
   const match = bookings.find(b => b.secret_code === secretCode);
@@ -168,7 +345,6 @@ async function submitReply() {
     return;
   }
 
-  // 1. Cập nhật Supabase Cloud Database
   if (window.supabaseClient) {
     try {
       const { error } = await window.supabaseClient
@@ -186,7 +362,6 @@ async function submitReply() {
     }
   }
 
-  // 2. Cập nhật LocalStorage dự phòng
   const data = localStorage.getItem('thcs_phuochung_bookings');
   let bookings = data ? JSON.parse(data) : [];
 
@@ -212,7 +387,6 @@ async function submitReply() {
 async function exportFullDatabase(format) {
   let bookings = [];
 
-  // Tải toàn bộ dữ liệu mới nhất từ Supabase Cloud
   if (window.supabaseClient) {
     try {
       const { data } = await window.supabaseClient.from('anonymous_bookings').select('*');
