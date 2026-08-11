@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Supabase Database Connection & Client Config (Bulletproof Client Init)
+   Supabase Database Connection & Client Config (Bulletproof Native REST API + SDK)
    Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
    ========================================================================== */
 
@@ -15,18 +15,112 @@ function getSupabaseClient() {
   if (window.supabase && typeof window.supabase.createClient === 'function') {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     window.supabaseClient = supabaseClient;
-    console.log("🟢 Đã kết nối Supabase Cloud Database thành công!");
+    console.log("🟢 Đã kết nối Supabase JS SDK thành công!");
     return supabaseClient;
   }
 
-  console.warn("⚠️ Chưa sẵn sàng Supabase CDN JS SDK.");
   return null;
 }
 
-// Tự động khởi tạo ngay khi script load
-document.addEventListener('DOMContentLoaded', () => {
-  getSupabaseClient();
-});
+/**
+ * GỬI MÃ OTP / EMAIL MAGIC LINK (TỰ ĐỘNG CHUYỂN SANG NATIVE REST API KHI CHƯA CÓ SDK)
+ */
+async function supabaseApiSendOtp(email) {
+  const client = getSupabaseClient();
+  if (client && client.auth) {
+    return await client.auth.signInWithOtp({
+      email: email,
+      options: { emailRedirectTo: window.location.href }
+    });
+  }
 
-// Thử khởi tạo ngay lập tức
+  // Gọi trực tiếp REST API của Supabase (Không phụ thuộc vào SDK CDN)
+  try {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        create_user: true
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      return { error: { message: errData.msg || errData.message || errData.error_description || "Không thể gửi OTP tới Email này. Vui lòng kiểm tra lại cấu hình Supabase!" } };
+    }
+
+    const data = await response.json().catch(() => ({}));
+    return { data, error: null };
+  } catch (err) {
+    return { error: { message: `Lỗi kết nối mạng: ${err.message}` } };
+  }
+}
+
+/**
+ * ĐĂNG NHẬP MẬT KHẨU (NATIVE REST API)
+ */
+async function supabaseApiSignInWithPassword(email, password) {
+  const client = getSupabaseClient();
+  if (client && client.auth) {
+    return await client.auth.signInWithPassword({ email, password });
+  }
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      return { error: { message: errData.msg || errData.message || errData.error_description || "Mật khẩu chưa chính xác hoặc tài khoản chưa đăng ký." } };
+    }
+
+    const data = await response.json();
+    return { data, error: null };
+  } catch (err) {
+    return { error: { message: `Lỗi kết nối: ${err.message}` } };
+  }
+}
+
+/**
+ * TẠO TÀI KHOẢN MỚI (NATIVE REST API)
+ */
+async function supabaseApiSignUp(email, password) {
+  const client = getSupabaseClient();
+  if (client && client.auth) {
+    return await client.auth.signUp({ email, password });
+  }
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      return { error: { message: errData.msg || errData.message || errData.error_description || "Lỗi đăng ký tài khoản." } };
+    }
+
+    const data = await response.json();
+    return { data, error: null };
+  } catch (err) {
+    return { error: { message: `Lỗi kết nối: ${err.message}` } };
+  }
+}
+
+// Khởi tạo ngay
 getSupabaseClient();

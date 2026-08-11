@@ -113,47 +113,34 @@ async function authenticateAdminWithPassword() {
   }
 
   // B. Thử Đăng nhập chính thức qua Supabase Auth API
-  const client = getActiveSupabaseClient();
-  if (client) {
-    try {
-      const { data, error } = await client.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
-      if (error) {
-        if (error.message.includes("Invalid login credentials")) {
-          const { data: signUpData, error: signUpError } = await client.auth.signUp({
-            email: email,
-            password: password
-          });
-
-          if (!signUpError) {
-            showAuthMsg("🎉 Đã tạo mới và Đăng nhập thành công tài khoản Supabase Auth!", "#10B981");
-            currentAdminUser = signUpData.user;
-            setTimeout(() => {
-              document.getElementById('admin-login-modal').style.display = 'none';
-              renderAdminBookings();
-              initRealtimeSupabaseListener();
-            }, 600);
-            return;
-          }
+  try {
+    let result = await supabaseApiSignInWithPassword(email, password);
+    if (result.error) {
+      if (result.error.message.includes("Invalid login credentials") || result.error.message.includes("chưa đăng ký")) {
+        let signUpRes = await supabaseApiSignUp(email, password);
+        if (!signUpRes.error) {
+          showAuthMsg("🎉 Đã tạo mới và Đăng nhập thành công tài khoản Supabase Auth!", "#10B981");
+          currentAdminUser = signUpRes.data ? (signUpRes.data.user || signUpRes.data) : { email };
+          setTimeout(() => {
+            document.getElementById('admin-login-modal').style.display = 'none';
+            renderAdminBookings();
+            initRealtimeSupabaseListener();
+          }, 600);
+          return;
         }
-        showAuthMsg(`⚠️ ${error.message}`, "#EF4444");
-      } else {
-        showAuthMsg("✅ Đăng nhập Supabase Auth thành công!", "#10B981");
-        currentAdminUser = data.user;
-        setTimeout(() => {
-          document.getElementById('admin-login-modal').style.display = 'none';
-          renderAdminBookings();
-          initRealtimeSupabaseListener();
-        }, 500);
       }
-    } catch (err) {
-      showAuthMsg(`⚠️ Lỗi kết nối: ${err.message}`, "#EF4444");
+      showAuthMsg(`⚠️ ${result.error.message}`, "#EF4444");
+    } else {
+      showAuthMsg("✅ Đăng nhập Supabase Auth thành công!", "#10B981");
+      currentAdminUser = result.data ? (result.data.user || result.data) : { email };
+      setTimeout(() => {
+        document.getElementById('admin-login-modal').style.display = 'none';
+        renderAdminBookings();
+        initRealtimeSupabaseListener();
+      }, 500);
     }
-  } else {
-    showAuthMsg("⚠️ Chưa kết nối Supabase SDK. Sử dụng mật khẩu 123456 để vào hệ thống!", "#D97706");
+  } catch (err) {
+    showAuthMsg(`⚠️ Lỗi kết nối: ${err.message}`, "#EF4444");
   }
 }
 
@@ -168,29 +155,17 @@ async function sendSupabaseOtp() {
     return;
   }
 
-  showAuthMsg("⏳ Đang gửi Mã OTP / Magic Link tới Email...", "#3B82F6");
+  showAuthMsg("⏳ Đang kết nối Supabase Cloud & Gửi Mã OTP...", "#3B82F6");
 
-  const client = getActiveSupabaseClient();
-  if (client) {
-    try {
-      const { error } = await client.auth.signInWithOtp({
-        email: email,
-        options: {
-          emailRedirectTo: window.location.href
-        }
-      });
-
-      if (error) {
-        showAuthMsg(`⚠️ ${error.message}`, "#EF4444");
-      } else {
-        showAuthMsg(`💌 Đã gửi liên kết đính kèm Mã OTP đăng nhập tới <strong>${email}</strong>. Cô Ngọc Nga vui lòng kiểm tra Hộp thư đến / Spam nhé!`, "#10B981");
-      }
-    } catch (err) {
-      showAuthMsg(`⚠️ Lỗi kết nối Supabase Auth: ${err.message}`, "#EF4444");
+  try {
+    const result = await supabaseApiSendOtp(email);
+    if (result.error) {
+      showAuthMsg(`⚠️ ${result.error.message}`, "#EF4444");
+    } else {
+      showAuthMsg(`💌 Đã gửi liên kết đính kèm Mã OTP đăng nhập tới <strong>${email}</strong>. Cô Ngọc Nga vui lòng kiểm tra Hộp thư đến / Spam nhé!`, "#10B981");
     }
-  } else {
-    showAuthMsg("⚠️ Đang tự động kết nối Supabase Client... Vui lòng bấm gửi lại sau 2 giây!", "#D97706");
-    if (typeof getSupabaseClient === 'function') getSupabaseClient();
+  } catch (err) {
+    showAuthMsg(`⚠️ Lỗi kết nối Supabase Auth: ${err.message}`, "#EF4444");
   }
 }
 
