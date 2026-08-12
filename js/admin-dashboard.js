@@ -153,24 +153,52 @@ function changeTeacherAdminPassword() {
 }
 
 /**
- * 2. ĐĂNG NHẬP BẰNG MÃ OTP / EMAIL MAGIC LINK (SUPABASE AUTH)
+ * 2. ĐĂNG NHẬP BẰNG MÃ OTP / EMAIL MAGIC LINK (SUPABASE AUTH VỚI CHỐNG RATE LIMIT)
  */
 async function sendSupabaseOtp() {
-  const email = document.getElementById('admin-otp-email').value.trim();
+  const emailInput = document.getElementById('admin-otp-email');
+  const sendBtn = document.querySelector('#auth-form-otp button');
+  const email = emailInput ? emailInput.value.trim() : '';
 
   if (!email) {
     alert("Vui lòng nhập địa chỉ Email của Cô Ngọc Nga!");
     return;
   }
 
-  showAuthMsg("⏳ Đang kết nối Supabase Cloud & Gửi Mã OTP...", "#3B82F6");
+  showAuthMsg("⏳ Đang gửi Mã OTP / Magic Link tới Email...", "#3B82F6");
 
   try {
     const result = await supabaseApiSendOtp(email);
     if (result.error) {
-      showAuthMsg(`⚠️ ${result.error.message}`, "#EF4444");
+      let errMsg = result.error.message || '';
+      if (errMsg.toLowerCase().includes('rate limit') || errMsg.toLowerCase().includes('exceeded')) {
+        showAuthMsg(
+          `⚠️ <strong>Email vừa được gửi trước đó!</strong><br>` +
+          `Để tránh Spam, Supabase yêu cầu chờ 60 giây giữa các lần bấm.<br>` +
+          `Cô Ngọc Nga hãy mở Hộp thư đến / Spam hoặc <a href="javascript:void(0)" onclick="switchAuthMode('pass')" style="color:#8B73E6; font-weight:bold; text-decoration:underline;">👉 Bấm đây để Đăng Nhập Mật Khẩu Ngay</a>`,
+          "#EF4444"
+        );
+      } else {
+        showAuthMsg(`⚠️ ${errMsg}`, "#EF4444");
+      }
     } else {
       showAuthMsg(`💌 Đã gửi liên kết đính kèm Mã OTP đăng nhập tới <strong>${email}</strong>. Cô Ngọc Nga vui lòng kiểm tra Hộp thư đến / Spam nhé!`, "#10B981");
+
+      // Khóa nút 60s để chống bấm dồn dập dính Rate Limit
+      if (sendBtn) {
+        let secondsLeft = 60;
+        sendBtn.disabled = true;
+        const originalText = sendBtn.innerHTML;
+        const interval = setInterval(() => {
+          secondsLeft--;
+          sendBtn.innerHTML = `<i class="fa-solid fa-clock"></i> Gửi lại sau (${secondsLeft}s)`;
+          if (secondsLeft <= 0) {
+            clearInterval(interval);
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = originalText;
+          }
+        }, 1000);
+      }
     }
   } catch (err) {
     showAuthMsg(`⚠️ Lỗi kết nối Supabase Auth: ${err.message}`, "#EF4444");
