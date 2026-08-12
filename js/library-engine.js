@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    Thư Viện Kỹ Năng Sống & Tâm Lý Học Đường (Mental Health & Life Skills Library)
    Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
    Giáo viên TPT Đội: Cô Nguyễn Thị Ngọc Nga
@@ -16,7 +16,7 @@ const LIBRARY_ARTICLES = [
     excerpt: "Các quy tắc sinh tồn đặc biệt khi đi đò, tắm sông Nhơn Hội, cách sử dụng phao cứu sinh tự chế và kỹ năng ứng cứu gián tiếp an toàn.",
     content: `
       <h3>🌊 1. Thực trạng & Nguy cơ vùng sông nước An Giang</h3>
-      <p>Huyện An Phú và xã Nhơn Hội có hệ thống sông kênh rạch chằng chịt. Vào mùa nước nổi hay mùa nắng nóng, nhu cầu tắm sông của học sinh tăng cao nhưng ẩn chứa nhiều hố xoáy ngầm bất ngờ.</p>
+      <p>Xã Nhơn Hội (tỉnh An Giang) có hệ thống sông kênh rạch chằng chịt. Vào mùa nước nổi hay mùa nắng nóng, nhu cầu tắm sông của học sinh tăng cao nhưng ẩn chứa nhiều hố xoáy ngầm bất ngờ.</p>
       
       <h3>🚫 2. Quy tắc 3 KHÔNG bắt buộc</h3>
       <ul>
