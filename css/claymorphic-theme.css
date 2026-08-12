@@ -646,6 +646,20 @@ body {
 .badge-approved { background: #E0F2FE; color: #0284C7; }
 .badge-completed { background: #DCFCE7; color: #15803D; }
 
+/* 3D Claymorphic Thumbnail Images */
+.game-thumb-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  box-shadow: 0 6px 16px rgba(139, 115, 230, 0.18);
+  transition: var(--transition-smooth);
+}
+.game-card:hover .game-thumb-img {
+  transform: scale(1.03);
+}
+
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .app-container { flex-direction: column; }
