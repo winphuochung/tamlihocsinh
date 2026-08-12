@@ -256,20 +256,6 @@
               <button class="btn-clay-secondary" onclick="event.stopPropagation(); startGame('mental_health')">Chơi Thử Thách 🎯</button>
             </div>
           </div>
-
-          <!-- GAME PLAY MODAL / CONTAINER -->
-          <div id="game-container" style="display: none; margin-top: 24px; background: #FFFFFF; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-clay); border: 3px solid var(--primary-lavender-light);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-              <h3 id="game-title" style="font-size: 18px; font-weight: 800; color: var(--primary-lavender);">Tên Trò Chơi</h3>
-              <button class="btn-clay-secondary" onclick="closeGame()">X Thoát Trò Chơi</button>
-            </div>
-
-            <div id="game-body">
-              <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.5;"></p>
-              <div id="game-options" style="display: flex; flex-direction: column; gap: 12px;"></div>
-              <div id="game-feedback" style="margin-top: 20px; padding: 16px; border-radius: var(--radius-md); display: none;"></div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -424,6 +410,22 @@
       </section>
 
     </main>
+  </div>
+
+  <!-- GAME PLAY POPUP MODAL OVERLAY (NỔI TRÊN TOÀN BỘ MÀN HÌNH BẤM ĐÂU CŨNG HIỂN THỊ) -->
+  <div id="game-container" class="game-modal-overlay" style="display: none;">
+    <div class="game-modal-card">
+      <div class="game-modal-header">
+        <h3 id="game-title" style="font-size: 18px; font-weight: 800; color: var(--primary-lavender); margin: 0;">Tên Trò Chơi</h3>
+        <button class="btn-clay-secondary" onclick="closeGame()" style="padding: 6px 14px; font-size: 12px; border-radius: var(--radius-pill);">✖ Đóng Trò Chơi</button>
+      </div>
+
+      <div id="game-body">
+        <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.5;"></p>
+        <div id="game-options" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        <div id="game-feedback" style="margin-top: 20px; padding: 16px; border-radius: var(--radius-md); display: none;"></div>
+      </div>
+    </div>
   </div>
 
   <!-- SUPABASE CLOUD DATABASE JS SDK -->

@@ -164,19 +164,13 @@ let currentGameState = {
 };
 
 /**
- * BẮT ĐẦU TRÒ CHƠI KỸ NĂNG TƯƠNG TÁC (TỰ ĐỘNG CHUYỂN TAB VÀ CUỘN TRANG TỨC THÌ)
+ * BẮT ĐẦU TRÒ CHƠI KỸ NĂNG TƯƠNG TÁC (HIỂN THỊ DẠNG POPUP MODAL 3D OVERLAY NỔI MÀN HÌNH)
  */
 function startGame(gameKey) {
-  console.log("🎮 Đang bắt đầu trò chơi:", gameKey);
+  console.log("🎮 Đang mở Popup Modal Trò Chơi:", gameKey);
   const game = GAME_DATA[gameKey];
   if (!game) return;
 
-  // 1. Tự động chuyển sang Tab Trò Chơi Kỹ Năng
-  if (typeof switchTab === 'function') {
-    switchTab('games');
-  }
-
-  // 2. Khởi tạo trạng thái lượt chơi
   currentGameState = {
     gameKey: gameKey,
     questionIndex: 0,
@@ -184,18 +178,18 @@ function startGame(gameKey) {
     totalQuestions: game.questions.length
   };
 
-  // 3. Mở khung hiển thị game và render câu hỏi
   const container = document.getElementById('game-container');
   if (container) {
-    container.style.display = 'block';
-    renderCurrentQuestion();
+    // Reset cấu trúc khung game
+    document.getElementById('game-body').innerHTML = `
+      <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.5;"></p>
+      <div id="game-options" style="display: flex; flex-direction: column; gap: 12px;"></div>
+      <div id="game-feedback" style="margin-top: 20px; padding: 16px; border-radius: var(--radius-md); display: none;"></div>
+    `;
 
-    // 4. Cuộn màn hình tới khung game tức thì
-    setTimeout(() => {
-      const yOffset = -80;
-      const y = container.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }, 120);
+    // Kích hoạt hiển thị Popup Modal nổi trên toàn màn hình
+    container.style.display = 'flex';
+    renderCurrentQuestion();
   }
 }
 
