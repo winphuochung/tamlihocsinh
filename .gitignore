@@ -7,6 +7,10 @@ node_modules/
 .env.development
 .env.production
 
+# AI Agent configuration & skills (Ignore on GitHub)
+.agent/
+.Agent/
+
 # Logs & temp files
 *.log
 npm-debug.log*
