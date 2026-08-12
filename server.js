@@ -28,9 +28,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Route dự phòng tự động chuyển về index.html nếu không tìm thấy file tĩnh
+// Route dự phòng tự động chuyển về index.html cho các đường dẫn SPA (không chứa extension file như .css, .js)
 app.use((req, res, next) => {
-  if (req.method === 'GET' && !req.path.startsWith('/api/')) {
+  if (req.method === 'GET' && !req.path.startsWith('/api/') && !req.path.includes('.')) {
     return res.sendFile(path.join(__dirname, 'index.html'));
   }
   next();
