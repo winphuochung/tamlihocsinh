@@ -1,10 +1,9 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    Advanced AI Psychological Counselor Engine (Chuyên Gia Tư Vấn Tâm Lý Học Đường)
    Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
    Giáo viên TPT Đội: Cô Nguyễn Thị Ngọc Nga
    ========================================================================== */
 
-// Lưu trữ lịch sử hội thoại trong phiên trò chuyện
 let counselingHistory = [];
 
 /**
@@ -16,37 +15,56 @@ const CRISIS_PATTERNS = [
 ];
 
 /**
- * TỰ ĐỘNG PHÂN TÍCH BỐI CẢNH & CẢM XÚC (ADVANCED PSYCHOLOGICAL ANALYZER)
+ * TỰ ĐỘNG PHÂN TÍCH BỐI CẢNH & CẢM XÚC (ADVANCED PSYCHOLOGICAL ANALYZER - FIXED PRIORITY)
  */
 function analyzeStudentState(text) {
   const t = text.toLowerCase();
   
   // Trích xuất Khối lớp nếu có
   let grade = "";
-  if (t.includes("lớp 6") || t.includes("khối 6")) grade = "Khối 6";
-  else if (t.includes("lớp 7") || t.includes("khối 7")) grade = "Khối 7";
-  else if (t.includes("lớp 8") || t.includes("khối 8")) grade = "Khối 8";
-  else if (t.includes("lớp 9") || t.includes("khối 9")) grade = "Khối 9";
+  if (/\b(lớp 6|khối 6)\b/i.test(t)) grade = "Khối 6";
+  else if (/\b(lớp 7|khối 7)\b/i.test(t)) grade = "Khối 7";
+  else if (/\b(lớp 8|khối 8)\b/i.test(t)) grade = "Khối 8";
+  else if (/\b(lớp 9|khối 9)\b/i.test(t)) grade = "Khối 9";
 
-  // Phân loại miền tâm lý chuyên sâu
-  let domain = "general";
-  if (/áp lực|thi|điểm|học|kiểm tra|học lực|thức đêm|khảo sát|sợ rớt|học sút|mệt mỏi/i.test(t)) {
-    domain = "academic";
-  } else if (/bắt nạt|đánh|chửi|bạo lực|đe dọa|chặn đường|tẩy chay|cô lập|vây|nộp tiền|xô xát/i.test(t)) {
-    domain = "violence";
-  } else if (/facebook|tiktok|mạng|ảnh|bình luận|nhắn tin|bóc phốt|group|lừa đảo|bắt nạt mạng/i.test(t)) {
-    domain = "cyber";
-  } else if (/xâm hại|đụng chạm|bí mật|vùng kín|đồ lót|sờ|ép buộc|sợ hãi|người lạ|dụ dỗ/i.test(t)) {
-    domain = "abuse";
-  } else if (/đuối nước|bơi|sông|kênh|tắm sông|an giang|nhơn hội|tắm/i.test(t)) {
-    domain = "drowning";
-  } else if (/bố mẹ|ba mẹ|gia đình|cãi nhau|không hiểu|áp đặt|nổi giận|tủi thân|so sánh|mắng|chửi/i.test(t)) {
-    domain = "family";
-  } else if (/cô đơn|tự ti|kém cỏi|không ai chơi|bỏ rơi|buồn|khóc|bế tắc|lo âu|mệt/i.test(t)) {
-    domain = "emotion";
+  // THỨ TỰ ƯU TIÊN PHÂN LOẠI CHUẨN XÁC
+  
+  // 1. Xâm hại & Ranh giới cơ thể
+  if (/xâm hại|đụng chạm|vùng kín|đồ lót|sờ|ép buộc|người lạ dụ|chụp ảnh nhạy cảm/i.test(t)) {
+    return { domain: "abuse", grade, rawText: text };
   }
 
-  return { domain, grade, rawText: text };
+  // 2. Bắt nạt & Bạo lực học đường (Phải đứng TRƯỚC Áp lực học tập để không dính từ "học" trong "bắt nạt học đường")
+  if (/bắt nạt|bạo lực|đánh|chửi|đe dọa|chặn đường|tẩy chay|cô lập|vây|nộp tiền|xô xát|bị bạn/i.test(t)) {
+    return { domain: "violence", grade, rawText: text };
+  }
+
+  // 3. Bắt nạt mạng & Không gian mạng
+  if (/facebook|tiktok|zalo|bắt nạt mạng|bình luận ác|xúc phạm|bóc phốt|group|lừa đảo|lộ ảnh/i.test(t)) {
+    return { domain: "cyber", grade, rawText: text };
+  }
+
+  // 4. An toàn sông nước & Đuối nước
+  if (/đuối nước|bơi|tắm sông|tắm kênh|chìm|sông nhơn hội|trôi nước/i.test(t)) {
+    return { domain: "drowning", grade, rawText: text };
+  }
+
+  // 5. Mâu thuẫn gia đình & Bố mẹ
+  if (/bố mẹ|ba mẹ|gia đình|cãi nhau|áp đặt|nổi giận|tủi thân|so sánh|bị mắng|bị chửi/i.test(t)) {
+    return { domain: "family", grade, rawText: text };
+  }
+
+  // 6. Áp lực học tập & Thi cử (Cụm từ chuẩn xác, KHÔNG dùng từ "học" đứng một mình)
+  if (/áp lực học|thi cử|điểm kém|kiểm tra|học lực|thức đêm|khảo sát|sợ rớt|học sút|áp lực thi|mệt mỏi học/i.test(t)) {
+    return { domain: "academic", grade, rawText: text };
+  }
+
+  // 7. Tâm lý cảm xúc (Cô đơn, tự ti, buồn khóc)
+  if (/cô đơn|tự ti|kém cỏi|không ai chơi|bỏ rơi|buồn|khóc|bế tắc|lo âu|mệt mỏi/i.test(t)) {
+    return { domain: "emotion", grade, rawText: text };
+  }
+
+  return { domain: "general", grade, rawText: text };
 }
 
 /**
@@ -87,8 +105,19 @@ function generateProfessionalCounselingReply(userText) {
   let questionPart = "";
 
   switch (state.domain) {
+    case "violence":
+      empathyPart = `🛡️ Chào em ${state.grade ? `học sinh ${state.grade}` : ''}! Thầy/Cô Chuyên gia Tư vấn lắng nghe thấy sự lo lắng và tổn thương trong lời nhắn của em: <i>"${userText}"</i>. Xin em hãy nhớ kỹ điều này: <strong>Bắt nạt hay bạo lực học đường tuyệt đối KHÔNG PHẢI LÀ LỖI CỦA EM!</strong>`;
+      analysisPart = `⚖️ <strong>Góc nhìn chuyên gia tâm lý & Pháp luật:</strong> Đe dọa, đánh đập hay cô lập người khác là hành vi vi phạm nghiêm trọng nội quy học đường và pháp luật. Việc im lặng nhượng bộ thường khiến kẻ bắt nạt càng lấn tới. Em hoàn toàn có quyền được bảo vệ an toàn tại THCS Phước Hưng!`;
+      stepsPart = [
+        "<strong>1. An toàn Thân thể là số 1:</strong> Tránh đi một mình ở hành lang vắng, khu vực tối hoặc cổng trường lúc tan học.",
+        "<strong>2. Nguyên tắc 'Nhìn Thẳng & Nói Ngắn':</strong> Giữ thái độ bình tĩnh, nhìn thẳng, nói rõ <i>'Tôi không đồng ý'</i> và nhanh chóng di chuyển đến nơi có thầy cô hoặc đông bạn bè.",
+        "<strong>3. Báo Tin Bảo Vệ Ẩn Danh:</strong> Thu thập thông tin (ai đe dọa, ở đâu) và gửi ngay cho nhà trường qua kênh bảo mật."
+      ];
+      questionPart = "Tình huống bắt nạt này xảy ra ở trong lớp hay ngoài cổng trường vậy em? Em đã kể điều này cho thầy cô hoặc cha mẹ nghe chưa?";
+      break;
+
     case "academic":
-      empathyPart = `💖 Chào em ${state.grade ? `học sinh ${state.grade}` : ''}! Thầy/Cô Chuyên gia Tư vấn cảm nhận được áp lực thi cử và sự dồn dập đang đè nặng lên vai em. Cảm giác sợ bị điểm kém hay sợ người lớn thất vọng là nỗi lo rất thật mà học sinh lứa tuổi em thường trải qua.`;
+      empathyPart = `💖 Chào em ${state.grade ? `học sinh ${state.grade}` : ''}! Thầy/Cô Chuyên gia Tư vấn cảm nhận được áp lực thi cử và sự dồn dập đang đè nặng lên vai em trong lời tâm sự: <i>"${userText}"</i>. Cảm giác sợ bị điểm kém hay sợ người lớn thất vọng là nỗi lo rất thật mà học sinh lứa tuổi em thường trải qua.`;
       analysisPart = `🧠 <strong>Giải mã góc nhìn tâm lý CBT:</strong> Bộ não con người khi gặp áp lực thi cử kéo dài sẽ tiết ra lượng lớn hormone Cortisol gây mệt mỏi và giảm khả năng tập trung tới 50%. Điểm số là thước đo phản ánh một bài làm tại một thời điểm, hoàn toàn <i>không định giá năng lực hay tương lai cả đời của em</i>.`;
       stepsPart = [
         "<strong>1. Hạ nhiệt căng thẳng 15 phút:</strong> Áp dụng phương pháp <i>Pomodoro</i> (Học tập trung 25 phút -> Nghỉ ngơi 5 phút). Tuyệt đối không thức sau 23h đêm thi.",
@@ -98,19 +127,8 @@ function generateProfessionalCounselingReply(userText) {
       questionPart = "Bây giờ em cảm thấy căng thẳng nhất ở môn học nào hay ở kỳ thi sắp tới? Em có muốn chia sẻ cụ thể hơn với Thầy/Cô không?";
       break;
 
-    case "violence":
-      empathyPart = `🛡️ Chào em! Thầy/Cô rất tiếc và lắng nghe bằng tất cả sự thấu cảm với tổn thương em đang gặp phải. Xin em nhớ rõ điều này: <strong>Bạo lực hay hành vi bắt nạt tuyệt đối KHÔNG PHẢI LÀ LỖI CỦA EM!</strong>`;
-      analysisPart = `⚖️ <strong>Góc nhìn chuyên gia tâm lý & Pháp luật:</strong> Đe dọa, đánh đập hay cô lập người khác là hành vi vi phạm nghiêm trọng nội quy học đường và pháp luật. Việc im lặng thương lượng thường khiến kẻ bắt nạt càng lấn tới. Em có quyền được bảo vệ an toàn tại THCS Phước Hưng!`;
-      stepsPart = [
-        "<strong>1. An toàn Thân thể là số 1:</strong> Tránh đi một mình ở hành lang vắng, khu vực tối hoặc cổng trường lúc tan học.",
-        "<strong>2. Nguyên tắc 'Nhìn Thẳng & Nói Ngắn':</strong> Giữ thái độ bình tĩnh, nhìn thẳng, nói rõ <i>'Tôi không đồng ý'</i> và nhanh chóng di chuyển đến nơi có đông thầy cô/bạn bè.",
-        "<strong>3. Sử dụng Kênh Báo Báo Ẩn Danh:</strong> Thu thập thông tin (thời gian, người đe dọa) và gửi cho nhà trường."
-      ];
-      questionPart = "Tình huống bắt nạt này xảy ra ở lớp hay ngoài cổng trường vậy em? Em đã kể điều này cho ai nghe chưa?";
-      break;
-
     case "cyber":
-      empathyPart = `🌐 Chào em! Thầy/Cô rất hiểu sự bối rối, lo âu và cảm giác tổn thương khi thông tin hoặc hình ảnh riêng tư của em bị xúc phạm trên không gian mạng. Đừng tự trách mình nhé em!`;
+      empathyPart = `🌐 Chào em! Thầy/Cô rất hiểu sự bối rối, lo âu và cảm giác tổn thương khi thông tin hoặc hình ảnh riêng tư của em bị xúc phạm trên không gian mạng: <i>"${userText}"</i>. Đừng tự trách mình nhé em!`;
       analysisPart = `🔍 <strong>Góc nhìn chuyên gia tâm lý mạng:</strong> Kẻ bắt nạt trực tuyến thường lợi dụng tính ẩn danh để gây hoảng loạn tâm lý. Khi em không phản ứng tiêu cực hay tranh cãi trên mạng, đối phương sẽ nhanh chóng mất đi điểm tựa gây hại.`;
       stepsPart = [
         "<strong>1. Lưu giữ Bằng Chứng:</strong> Chụp màn hình tất cả tin nhắn, bài viết, bình luận ác ý (không xóa tin nhắn làm bằng chứng).",
@@ -121,7 +139,7 @@ function generateProfessionalCounselingReply(userText) {
       break;
 
     case "abuse":
-      empathyPart = `🦺 Em thân mến, Thầy/Cô ở đây bên em. Em rất dũng cảm khi mở lòng chia sẻ điều này. Xin em khắc ghi: <strong>Cơ thể em là của riêng em, em KHÔNG CÓ LỖI và không phải tự dằn dặt vì bất kỳ hành vi đụng chạm sai trái nào của người khác!</strong>`;
+      empathyPart = `🦺 Em thân mến, Thầy/Cô ở đây bên em. Em rất dũng cảm khi mở lòng chia sẻ điều này: <i>"${userText}"</i>. Xin em khắc ghi: <strong>Cơ thể em là của riêng em, em KHÔNG CÓ LỖI và không phải tự dằn dặt vì bất kỳ hành vi đụng chạm sai trái nào của người khác!</strong>`;
       analysisPart = `🛡️ <strong>Góc nhìn chuyên gia tâm lý bảo vệ trẻ em:</strong> Không ai (kể cả người quen hay họ hàng) có quyền đụng chạm vào vùng riêng tư (vùng đồ lót) hoặc ép em giữ những bí mật làm em sợ hãi.`;
       stepsPart = [
         "<strong>1. Áp dụng Quy tắc 5 Ngón Tay:</strong> Kiên quyết hét to <i>'KHÔNG! ĐỪNG CHẠM VÀO TÔI!'</i>.",
@@ -132,7 +150,7 @@ function generateProfessionalCounselingReply(userText) {
       break;
 
     case "drowning":
-      empathyPart = `🏊 Chào em! Thầy/Cô đánh giá rất cao tinh thần chủ động tìm hiểu an toàn sông nước của em - đây là kỹ năng sống cực kỳ quan trọng tại vùng sông nước An Giang mình!`;
+      empathyPart = `🏊 Chào em! Thầy/Cô đánh giá rất cao tinh thần chủ động tìm hiểu an toàn sông nước của em: <i>"${userText}"</i> - đây là kỹ năng sống cực kỳ quan trọng tại vùng sông nước An Giang mình!`;
       analysisPart = `🌊 <strong>Góc nhìn chuyên gia an toàn sông nước:</strong> Kênh rạch tại xã Nhơn Hội có các dòng chảy xoáy và hố sâu bất ngờ. Việc trang bị kiến thức an toàn giúp em bảo vệ bản thân và bạn bè xung quanh.`;
       stepsPart = [
         "<strong>1. Quy tắc 3 KHÔNG:</strong> Không tự ý tắm sông/kênh; Không tự nhảy xuống nước cứu bạn khi chưa được huấn luyện; Không đi chơi sát bờ kênh một mình.",
@@ -143,7 +161,7 @@ function generateProfessionalCounselingReply(userText) {
       break;
 
     case "family":
-      empathyPart = `🏡 Chào em! Thầy/Cô lắng nghe thấy sự tủi thân, hụt hẫng và cảm giác bế tắc khi em cảm thấy người thân yêu nhất lại không hiểu hay lắng nghe mình.`;
+      empathyPart = `🏡 Chào em! Thầy/Cô lắng nghe thấy sự tủi thân, hụt hẫng và cảm giác bế tắc khi em cảm thấy người thân yêu nhất lại không hiểu hay lắng nghe mình: <i>"${userText}"</i>.`;
       analysisPart = `🌱 <strong>Góc nhìn chuyên gia tâm lý gia đình:</strong> Tuổi THCS là giai đoạn em đang hình thành cá tính riêng. Bố mẹ đôi khi vì lo lắng hoặc áp lực cuộc sống nên đã chọn sai cách truyền đạt khiến em cảm thấy bị áp đặt hay so sánh.`;
       stepsPart = [
         "<strong>1. Hạ Nhiệt Lúc Căng Thẳng:</strong> Khi bầu không khí nảy lửa, hãy xin phép vào phòng riêng hoặc đi uống nước để giữ bình tĩnh.",
@@ -154,7 +172,7 @@ function generateProfessionalCounselingReply(userText) {
       break;
 
     case "emotion":
-      empathyPart = `🌸 Em thân mến, Thầy/Cô muốn gửi đến em một cái ôm ấm áp. Cảm giác cô đơn, tự ti hay mất phương hướng là trải nghiệm tâm lý mà ai trong lứa tuổi học sinh cũng từng trải qua.`;
+      empathyPart = `🌸 Em thân mến, Thầy/Cô muốn gửi đến em một cái ôm ấm áp sau lời tâm sự của em: <i>"${userText}"</i>. Cảm giác cô đơn, tự ti hay mất phương hướng là trải nghiệm tâm lý mà ai trong lứa tuổi học sinh cũng từng trải qua.`;
       analysisPart = `✨ <strong>Góc nhìn chuyên gia tâm lý:</strong> Mỗi người chúng ta là một phiên bản độc bản duy nhất. Những cảm xúc buồn bã tạm thời không định nghĩa con người em. Em có những giá trị và tiềm năng rất riêng.`;
       stepsPart = [
         "<strong>1. Ngừng So Sánh Bản Thân:</strong> Mạng xã hội chỉ đăng những điều đẹp đẽ nhất của người khác, đó không phải toàn bộ thực tế.",
@@ -165,7 +183,7 @@ function generateProfessionalCounselingReply(userText) {
       break;
 
     default:
-      empathyPart = `🌱 <strong>Chào em! Thầy/Cô Chuyên gia Tư vấn tâm lý rất vui vì em đã tin tưởng và mở lòng chia sẻ.</strong>`;
+      empathyPart = `🌱 <strong>Chào em! Thầy/Cô Chuyên gia Tư vấn tâm lý rất vui vì em đã tin tưởng và mở lòng chia sẻ: <i>"${userText}"</i>.</strong>`;
       analysisPart = `Mọi băn khoăn, cảm xúc dù là nhỏ nhất của em đều thật sự quan trọng và đáng được tôn trọng. Khi em cảm thấy bối rối, việc cởi mở nói ra đã là một bước tiến rất dũng cảm rồi đấy!`;
       stepsPart = [
         "<strong>1. Nhận diện cảm xúc:</strong> Hãy thử đặt tên cho cảm xúc lúc này của em (Lo lắng, buồn bã, hay giận dữ?).",
@@ -276,4 +294,3 @@ function sendQuickQuery(queryText) {
   document.getElementById('chat-input').value = queryText;
   sendChatMessage();
 }
-
