@@ -164,11 +164,16 @@ let currentGameState = {
 };
 
 /**
- * BẮT ĐẦU TRÒ CHƠI KỸ NĂNG TƯƠNG TÁC
+ * BẮT ĐẦU TRÒ CHƠI KỸ NĂNG TƯƠNG TÁC (TỰ ĐỘNG CHUYỂN TAB KHI BẤM TỪ TRANG CHỦ)
  */
 function startGame(gameKey) {
   const game = GAME_DATA[gameKey];
   if (!game) return;
+
+  // Tự động chuyển sang Tab Trò Chơi Kỹ Năng nếu bấm từ Trang Chủ
+  if (typeof switchTab === 'function') {
+    switchTab('games');
+  }
 
   currentGameState = {
     gameKey: gameKey,
@@ -178,10 +183,13 @@ function startGame(gameKey) {
   };
 
   const container = document.getElementById('game-container');
-  container.style.display = 'block';
-
-  renderCurrentQuestion();
-  container.scrollIntoView({ behavior: 'smooth' });
+  if (container) {
+    container.style.display = 'block';
+    renderCurrentQuestion();
+    setTimeout(() => {
+      container.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  }
 }
 
 /**
