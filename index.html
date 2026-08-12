@@ -397,42 +397,38 @@
         </div>
       </section>
 
-      <!-- TAB 6: MENTAL HEALTH RESOURCES -->
+      <!-- TAB 6: MENTAL HEALTH & LIFE SKILLS LIBRARY -->
       <section id="tab-resources" class="tab-view">
         <div class="card-section">
-          <div class="card-header">
-            <h2><i class="fa-solid fa-book-open-reader" style="color: var(--primary-mint);"></i> Thư Viện Kỹ Năng Sống & Tâm Lý</h2>
+          <div class="card-header" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;">
+            <h2><i class="fa-solid fa-book-open-reader" style="color: var(--primary-mint);"></i> Thư Viện Kỹ Năng Sống & Tâm Lý Học Đường</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Trang bị cẩm nang sinh tồn, an toàn sông nước & chăm sóc sức khỏe tinh thần 24/7</p>
           </div>
 
-          <div class="games-grid">
-            <div class="game-card" style="text-align: left;">
-              <div style="font-size: 32px; margin-bottom: 8px;">🏊‍♂️</div>
-              <span class="badge-status badge-approved">An toàn sông nước</span>
-              <h3 style="margin-top: 8px;">Cẩm nang An toàn Phòng chống Đuối nước An Giang</h3>
-              <p>Các nguyên tắc sinh tồn khi hoạt động gần vùng sông nước, cách dùng phao cứu sinh tự chế.</p>
-              <p style="font-size: 11px; color: var(--primary-lavender); font-weight: 700;">Tác giả: Cô Nguyễn Thị Ngọc Nga</p>
-            </div>
-
-            <div class="game-card" style="text-align: left;">
-              <div style="font-size: 32px; margin-bottom: 8px;">🛡️</div>
-              <span class="badge-status badge-pending">Kỹ năng ứng xử</span>
-              <h3 style="margin-top: 8px;">Xử Lý Khi Bị Bắt Nạt Trực Tuyến</h3>
-              <p>Cách chụp màn hình bằng chứng, chặn tài khoản xấu và nhờ sự can thiệp của nhà trường.</p>
-              <p style="font-size: 11px; color: var(--primary-lavender); font-weight: 700;">Tác giả: Liên Đội THCS Phước Hưng</p>
-            </div>
-
-            <div class="game-card" style="text-align: left;">
-              <div style="font-size: 32px; margin-bottom: 8px;">🧘‍♀️</div>
-              <span class="badge-status badge-completed">Sức khỏe tinh thần</span>
-              <h3 style="margin-top: 8px;">5 Bài Tập Thở Giúp Giảm Căng Thắng Thi Cử</h3>
-              <p>Phương pháp hít thở sâu 4-7-8 cân bằng cảm xúc chỉ trong 3 phút trước khi bước vào phòng thi.</p>
-              <p style="font-size: 11px; color: var(--primary-lavender); font-weight: 700;">Tác giả: Chuyên gia Tâm lý Học đường</p>
-            </div>
+          <!-- CATEGORY FILTER BUTTONS -->
+          <div style="display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 6px; flex-wrap: wrap;">
+            <button class="btn-clay lib-filter-btn" onclick="filterLibrary('all', this)">🌐 Tất Cả Bài Viết</button>
+            <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('water_safety', this)">🏊 An Toàn Sông Nước</button>
+            <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('bullying', this)">🛡️ Ứng Xử Bắt Nạt</button>
+            <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('cyber', this)">💻 An Toàn Số</button>
+            <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('protection', this)">🦺 Bảo Vệ Trẻ Em</button>
+            <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('mental_health', this)">🧘‍♀️ Sức Khỏe Tinh Thần</button>
           </div>
+
+          <!-- ARTICLES GRID -->
+          <div id="library-articles-grid" class="games-grid"></div>
         </div>
       </section>
 
     </main>
+  </div>
+
+  <!-- ARTICLE READER MODAL OVERLAY -->
+  <div id="article-modal" class="modal-overlay" style="display: none;" onclick="closeArticleModal(event)">
+    <div class="modal-content" style="max-width: 760px; max-height: 88vh; overflow-y: auto; position: relative; border-radius: 24px; padding: 24px;" onclick="event.stopPropagation()">
+      <button class="modal-close" style="position: absolute; top: 16px; right: 20px; font-size: 24px; border: none; background: none; cursor: pointer; color: var(--text-muted);" onclick="closeArticleModal()">&times;</button>
+      <div id="article-modal-body"></div>
+    </div>
   </div>
 
   <!-- SUPABASE CLOUD DATABASE JS SDK -->
@@ -442,5 +438,6 @@
   <script src="js/games-engine.js?v=1.0.2"></script>
   <script src="js/ai-chat.js?v=1.0.5"></script>
   <script src="js/anonymous-booking.js?v=1.0.2"></script>
+  <script src="js/library-engine.js?v=1.0.1"></script>
 </body>
 </html>
