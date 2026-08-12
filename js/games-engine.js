@@ -164,12 +164,17 @@ let currentGameState = {
 };
 
 /**
- * BẮT ĐẦU TRÒ CHƠI KỸ NĂNG TƯƠNG TÁC (HIỂN THỊ DẠNG POPUP MODAL 3D OVERLAY NỔI MÀN HÌNH)
+ * BẮT ĐẦU TRÒ CHƠI KỸ NĂNG TƯƠNG TÁC (TÍCH HỢP NATIVE - CHUẨN MOBI/DESKTOP)
  */
 function startGame(gameKey) {
-  console.log("🎮 Đang mở Popup Modal Trò Chơi:", gameKey);
+  console.log("🎮 Đang mở Trò Chơi Kỹ Năng:", gameKey);
   const game = GAME_DATA[gameKey];
   if (!game) return;
+
+  // 1. Tự động chuyển sang Tab Trò Chơi Kỹ Năng
+  if (typeof switchTab === 'function') {
+    switchTab('games');
+  }
 
   currentGameState = {
     gameKey: gameKey,
@@ -178,18 +183,28 @@ function startGame(gameKey) {
     totalQuestions: game.questions.length
   };
 
+  // 2. Ẩn danh sách thẻ game, Mở khung chơi game tích hợp
+  const grid = document.getElementById('games-grid');
+  if (grid) grid.style.display = 'none';
+
   const container = document.getElementById('game-container');
   if (container) {
     // Reset cấu trúc khung game
     document.getElementById('game-body').innerHTML = `
-      <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.5;"></p>
+      <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.6; background: #F8F5FE; padding: 16px 20px; border-radius: var(--radius-md); border-left: 5px solid var(--primary-lavender);"></p>
       <div id="game-options" style="display: flex; flex-direction: column; gap: 12px;"></div>
-      <div id="game-feedback" style="margin-top: 20px; padding: 16px; border-radius: var(--radius-md); display: none;"></div>
+      <div id="game-feedback" style="margin-top: 20px; padding: 18px; border-radius: var(--radius-md); display: none;"></div>
     `;
 
-    // Kích hoạt hiển thị Popup Modal nổi trên toàn màn hình
-    container.style.display = 'flex';
+    container.style.display = 'block';
     renderCurrentQuestion();
+
+    // Cuộn trang mượt về đúng đầu khung game
+    setTimeout(() => {
+      const yOffset = -80;
+      const y = container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }, 100);
   }
 }
 
@@ -318,11 +333,16 @@ async function finishGame() {
 }
 
 function closeGame() {
-  document.getElementById('game-container').style.display = 'none';
+  const container = document.getElementById('game-container');
+  if (container) container.style.display = 'none';
+
+  const grid = document.getElementById('games-grid');
+  if (grid) grid.style.display = 'grid';
+
   // Reset game body
   document.getElementById('game-body').innerHTML = `
-    <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.5;"></p>
+    <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.6; background: #F8F5FE; padding: 16px 20px; border-radius: var(--radius-md); border-left: 5px solid var(--primary-lavender);"></p>
     <div id="game-options" style="display: flex; flex-direction: column; gap: 12px;"></div>
-    <div id="game-feedback" style="margin-top: 20px; padding: 16px; border-radius: var(--radius-md); display: none;"></div>
+    <div id="game-feedback" style="margin-top: 20px; padding: 18px; border-radius: var(--radius-md); display: none;"></div>
   `;
 }

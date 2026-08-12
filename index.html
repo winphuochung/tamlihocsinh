@@ -220,7 +220,7 @@
             <p style="font-size: 13px; color: var(--text-muted);">Vừa chơi vừa rèn luyện kỹ năng ứng phó tình huống thực tế</p>
           </div>
 
-          <div class="games-grid">
+          <div class="games-grid" id="games-grid">
             <div class="game-card" onclick="startGame('school_violence')">
               <img src="images/game-thumb-1.jpg" alt="Phòng chống bạo lực học đường" class="game-thumb-badge" style="width: 80px; height: 80px; max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 20px; margin: 0 auto 12px; display: block; border: 3px solid #FFFFFF; box-shadow: 0 6px 18px rgba(139, 115, 230, 0.22);">
               <h3>1. Phòng Chống Bạo Lực Học Đường</h3>
@@ -254,6 +254,28 @@
               <h3>5. Giải Tỏa Áp Lực Học Tập</h3>
               <p>Phương pháp điều hòa cảm xúc, giải tỏa căng thẳng trước kỳ thi.</p>
               <button class="btn-clay-secondary" onclick="event.stopPropagation(); startGame('mental_health')">Chơi Thử Thách 🎯</button>
+            </div>
+          </div>
+
+          <!-- INTEGRATED GAME PLAY PANEL (TÍCH HỢP GIAO DIỆN TRONG TRANG - CHUẨN MOBI/DESKTOP) -->
+          <div id="game-container" class="game-play-panel" style="display: none;">
+            <div class="game-panel-header">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 28px;">🎮</span>
+                <div>
+                  <h3 id="game-title" style="font-size: 18px; font-weight: 800; color: var(--primary-lavender); margin: 0;">Tên Trò Chơi</h3>
+                  <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Trường THCS Phước Hưng • Thử Thách Kỹ Năng Sống</span>
+                </div>
+              </div>
+              <button class="btn-clay-secondary" onclick="closeGame()" style="padding: 8px 16px; font-size: 13px; border-radius: var(--radius-pill); cursor: pointer;">
+                ⬅ Quay Lại Danh Sách Game
+              </button>
+            </div>
+
+            <div id="game-body" style="margin-top: 16px;">
+              <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.6; background: #F8F5FE; padding: 16px 20px; border-radius: var(--radius-md); border-left: 5px solid var(--primary-lavender);"></p>
+              <div id="game-options" style="display: flex; flex-direction: column; gap: 12px;"></div>
+              <div id="game-feedback" style="margin-top: 20px; padding: 18px; border-radius: var(--radius-md); display: none;"></div>
             </div>
           </div>
         </div>
@@ -410,22 +432,6 @@
       </section>
 
     </main>
-  </div>
-
-  <!-- GAME PLAY POPUP MODAL OVERLAY (NỔI TRÊN TOÀN BỘ MÀN HÌNH BẤM ĐÂU CŨNG HIỂN THỊ) -->
-  <div id="game-container" class="game-modal-overlay" style="display: none;">
-    <div class="game-modal-card">
-      <div class="game-modal-header">
-        <h3 id="game-title" style="font-size: 18px; font-weight: 800; color: var(--primary-lavender); margin: 0;">Tên Trò Chơi</h3>
-        <button class="btn-clay-secondary" onclick="closeGame()" style="padding: 6px 14px; font-size: 12px; border-radius: var(--radius-pill);">✖ Đóng Trò Chơi</button>
-      </div>
-
-      <div id="game-body">
-        <p id="game-question" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.5;"></p>
-        <div id="game-options" style="display: flex; flex-direction: column; gap: 12px;"></div>
-        <div id="game-feedback" style="margin-top: 20px; padding: 16px; border-radius: var(--radius-md); display: none;"></div>
-      </div>
-    </div>
   </div>
 
   <!-- SUPABASE CLOUD DATABASE JS SDK -->
