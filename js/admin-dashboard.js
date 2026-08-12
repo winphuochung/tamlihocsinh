@@ -92,34 +92,29 @@ async function authenticateAdminWithPassword() {
     return;
   }
 
-  showAuthMsg("⏳ Đang kết nối Supabase Auth...", "#3B82F6");
+  showAuthMsg("⏳ Đang xác thực mật khẩu bảo mật...", "#3B82F6");
 
-  // A. Nếu dùng Mật khẩu Local dự phòng
-  if (password === '123456' || password === 'admin') {
-    showAuthMsg("✅ Đăng nhập thành công!", "#10B981");
+  // Kiểm tra Mật khẩu bí mật riêng của Cô Nga đã lưu
+  const teacherPrivatePass = localStorage.getItem('teacher_private_admin_pass') || 'CôNgọcNga@2026';
+
+  if (password === teacherPrivatePass) {
+    showAuthMsg("✅ Đăng nhập bảo mật thành công!", "#10B981");
     setTimeout(() => {
       document.getElementById('admin-login-modal').style.display = 'none';
       renderAdminBookings();
       initRealtimeSupabaseListener();
     }, 400);
-
-    const client = getActiveSupabaseClient();
-    if (client) {
-      client.auth.signInWithPassword({ email, password }).catch(async () => {
-        await client.auth.signUp({ email, password });
-      });
-    }
     return;
   }
 
-  // B. Thử Đăng nhập chính thức qua Supabase Auth API
+  // Thử Đăng nhập chính thức qua Supabase Auth API
   try {
     let result = await supabaseApiSignInWithPassword(email, password);
     if (result.error) {
       if (result.error.message.includes("Invalid login credentials") || result.error.message.includes("chưa đăng ký")) {
         let signUpRes = await supabaseApiSignUp(email, password);
         if (!signUpRes.error) {
-          showAuthMsg("🎉 Đã tạo mới và Đăng nhập thành công tài khoản Supabase Auth!", "#10B981");
+          showAuthMsg("🎉 Đã khởi tạo và Đăng nhập thành công tài khoản Supabase Auth!", "#10B981");
           currentAdminUser = signUpRes.data ? (signUpRes.data.user || signUpRes.data) : { email };
           setTimeout(() => {
             document.getElementById('admin-login-modal').style.display = 'none';
@@ -129,7 +124,7 @@ async function authenticateAdminWithPassword() {
           return;
         }
       }
-      showAuthMsg(`⚠️ ${result.error.message}`, "#EF4444");
+      showAuthMsg(`❌ Mật khẩu hoặc Email bảo mật chưa chính xác. Học sinh không có quyền truy cập!`, "#EF4444");
     } else {
       showAuthMsg("✅ Đăng nhập Supabase Auth thành công!", "#10B981");
       currentAdminUser = result.data ? (result.data.user || result.data) : { email };
@@ -140,7 +135,20 @@ async function authenticateAdminWithPassword() {
       }, 500);
     }
   } catch (err) {
-    showAuthMsg(`⚠️ Lỗi kết nối: ${err.message}`, "#EF4444");
+    showAuthMsg(`❌ Lỗi xác thực bảo mật: Mật khẩu chưa đúng!`, "#EF4444");
+  }
+}
+
+/**
+ * HÀM ĐỔI MẬT KHẨU BẢO MẬT RÊNG DÀNH CHO CÔ NGỌC NGA
+ */
+function changeTeacherAdminPassword() {
+  const newPass = prompt("Nhập mật khẩu bí mật mới dành riêng cho Cô Ngọc Nga:");
+  if (newPass && newPass.trim().length >= 6) {
+    localStorage.setItem('teacher_private_admin_pass', newPass.trim());
+    alert("✅ Đã đổi mật khẩu bảo mật riêng cho Cô Ngọc Nga thành công!");
+  } else if (newPass) {
+    alert("⚠️ Mật khẩu phải có ít nhất 6 ký tự!");
   }
 }
 

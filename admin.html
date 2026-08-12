@@ -25,17 +25,17 @@
       <!-- FORM 1: PASSWORD LOGIN -->
       <div id="auth-form-pass">
         <div class="form-group" style="text-align: left;">
-          <label>Email Quản trị viên (Supabase Auth):</label>
-          <input type="email" id="admin-email" class="form-control" value="nguyenthithuongnga@gmail.com" placeholder="email@gmail.com">
+          <label>Email Giáo viên Quản trị:</label>
+          <input type="email" id="admin-email" class="form-control" placeholder="Nhập email giáo viên..." autocomplete="off">
         </div>
 
         <div class="form-group" style="text-align: left;">
-          <label>Mật khẩu quản trị:</label>
-          <input type="password" id="admin-password" class="form-control" value="123456" placeholder="Nhập mật khẩu...">
+          <label>Mật khẩu bảo mật riêng:</label>
+          <input type="password" id="admin-password" class="form-control" placeholder="Nhập mật khẩu bí mật..." autocomplete="off">
         </div>
 
         <button class="btn-clay" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px;" onclick="authenticateAdminWithPassword()">
-          <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Supabase Auth
+          <i class="fa-solid fa-lock"></i> Đăng Nhập Bảo Mật Giáo Viên
         </button>
       </div>
 
@@ -43,11 +43,11 @@
       <div id="auth-form-otp" style="display: none;">
         <div class="form-group" style="text-align: left;">
           <label>Nhập Email Giáo viên nhận mã OTP / Magic Link:</label>
-          <input type="email" id="admin-otp-email" class="form-control" value="nguyenthithuongnga@gmail.com" placeholder="email@gmail.com">
+          <input type="email" id="admin-otp-email" class="form-control" placeholder="Nhập email giáo viên..." autocomplete="off">
         </div>
 
         <button class="btn-clay" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px;" onclick="sendSupabaseOtp()">
-          <i class="fa-solid fa-paper-plane"></i> Gửi Mã OTP / Email Magic Link
+          <i class="fa-solid fa-paper-plane"></i> Gửi Mã OTP Về Email Dành Cho Giáo Viên
         </button>
       </div>
 
@@ -104,6 +104,9 @@
         </div>
 
         <div class="top-bar-actions">
+          <button class="btn-clay-secondary" onclick="changeTeacherAdminPassword()">
+            <i class="fa-solid fa-key"></i> Đổi Mật Khẩu
+          </button>
           <button class="btn-clay-secondary" onclick="exportFullDatabase('excel')">
             <i class="fa-solid fa-file-excel"></i> Xuất Excel / CSV
           </button>
