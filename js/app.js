@@ -4,6 +4,11 @@
    ========================================================================== */
 
 function switchTab(tabId) {
+  // Reset game view nếu đang mở game
+  if (typeof closeGame === 'function') {
+    closeGame();
+  }
+
   // Hide all tab views
   const views = document.querySelectorAll('.tab-view');
   views.forEach(view => view.classList.remove('active'));
