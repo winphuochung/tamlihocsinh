@@ -646,7 +646,23 @@ body {
 .badge-approved { background: #E0F2FE; color: #0284C7; }
 .badge-completed { background: #DCFCE7; color: #15803D; }
 
-/* 3D Claymorphic Thumbnail Images */
+/* 3D Claymorphic Thumbnail Badge (Gắn đúng vị trí icon 3D từng thẻ game) */
+.game-thumb-badge {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 24px;
+  margin: 0 auto 16px auto;
+  display: block;
+  box-shadow: 0 10px 24px rgba(139, 115, 230, 0.22);
+  border: 3px solid #FFFFFF;
+  transition: var(--transition-smooth);
+}
+.game-card:hover .game-thumb-badge {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 14px 30px rgba(139, 115, 230, 0.35);
+}
+
 .game-thumb-img {
   width: 100%;
   height: 150px;
