@@ -18,25 +18,31 @@ function switchTab(tabId) {
     targetView.classList.add('active');
   }
 
-  // Highlight active sidebar item
-  event?.currentTarget?.classList.add('active');
+  // Highlight active sidebar item (hỗ trợ cả click tay và gọi tự động bằng JS)
+  const targetNavItem = document.querySelector(`.nav-item[onclick*="${tabId}"]`);
+  if (targetNavItem) {
+    targetNavItem.classList.add('active');
+  }
 }
 
 // Quick lookup from top widget
 function quickLookup() {
-  const code = document.getElementById('quick-lookup-code').value.trim();
+  const codeInput = document.getElementById('quick-lookup-code');
+  const code = codeInput ? codeInput.value.trim() : '';
   if (!code) {
     alert('Vui lòng nhập Mã Tra Cứu Bí Mật!');
     return;
   }
 
   switchTab('lookup');
-  document.getElementById('lookup-input-code').value = code;
+  const lookupInput = document.getElementById('lookup-input-code');
+  if (lookupInput) lookupInput.value = code;
+  
   if (typeof executeLookup === 'function') {
     executeLookup();
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Hệ thống Tư vấn Tâm lý THCS Phước Hưng đã sẵn sàng!');
+  console.log('🟢 Hệ thống Tư vấn Tâm lý THCS Phước Hưng đã sẵn sàng!');
 });

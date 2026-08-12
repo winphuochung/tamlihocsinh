@@ -164,17 +164,19 @@ let currentGameState = {
 };
 
 /**
- * BẮT ĐẦU TRÒ CHƠI KỸ NĂNG TƯƠNG TÁC (TỰ ĐỘNG CHUYỂN TAB KHI BẤM TỪ TRANG CHỦ)
+ * BẮT ĐẦU TRÒ CHƠI KỸ NĂNG TƯƠNG TÁC (TỰ ĐỘNG CHUYỂN TAB VÀ CUỘN TRANG TỨC THÌ)
  */
 function startGame(gameKey) {
+  console.log("🎮 Đang bắt đầu trò chơi:", gameKey);
   const game = GAME_DATA[gameKey];
   if (!game) return;
 
-  // Tự động chuyển sang Tab Trò Chơi Kỹ Năng nếu bấm từ Trang Chủ
+  // 1. Tự động chuyển sang Tab Trò Chơi Kỹ Năng
   if (typeof switchTab === 'function') {
     switchTab('games');
   }
 
+  // 2. Khởi tạo trạng thái lượt chơi
   currentGameState = {
     gameKey: gameKey,
     questionIndex: 0,
@@ -182,13 +184,18 @@ function startGame(gameKey) {
     totalQuestions: game.questions.length
   };
 
+  // 3. Mở khung hiển thị game và render câu hỏi
   const container = document.getElementById('game-container');
   if (container) {
     container.style.display = 'block';
     renderCurrentQuestion();
+
+    // 4. Cuộn màn hình tới khung game tức thì
     setTimeout(() => {
-      container.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
+      const yOffset = -80;
+      const y = container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }, 120);
   }
 }
 
