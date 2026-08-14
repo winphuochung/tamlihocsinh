@@ -280,7 +280,7 @@ function filterLibrary(category, btnEl) {
 }
 
 /**
- * MỞ MODAL ĐỌC BÀI VIẾT CHI TIẾT
+ * MỞ MODAL ĐỌC BÀI VIẾT CHI TIẾT (CHUẨN SMARTPHONE READER MODE)
  */
 function openArticleModal(articleId) {
   const art = LIBRARY_ARTICLES.find(a => a.id === articleId);
@@ -289,33 +289,41 @@ function openArticleModal(articleId) {
   const modal = document.getElementById('article-modal');
   const modalBody = document.getElementById('article-modal-body');
 
+  // Khóa cuộn trang nền để trải nghiệm đọc trên điện thoại mượt mà
+  document.body.style.overflow = 'hidden';
+
   modalBody.innerHTML = `
-    <div style="text-align: center; margin-bottom: 16px;">
-      <div style="font-size: 48px;">${art.icon}</div>
-      <span class="badge-status ${art.badgeClass}" style="margin-top: 6px; display: inline-block;">${art.badgeText}</span>
-      <h2 style="font-size: 20px; color: var(--text-main); margin-top: 10px; line-height: 1.4;">${art.title}</h2>
-      <p style="font-size: 12px; color: var(--primary-lavender); font-weight: 700; margin-top: 6px;">Tác giả: ${art.author}</p>
+    <button class="modal-close-btn" onclick="closeArticleModal()" aria-label="Đóng bài viết">&times;</button>
+
+    <div style="text-align: center; margin-bottom: 16px; padding-top: 10px;">
+      <div style="font-size: 52px; margin-bottom: 8px;">${art.icon}</div>
+      <span class="badge-status ${art.badgeClass}" style="margin-top: 4px; font-size: 12px; padding: 6px 14px;">${art.badgeText}</span>
+      <h2 style="font-size: 20px; color: var(--text-main); margin-top: 12px; line-height: 1.45; font-weight: 800;">${art.title}</h2>
+      <p style="font-size: 13px; color: var(--primary-lavender); font-weight: 700; margin-top: 6px;">✍️ Tác giả: ${art.author}</p>
     </div>
 
-    <div style="font-size: 13.5px; line-height: 1.7; color: var(--text-main); background: #FAF8FF; padding: 18px; border-radius: 16px; border: 1px solid #EAE3F7; margin-bottom: 20px;">
+    <div class="article-detail-body">
       ${art.content}
     </div>
 
-    <div style="background: #F0FAF7; border: 1px solid #C6F6D5; padding: 14px 18px; border-radius: 14px; margin-bottom: 16px;">
-      <h4 style="font-size: 13.5px; color: #22543D; margin: 0 0 8px 0; font-weight: 800;">🔗 Danh Mục Liên Kết Ngoại Uy Tín & Trích Nguồn Chính Thức:</h4>
-      <ul style="margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.7;">
+    <div style="background: #F0FAF7; border: 1.5px solid #C6F6D5; padding: 16px; border-radius: 16px; margin-bottom: 20px;">
+      <h4 style="font-size: 14px; color: #22543D; margin: 0 0 10px 0; font-weight: 800; display: flex; align-items: center; gap: 6px;">
+        <i class="fa-solid fa-link"></i> Nguồn Trích Dẫn & Liên Kết Ngoại Uy Tín:
+      </h4>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
         ${art.externalLinks.map(link => `
-          <li>
-            <a href="${link.url}" target="_blank" rel="noopener noreferrer" style="color: #2B6CB0; font-weight: 700; text-decoration: underline;">
-              ${link.title} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i>
-            </a>
-          </li>
+          <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="external-link-card">
+            <span>${link.title}</span>
+            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px; opacity: 0.7;"></i>
+          </a>
         `).join('')}
-      </ul>
+      </div>
     </div>
 
-    <div style="text-align: center; margin-top: 16px;">
-      <button class="btn-clay" style="padding: 10px 24px;" onclick="closeArticleModal()">Đóng Bài Viết</button>
+    <div style="text-align: center; margin-top: 20px; padding-bottom: 10px;">
+      <button class="btn-clay" style="padding: 12px 32px; font-size: 15px; font-weight: 700; width: 100%; max-width: 280px;" onclick="closeArticleModal()">
+        <i class="fa-solid fa-circle-check"></i> Đã Đọc Xong
+      </button>
     </div>
   `;
 
@@ -326,11 +334,14 @@ function openArticleModal(articleId) {
  * ĐÓNG MODAL ĐỌC BÀI VIẾT
  */
 function closeArticleModal(event) {
-  if (event && event.target && !event.target.classList.contains('modal-overlay') && !event.target.classList.contains('modal-close')) {
+  if (event && event.target && !event.target.classList.contains('modal-overlay') && !event.target.classList.contains('modal-close-btn')) {
     return;
   }
   const modal = document.getElementById('article-modal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
 }
 
 // Tự động khởi tạo khi tải trang

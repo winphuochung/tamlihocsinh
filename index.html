@@ -377,7 +377,6 @@
           </div>
         </div>
       </section>
-
       <!-- TAB 5: SECRET LOOKUP VIEW -->
       <section id="tab-lookup" class="tab-view">
         <div class="card-section" style="max-width: 640px; margin: 0 auto;">
@@ -406,7 +405,7 @@
           </div>
 
           <!-- CATEGORY FILTER BUTTONS -->
-          <div style="display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 6px; flex-wrap: wrap;">
+          <div class="lib-filter-container">
             <button class="btn-clay lib-filter-btn" onclick="filterLibrary('all', this)">🌐 Tất Cả Bài Viết</button>
             <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('water_safety', this)">🏊 An Toàn Sông Nước</button>
             <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('bullying', this)">🛡️ Ứng Xử Bắt Nạt</button>
@@ -425,8 +424,7 @@
 
   <!-- ARTICLE READER MODAL OVERLAY -->
   <div id="article-modal" class="modal-overlay" style="display: none;" onclick="closeArticleModal(event)">
-    <div class="modal-content" style="max-width: 760px; max-height: 88vh; overflow-y: auto; position: relative; border-radius: 24px; padding: 24px;" onclick="event.stopPropagation()">
-      <button class="modal-close" style="position: absolute; top: 16px; right: 20px; font-size: 24px; border: none; background: none; cursor: pointer; color: var(--text-muted);" onclick="closeArticleModal()">&times;</button>
+    <div class="modal-content" onclick="event.stopPropagation()">
       <div id="article-modal-body"></div>
     </div>
   </div>
@@ -438,6 +436,6 @@
   <script src="js/games-engine.js?v=1.0.2"></script>
   <script src="js/ai-chat.js?v=1.0.5"></script>
   <script src="js/anonymous-booking.js?v=1.0.2"></script>
-  <script src="js/library-engine.js?v=1.0.2"></script>
+  <script src="js/library-engine.js?v=1.0.3"></script>
 </body>
 </html>
