@@ -10,6 +10,8 @@ node_modules/
 # AI Agent configuration & skills (Ignore on GitHub)
 .agent/
 .Agent/
+.agent
+.Agent
 
 # Logs & temp files
 *.log
