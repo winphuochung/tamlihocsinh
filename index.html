@@ -173,25 +173,11 @@
               </div>
               <div class="calendar-mini">
                 <div class="calendar-header">
-                  <span>Tháng 8, 2026</span>
-                  <span style="color: var(--primary-lavender);">THCS Phước Hưng</span>
+                  <span id="calendar-month-year" style="font-weight: 800; color: var(--text-main);">Tháng 8, 2026</span>
+                  <span style="color: var(--primary-lavender); font-weight: 700;">THCS Phước Hưng</span>
                 </div>
-                <div class="calendar-days">
-                  <div class="calendar-day-head">T2</div>
-                  <div class="calendar-day-head">T3</div>
-                  <div class="calendar-day-head">T4</div>
-                  <div class="calendar-day-head">T5</div>
-                  <div class="calendar-day-head">T6</div>
-                  <div class="calendar-day-head">T7</div>
-                  <div class="calendar-day-head">CN</div>
-
-                  <div class="calendar-day-num">3</div>
-                  <div class="calendar-day-num">4</div>
-                  <div class="calendar-day-num has-event">5</div>
-                  <div class="calendar-day-num active">6</div>
-                  <div class="calendar-day-num has-event">7</div>
-                  <div class="calendar-day-num">8</div>
-                  <div class="calendar-day-num">9</div>
+                <div class="calendar-days" id="calendar-days-grid">
+                  <!-- Sẽ được khởi tạo tự động theo thời gian thực bằng JS -->
                 </div>
               </div>
               <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px; text-align: center;">
@@ -432,7 +418,7 @@
   <!-- SUPABASE CLOUD DATABASE JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js?v=1.0.2"></script>
-  <script src="js/app.js?v=1.0.2"></script>
+  <script src="js/app.js?v=1.0.3"></script>
   <script src="js/games-engine.js?v=1.0.2"></script>
   <script src="js/ai-chat.js?v=1.0.5"></script>
   <script src="js/anonymous-booking.js?v=1.0.2"></script>
