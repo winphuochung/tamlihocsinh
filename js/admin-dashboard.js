@@ -94,8 +94,7 @@ async function checkSupabaseAuthSession() {
       } else if (event === 'SIGNED_OUT') {
         currentAdminUser = null;
         localStorage.removeItem('teacher_admin_session');
-        const modal = document.getElementById('admin-login-modal');
-        if (modal) modal.style.display = 'flex';
+        window.location.href = 'index.html';
       }
     });
   } catch (err) {
@@ -292,17 +291,21 @@ function showAuthMsg(msg, color) {
 }
 
 /**
- * ĐĂNG XUẤT SUPABASE AUTH
+ * ĐĂNG XUẤT CỔNG GIÁO VIÊN & TỰ ĐỘNG CHUYỂN VỀ TRANG CHỦ (INDEX.HTML)
  */
 async function logoutAdmin() {
+  localStorage.removeItem('teacher_admin_session');
+  currentAdminUser = null;
+
   const client = getActiveSupabaseClient();
   if (client) {
     try {
       await client.auth.signOut();
     } catch (err) {}
   }
-  currentAdminUser = null;
-  document.getElementById('admin-login-modal').style.display = 'flex';
+
+  // Tự động quay về trang chủ trang web
+  window.location.href = 'index.html';
 }
 
 function switchAdminTab(tabId) {
