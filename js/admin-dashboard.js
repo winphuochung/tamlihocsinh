@@ -331,8 +331,18 @@ async function renderAdminBookings() {
   const tbody = document.getElementById('admin-booking-tbody');
   if (!tbody) return;
 
-  let bookings = [];
+  let cloudBookings = [];
+  let localBookings = [];
 
+  // 1. Lấy dữ liệu từ LocalStorage (bao gồm Seed Mẫu mặc định)
+  if (typeof getBookingsLocal === 'function') {
+    localBookings = getBookingsLocal();
+  } else {
+    const localData = localStorage.getItem('thcs_phuochung_bookings');
+    localBookings = localData ? JSON.parse(localData) : [];
+  }
+
+  // 2. Lấy dữ liệu từ Supabase Cloud
   const client = getActiveSupabaseClient();
   if (client) {
     try {
@@ -342,7 +352,7 @@ async function renderAdminBookings() {
         .order('created_at', { ascending: false });
 
       if (data && data.length > 0) {
-        bookings = data.map(b => ({
+        cloudBookings = data.map(b => ({
           secret_code: b.secret_code,
           topic: b.topic,
           grade: b.student_grade || b.grade || 'Khối 8',
@@ -355,14 +365,22 @@ async function renderAdminBookings() {
         }));
       }
     } catch (err) {
-      console.warn("⚠️ Không thể tải Supabase, sử dụng bộ nhớ Local:", err);
+      console.warn("⚠️ Không thể tải Supabase Cloud, sử dụng bộ nhớ Local:", err);
     }
   }
 
-  if (bookings.length === 0) {
-    const localData = localStorage.getItem('thcs_phuochung_bookings');
-    bookings = localData ? JSON.parse(localData) : [];
-  }
+  // 3. Hợp nhất dữ liệu Cloud & Local (loại bỏ trùng lặp mã bí mật secret_code)
+  const combinedMap = new Map();
+  
+  localBookings.forEach(b => {
+    if (b.secret_code) combinedMap.set(b.secret_code, b);
+  });
+
+  cloudBookings.forEach(b => {
+    if (b.secret_code) combinedMap.set(b.secret_code, b);
+  });
+
+  const bookings = Array.from(combinedMap.values());
 
   tbody.innerHTML = '';
 

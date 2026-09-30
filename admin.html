@@ -28,17 +28,13 @@
       <div id="auth-form-pass">
         <div class="form-group" style="text-align: left;">
           <label>Email Giáo viên Quản trị:</label>
-          <input type="email" id="admin-email" class="form-control" placeholder="Nhập email giáo viên..." value="thangphuochung1@gmail.com" autocomplete="off">
+          <input type="email" id="admin-email" class="form-control" placeholder="Nhập email giáo viên..." autocomplete="off">
         </div>
 
         <div class="form-group" style="text-align: left;">
           <label>Mật khẩu bảo mật riêng:</label>
           <input type="password" id="admin-password" class="form-control" placeholder="Nhập mật khẩu bí mật..." autocomplete="off">
         </div>
-
-        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 14px; text-align: left; line-height: 1.4;">
-          💡 <strong>Gợi ý:</strong> Nhập mật khẩu bí mật bất kỳ (từ 6 ký tự) hoặc dùng mật khẩu mặc định <code>123456</code> / <code>CôNgọcNga@2026</code>
-        </p>
 
         <button class="btn-clay" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px;" onclick="authenticateAdminWithPassword()">
           <i class="fa-solid fa-lock"></i> Đăng Nhập Bảo Mật Giáo Viên
@@ -300,6 +296,6 @@
   <!-- SUPABASE CLOUD DATABASE JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js?v=1.0.3"></script>
-  <script src="js/admin-dashboard.js?v=1.0.3"></script>
+  <script src="js/admin-dashboard.js?v=1.0.4"></script>
 </body>
 </html>
