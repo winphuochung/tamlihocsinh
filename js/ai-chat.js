@@ -1,7 +1,7 @@
 /* ==========================================================================
    Advanced AI Psychological Counselor Client Engine (Chuyên Gia Tư Vấn Tâm Lý Học Đường)
-   Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
-   Giáo viên tư vấn tâm lí - THCS Phước Hưng
+   Trường Tiểu học và THCS Phước Hưng - Xã Nhơn Hội - An Giang
+   Giáo viên tư vấn tâm lí - Tiểu học và THCS Phước Hưng
    ========================================================================== */
 
 let counselingHistory = [];
@@ -128,7 +128,7 @@ function generateFallbackCounselingReply(userText) {
   switch (state.domain) {
     case "violence":
       empathyPart = `🛡️ Chào em ${state.grade ? `học sinh ${state.grade}` : ''}! Thầy/Cô Chuyên gia Tư vấn lắng nghe thấy sự lo lắng và tổn thương trong lời nhắn của em: <i>"${userText}"</i>. Xin em hãy nhớ kỹ điều này: <strong>Bắt nạt hay bạo lực học đường tuyệt đối KHÔNG PHẢI LÀ LỖI CỦA EM!</strong>`;
-      analysisPart = `⚖️ <strong>Góc nhìn chuyên gia tâm lý & Pháp luật:</strong> Đe dọa, đánh đập hay cô lập người khác là hành vi vi phạm nghiêm trọng nội quy học đường và pháp luật. Việc im lặng nhượng bộ thường khiến kẻ bắt nạt càng lấn tới. Em hoàn toàn có quyền được bảo vệ an toàn tại THCS Phước Hưng!`;
+      analysisPart = `⚖️ <strong>Góc nhìn chuyên gia tâm lý & Pháp luật:</strong> Đe dọa, đánh đập hay cô lập người khác là hành vi vi phạm nghiêm trọng nội quy học đường và pháp luật. Việc im lặng nhượng bộ thường khiến kẻ bắt nạt càng lấn tới. Em hoàn toàn có quyền được bảo vệ an toàn tại Tiểu học và THCS Phước Hưng!`;
       stepsPart = [
         "<strong>1. An toàn Thân thể là số 1:</strong> Tránh đi một mình ở hành lang vắng, khu vực tối hoặc cổng trường lúc tan học.",
         "<strong>2. Nguyên tắc 'Nhìn Thẳng & Nói Ngắn':</strong> Giữ thái độ bình tĩnh, nhìn thẳng, nói rõ <i>'Tôi không đồng ý'</i> và nhanh chóng di chuyển đến nơi có thầy cô hoặc đông bạn bè.",

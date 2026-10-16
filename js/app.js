@@ -1,6 +1,6 @@
 /* ==========================================================================
    Main Application Router & Interactivity JS
-   Trường THCS Phước Hưng - Giáo viên tư vấn tâm lí
+   Trường Tiểu học và THCS Phước Hưng - Giáo viên tư vấn tâm lí
    ========================================================================== */
 
 function switchTab(tabId) {
@@ -97,7 +97,7 @@ function initRealtimeWeeklyCalendar() {
       d.getFullYear() === today.getFullYear()
     );
 
-    // Lịch tiếp nhận tư vấn trực tiếp cố định tại THCS Phước Hưng:
+    // Lịch tiếp nhận tư vấn trực tiếp cố định tại Tiểu học và THCS Phước Hưng:
     // Thứ 3 (idx 1), Thứ 5 (idx 3), Thứ 6 (idx 4)
     const isConsultationDay = (idx === 1 || idx === 3 || idx === 4);
 
@@ -140,5 +140,5 @@ function selectCalendarDate(isoDateStr, dayName) {
 
 document.addEventListener('DOMContentLoaded', () => {
   initRealtimeWeeklyCalendar();
-  console.log('🟢 Hệ thống Tư vấn Tâm lý THCS Phước Hưng & Lịch thực tế đã sẵn sàng!');
+  console.log('🟢 Hệ thống Tư vấn Tâm lý Tiểu học và THCS Phước Hưng & Lịch thực tế đã sẵn sàng!');
 });

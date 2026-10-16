@@ -1,7 +1,7 @@
 /* ==========================================================================
    Thư Viện Kỹ Năng Sống & Tâm Lý Học Đường (Mental Health & Life Skills Library)
-   Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
-   Giáo viên tư vấn tâm lí - THCS Phước Hưng
+   Trường Tiểu học và THCS Phước Hưng - Xã Nhơn Hội - An Giang
+   Giáo viên tư vấn tâm lí - Tiểu học và THCS Phước Hưng
    ========================================================================== */
 
 const LIBRARY_ARTICLES = [
@@ -45,7 +45,7 @@ const LIBRARY_ARTICLES = [
     badgeClass: "badge-pending",
     title: "5 Bước Xử Lý Thông Minh Khi Bị Bắt Nạt Học Đường",
     icon: "🛡️",
-    author: "Liên Đội THCS Phước Hưng",
+    author: "Liên Đội Tiểu học và THCS Phước Hưng",
     excerpt: "Hướng dẫn chi tiết từ góc nhìn tâm lý học đường giúp học sinh bình tĩnh ứng phó, bảo vệ an toàn thân thể và nhờ sự can thiệp chính thức.",
     content: `
       <h3>🛡️ 1. Hiểu đúng về Bắt nạt Học đường</h3>
@@ -207,7 +207,7 @@ const LIBRARY_ARTICLES = [
     badgeClass: "badge-pending",
     title: "Kỹ Năng Sơ Cấp Cứu Khi Thấy Bạn Gặp Tai Nạn Thương Tích Trong Trường Học",
     icon: "🚑",
-    author: "Y tế Trường THCS Phước Hưng",
+    author: "Y tế Trường Tiểu học và THCS Phước Hưng",
     excerpt: "Cách xử lý chảy máu cam, trật khớp, bong gân và quy trình gọi sự trợ giúp y tế nhanh nhất.",
     content: `
       <h3>🚑 1. Quy tắc Vàng: Bình Tĩnh & Gọi Y Tế</h3>

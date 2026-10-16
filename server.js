@@ -22,7 +22,7 @@ app.get('/admin', (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
-    school: 'Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang',
+    school: 'Trường Tiểu học và THCS Phước Hưng - Xã Nhơn Hội - An Giang',
     teacher: 'Giáo viên tư vấn tâm lí',
     timestamp: new Date()
   });
@@ -190,7 +190,7 @@ app.post('/api/bookings/reply', (req, res) => {
  * ==========================================================================
  * ENTERPRISE AI COUNSELOR ENDPOINT (/api/ai-counselor)
  * Chuyên Gia Tư Vấn Tâm Lý Học Đường Thông Minh
- * THCS Phước Hưng - An Giang
+ * Tiểu học và THCS Phước Hưng - An Giang
  * ==========================================================================
  */
 app.post('/api/ai-counselor', async (req, res) => {
@@ -234,8 +234,8 @@ app.post('/api/ai-counselor', async (req, res) => {
     const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     if (apiKey) {
       try {
-        const systemPrompt = `Bạn là Chuyên gia Tư vấn Tâm lý Học đường uy tín, ấm áp, thấu cảm thuộc Trường THCS Phước Hưng (Xã Nhơn Hội, An Giang), đảm nhận vai trò Giáo viên tư vấn tâm lí.
-Đối tượng tư vấn: Học sinh THCS (từ 11 đến 15 tuổi).
+        const systemPrompt = `Bạn là Chuyên gia Tư vấn Tâm lý Học đường uy tín, ấm áp, thấu cảm thuộc Trường Tiểu học và THCS Phước Hưng (Xã Nhơn Hội, An Giang), đảm nhận vai trò Giáo viên tư vấn tâm lí.
+Đối tượng tư vấn: Học sinh Tiểu học và THCS (từ 6 đến 15 tuổi).
 Phong cách: Xưng "Thầy/Cô tư vấn" hoặc "Tớ", gọi "Em". Tuyệt đối chân thành, tôn trọng, không phán xét, không lên lớp.
 Mô hình tư vấn:
 1. Lắng nghe và phản chiếu cảm xúc (trích dẫn nhẹ lời em vừa nói).
@@ -308,7 +308,7 @@ function buildExpertPsychologicalReply(userText) {
   switch (domain) {
     case "violence":
       titleEmpathy = `🛡️ Chào em! Thầy/Cô Chuyên gia Tư vấn lắng nghe thấy sự ${detectedEmotion} rất lớn trong lời nhắn của em: <i>"${userText}"</i>. Xin em hãy nhớ kỹ điều này: <strong>Bắt nạt hay bạo lực học đường tuyệt đối KHÔNG PHẢI LÀ LỖI CỦA EM!</strong>`;
-      cbtAnalysis = `⚖️ <strong>Góc nhìn chuyên gia tâm lý & Pháp luật:</strong> Đe dọa, đánh đập hay cô lập người khác là hành vi vi phạm nghiêm trọng nội quy học đường và pháp luật. Việc im lặng nhượng bộ thường khiến kẻ bắt nạt càng lấn tới. Em hoàn toàn có quyền được bảo vệ an toàn tại THCS Phước Hưng!`;
+      cbtAnalysis = `⚖️ <strong>Góc nhìn chuyên gia tâm lý & Pháp luật:</strong> Đe dọa, đánh đập hay cô lập người khác là hành vi vi phạm nghiêm trọng nội quy học đường và pháp luật. Việc im lặng nhượng bộ thường khiến kẻ bắt nạt càng lấn tới. Em hoàn toàn có quyền được bảo vệ an toàn tại Tiểu học và THCS Phước Hưng!`;
       steps = [
         "<strong>1. An toàn Thân thể là số 1:</strong> Tránh đi một mình ở hành lang vắng, khu vực tối hoặc cổng trường lúc tan học.",
         "<strong>2. Nguyên tắc 'Nhìn Thẳng & Nói Ngắn':</strong> Giữ thái độ bình tĩnh, nhìn thẳng, nói rõ <i>'Tôi không đồng ý'</i> và nhanh chóng di chuyển đến nơi có thầy cô hoặc đông bạn bè.",

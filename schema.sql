@@ -1,7 +1,7 @@
 -- ==========================================================================
--- CƠ SỞ DỮ LIỆU CLOUD SUPABASE - THCS PHƯỚC HƯNG (AN GIANG)
+-- CƠ SỞ DỮ LIỆU CLOUD SUPABASE - TIỂU HỌC VÀ THCS PHƯỚC HƯNG (AN GIANG)
 -- URL Project: https://qoyppvklftetrutmgwfk.supabase.co
--- Giáo viên tư vấn tâm lí - THCS Phước Hưng
+-- Giáo viên tư vấn tâm lí - Tiểu học và THCS Phước Hưng
 -- ==========================================================================
 
 -- 1. Bảng lưu trữ Đăng ký Lịch hẹn Tư vấn Ẩn danh (SUPABASE)

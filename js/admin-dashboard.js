@@ -1,6 +1,6 @@
 /* ==========================================================================
    Admin Dashboard & Database Exporter Engine (Supabase Auth & Cloud DB Synced)
-   Dành cho Giáo viên tư vấn tâm lí - THCS Phước Hưng
+   Dành cho Giáo viên tư vấn tâm lí - Tiểu học và THCS Phước Hưng
    ========================================================================== */
 
 let activeReplyCode = null;

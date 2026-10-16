@@ -1,6 +1,6 @@
 /* ==========================================================================
    Supabase Database Connection & Client Config (Bulletproof Native REST API + SDK)
-   Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
+   Trường Tiểu học và THCS Phước Hưng - Xã Nhơn Hội - An Giang
    ========================================================================== */
 
 const SUPABASE_URL = "https://qoyppvklftetrutmgwfk.supabase.co";

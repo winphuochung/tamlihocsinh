@@ -1,7 +1,7 @@
 /* ==========================================================================
    Anonymous Booking & Secret Lookup Engine (Synced with Supabase Cloud DB)
-   Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
-   Giáo viên tư vấn tâm lí - THCS Phước Hưng
+   Trường Tiểu học và THCS Phước Hưng - Xã Nhơn Hội - An Giang
+   Giáo viên tư vấn tâm lí - Tiểu học và THCS Phước Hưng
    ========================================================================== */
 
 const STORAGE_KEY = 'thcs_phuochung_bookings';

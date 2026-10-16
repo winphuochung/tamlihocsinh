@@ -1,6 +1,6 @@
 /* ==========================================================================
    Gamified Scenario Engine - Complete 5 Multi-Stage Games
-   Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
+   Trường Tiểu học và THCS Phước Hưng - Xã Nhơn Hội - An Giang
    ========================================================================== */
 
 const GAME_DATA = {
@@ -77,7 +77,7 @@ const GAME_DATA = {
       {
         question: "Tình huống 10: Lớp em muốn xây dựng phong trào 'Lớp Học Hạnh Phúc - Không Bạo Lực'. Em có thể đóng góp gì?",
         options: [
-          { text: "A. Tích cực tham gia các buổi sinh hoạt Đội, lắng nghe giúp đỡ bạn bè và lan tỏa yêu thương.", correct: true, feedback: "🎉 CHÍNH XÁC! Em chính là một đại sứ hòa bình tuyệt vời của THCS Phước Hưng!" },
+          { text: "A. Tích cực tham gia các buổi sinh hoạt Đội, lắng nghe giúp đỡ bạn bè và lan tỏa yêu thương.", correct: true, feedback: "🎉 CHÍNH XÁC! Em chính là một đại sứ hòa bình tuyệt vời của Tiểu học và THCS Phước Hưng!" },
           { text: "B. Chỉ quan tâm đến bản thân mình, không cần tham gia hoạt động tập thể.", correct: false, feedback: "❌ Sự đoàn kết của tập thể là sức mạnh ngăn chặn mọi hành vi bạo lực học đường!" }
         ]
       }
@@ -128,7 +128,7 @@ const GAME_DATA = {
       {
         question: "Tình huống 6: Khi muốn bình luận ý kiến cá nhân dưới bài đăng của bạn bè hoặc người khác trên mạng xã hội, em cần chú ý điều gì?",
         options: [
-          { text: "A. Tôn trọng người đọc, dùng từ ngữ lịch sự, không lăng mạ hay dùng từ thô tục.", correct: true, feedback: "🎉 CHÍNH XÁC! Bình luận văn minh thể hiện nét đẹp văn hóa của học sinh THCS Phước Hưng!" },
+          { text: "A. Tôn trọng người đọc, dùng từ ngữ lịch sự, không lăng mạ hay dùng từ thô tục.", correct: true, feedback: "🎉 CHÍNH XÁC! Bình luận văn minh thể hiện nét đẹp văn hóa của học sinh Tiểu học và THCS Phước Hưng!" },
           { text: "B. Thoải mái chửi bới vì mạng xã hội là ảo, không ai làm gì được mình.", correct: false, feedback: "❌ Luật An ninh mạng xử phạt rất nghiêm các hành vi xúc phạm danh dự người khác trên internet!" }
         ]
       },
@@ -154,7 +154,7 @@ const GAME_DATA = {
         ]
       },
       {
-        question: "Tình huống 10: Làm thế nào để trở thành một 'Công Dân Số Văn Minh' tại THCS Phước Hưng?",
+        question: "Tình huống 10: Làm thế nào để trở thành một 'Công Dân Số Văn Minh' tại Tiểu học và THCS Phước Hưng?",
         options: [
           { text: "A. Chia sẻ thông tin tích cực, kiểm chứng tin tức trước khi đăng và bảo vệ bạn bè trên mạng.", correct: true, feedback: "🎉 CHÍNH XÁC! Em là tấm gương sáng về văn hóa ứng xử trên không gian mạng!" },
           { text: "B. Đăng các tin đồn chưa kiểm chứng để thu hút lượt like và view.", correct: false, feedback: "❌ Lan truyền tin giả gây ảnh hưởng xấu đến uy tín của cá nhân và nhà trường!" }
@@ -391,7 +391,7 @@ const GAME_DATA = {
         ]
       },
       {
-        question: "Tình huống 10: Kênh hỗ trợ tâm lý giải tỏa áp lực thi cử ẩn danh an toàn nhất dành cho học sinh THCS Phước Hưng là gì?",
+        question: "Tình huống 10: Kênh hỗ trợ tâm lý giải tỏa áp lực thi cử ẩn danh an toàn nhất dành cho học sinh Tiểu học và THCS Phước Hưng là gì?",
         options: [
           { text: "A. Sử dụng Trợ lý AI 24/7 hoặc Đặt lịch hẹn ẩn danh với Giáo viên tư vấn tâm lí trên website.", correct: true, feedback: "🎉 CHÍNH XÁC! Giáo viên tư vấn tâm lí và Trợ lý AI luôn sẵn sàng đồng hành chia sẻ mọi lo âu cùng em!" },
           { text: "B. Giấu kín trong lòng không bao giờ tâm sự với ai.", correct: false, feedback: "❌ Chia sẻ lo âu là bước đầu tiên để em giải tỏa 100% áp lực tinh thần!" }
