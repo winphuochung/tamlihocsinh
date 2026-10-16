@@ -422,44 +422,21 @@ function openArticleModal(articleId) {
  * ĐỌC TO TOÀN BỘ NỘI DUNG BÀI VIẾT (TEXT-TO-SPEECH)
  */
 function speakArticleContent(btn) {
-  if (!('speechSynthesis' in window)) {
-    alert('Trình duyệt chưa hỗ trợ tính năng Đọc giọng nói!');
-    return;
-  }
-
-  if (window.speechSynthesis.speaking) {
-    window.speechSynthesis.cancel();
-    btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Nghe đọc bài viết';
-    btn.classList.remove('speaking');
-    return;
-  }
-
   const contentBox = document.getElementById('article-read-content');
   if (!contentBox) return;
 
   const plainText = contentBox.innerText.trim();
   if (!plainText) return;
 
-  const utterance = new SpeechSynthesisUtterance(plainText);
-  utterance.lang = 'vi-VN';
-  utterance.rate = 0.95;
-  const voices = window.speechSynthesis.getVoices();
-  const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang === 'vi_VN' || (v.lang && v.lang.startsWith('vi')));
-  if (viVoice) utterance.voice = viVoice;
-
-  btn.classList.add('speaking');
-  btn.innerHTML = '<i class="fa-solid fa-circle-stop"></i> Dừng đọc';
-
-  utterance.onend = () => {
-    btn.classList.remove('speaking');
-    btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Nghe đọc bài viết';
-  };
-  utterance.onerror = () => {
-    btn.classList.remove('speaking');
-    btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Nghe đọc bài viết';
-  };
-
-  window.speechSynthesis.speak(utterance);
+  if (typeof playVietnameseSpeech === 'function') {
+    playVietnameseSpeech(plainText, btn);
+  } else if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(plainText);
+    utterance.lang = 'vi-VN';
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
+  }
 }
 
 /**

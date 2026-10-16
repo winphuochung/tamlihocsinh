@@ -245,29 +245,10 @@ function appendBubble(content, sender, isHtml = false) {
 }
 
 /**
- * ĐỘNG CƠ ĐỌC GIỌNG NÓI TIẾNG VIỆT (WEB SPEECH SYNTHESIS TTS ENGINE)
+ * ĐỘNG CƠ ĐỌC GIỌNG NÓI TIẾNG VIỆT (NATIVE VIETNAMESE SOUND ENGINE)
  */
 function toggleTtsSpeech(btn) {
-  if (!('speechSynthesis' in window)) {
-    alert('Trình duyệt của em chưa hỗ trợ tính năng Đọc giọng nói (Text-to-Speech). Hãy thử trình duyệt Chrome, Edge hoặc Safari nhé!');
-    return;
-  }
-
-  // Nếu nút này đang nói mà bấm tiếp -> Dừng lại
-  if (window.speechSynthesis.speaking && activeTtsButton === btn) {
-    window.speechSynthesis.cancel();
-    resetTtsButton(btn);
-    activeTtsButton = null;
-    return;
-  }
-
-  // Hủy các câu đang phát dở trước đó
-  window.speechSynthesis.cancel();
-  if (activeTtsButton) {
-    resetTtsButton(activeTtsButton);
-  }
-
-  const bubble = btn.closest('.chat-bubble') || btn.closest('.article-detail-body') || btn.parentElement;
+  const bubble = btn.closest('.chat-bubble') || btn.parentElement;
   if (!bubble) return;
 
   // Lấy văn bản sạch (bỏ các nút bấm và mã thừa)
@@ -277,37 +258,20 @@ function toggleTtsSpeech(btn) {
 
   if (!plainText) return;
 
-  // Tạo ngữ điệu đọc Web Speech API
-  const utterance = new SpeechSynthesisUtterance(plainText);
-  utterance.lang = 'vi-VN';
-  utterance.rate = (currentAiLevel === 'tieuhoc') ? 0.9 : 1.0; // Đọc chậm rãi, ấm áp hơn cho học sinh tiểu học
-
-  // Ưu tiên chọn giọng đọc Tiếng Việt chuẩn nếu hệ điều hành có sẵn
-  const voices = window.speechSynthesis.getVoices();
-  const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang === 'vi_VN' || (v.lang && v.lang.startsWith('vi')));
-  if (viVoice) {
-    utterance.voice = viVoice;
+  if (typeof playVietnameseSpeech === 'function') {
+    playVietnameseSpeech(plainText, btn);
+  } else {
+    // Fallback nếu chưa tải kịp script
+    const utterance = new SpeechSynthesisUtterance(plainText);
+    utterance.lang = 'vi-VN';
+    window.speechSynthesis.speak(utterance);
   }
-
-  btn.classList.add('speaking');
-  btn.innerHTML = '<i class="fa-solid fa-circle-stop"></i> Dừng đọc';
-  activeTtsButton = btn;
-
-  utterance.onend = function() {
-    resetTtsButton(btn);
-    activeTtsButton = null;
-  };
-
-  utterance.onerror = function() {
-    resetTtsButton(btn);
-    activeTtsButton = null;
-  };
-
-  window.speechSynthesis.speak(utterance);
 }
 
 function resetTtsButton(btn) {
-  if (btn) {
+  if (typeof resetSpeakerButton === 'function') {
+    resetSpeakerButton(btn);
+  } else if (btn) {
     btn.classList.remove('speaking');
     btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Nghe đọc';
   }

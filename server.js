@@ -188,6 +188,48 @@ app.post('/api/bookings/reply', (req, res) => {
 
 /**
  * ==========================================================================
+ * VIETNAMESE NATIVE TEXT-TO-SPEECH (TTS) PROXY API (/api/tts)
+ * Đảm bảo 100% phát ra giọng đọc tiếng Việt của người Việt Nam tự nhiên, trong trẻo
+ * ==========================================================================
+ */
+const https = require('https');
+
+app.get('/api/tts', (req, res) => {
+  try {
+    const rawText = req.query.text || '';
+    if (!rawText.trim()) {
+      return res.status(400).send('Missing text parameter');
+    }
+
+    // Cắt ngắn tối đa 200 ký tự cho mỗi đoạn đọc an toàn của TTS
+    const safeText = rawText.trim().substring(0, 200);
+    const googleTtsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(safeText)}`;
+
+    const proxyReq = https.get(googleTtsUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://translate.google.com/'
+      }
+    }, (proxyRes) => {
+      if (proxyRes.statusCode !== 200) {
+        return res.status(proxyRes.statusCode).send('Error fetching TTS audio');
+      }
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Cache-Control', 'public, max-age=86400'); // Cache 1 ngày
+      proxyRes.pipe(res);
+    });
+
+    proxyReq.on('error', (err) => {
+      console.warn('⚠️ Lỗi Google TTS Proxy:', err.message);
+      res.status(500).send('TTS server error');
+    });
+  } catch (err) {
+    res.status(500).send('Internal server error');
+  }
+});
+
+/**
+ * ==========================================================================
  * ENTERPRISE AI COUNSELOR ENDPOINT (/api/ai-counselor)
  * Chuyên Gia Tư Vấn Tâm Lý Học Đường Thông Minh
  * Tiểu học và THCS Phước Hưng - An Giang

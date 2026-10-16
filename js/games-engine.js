@@ -588,19 +588,16 @@ function filterGamesByLevel(level, btnEl) {
 /**
  * ĐỌC TO CÂU HỎI TRÒ CHƠI KỸ NĂNG CHO HỌC SINH (TEXT-TO-SPEECH)
  */
-function speakGameQuestion(text) {
-  if (!('speechSynthesis' in window)) {
-    alert('Trình duyệt chưa hỗ trợ tính năng Đọc giọng nói!');
-    return;
+function speakGameQuestion(text, btn = null) {
+  if (typeof playVietnameseSpeech === 'function') {
+    playVietnameseSpeech(text, btn);
+  } else if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'vi-VN';
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
   }
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'vi-VN';
-  utterance.rate = 0.95;
-  const voices = window.speechSynthesis.getVoices();
-  const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang === 'vi_VN' || (v.lang && v.lang.startsWith('vi')));
-  if (viVoice) utterance.voice = viVoice;
-  window.speechSynthesis.speak(utterance);
 }
 
 /**
@@ -617,7 +614,7 @@ function renderCurrentQuestion() {
     questionEl.innerHTML = `
       <div>${qData.question}</div>
       <div style="margin-top: 10px;">
-        <button type="button" class="btn-tts" onclick="speakGameQuestion(\`${qData.question.replace(/[`\\]/g, '')}\`)" title="Bấm để nghe cô đọc câu hỏi này">
+        <button type="button" class="btn-tts" onclick="speakGameQuestion(\`${qData.question.replace(/[`\\]/g, '')}\`, this)" title="Bấm để nghe cô đọc câu hỏi này">
           <i class="fa-solid fa-volume-high"></i> Nghe đọc câu hỏi
         </button>
       </div>
