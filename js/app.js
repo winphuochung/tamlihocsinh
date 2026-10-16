@@ -1,6 +1,6 @@
 /* ==========================================================================
    Main Application Router & Interactivity JS
-   Trường THCS Phước Hưng - Liên Đội - Cô Nguyễn Thị Ngọc Nga
+   Trường THCS Phước Hưng - Giáo viên tư vấn tâm lí
    ========================================================================== */
 
 function switchTab(tabId) {

@@ -15,7 +15,7 @@ const GAME_DATA = {
         options: [
           { text: "A. Lao vào đánh nhau với nhóm bạn lớp trên để bảo vệ bạn.", correct: false, feedback: "❌ Chưa an toàn! Việc lao vào mâu thuẫn trực tiếp có thể khiến em bị tổn thương. Hãy tìm sự hỗ trợ từ người lớn!" },
           { text: "B. Bỏ đi coi như không thấy gì vì sợ bị trả thù.", correct: false, feedback: "❌ Chưa tối ưu! Thờ ơ với bạo lực khiến kẻ xấu càng lấn tới. Chúng ta có kênh báo cáo ẩn danh an toàn!" },
-          { text: "C. Báo ngay cho Cô Nguyễn Thị Ngọc Nga (Giáo viên tư vấn tâm lí) hoặc bảo vệ nhà trường.", correct: true, feedback: "🎉 CHÍNH XÁC! Đây là cách xử lý thông minh và an toàn nhất. Thầy cô sẽ bảo vệ danh tính của em!" }
+          { text: "C. Báo ngay cho Giáo viên tư vấn tâm lí hoặc bảo vệ nhà trường.", correct: true, feedback: "🎉 CHÍNH XÁC! Đây là cách xử lý thông minh và an toàn nhất. Thầy cô sẽ bảo vệ danh tính của em!" }
         ]
       },
       {
@@ -29,7 +29,7 @@ const GAME_DATA = {
         question: "Tình huống 3: Khi bạn thân rủ em đi 'xử lý' một bạn khác để trả thù mâu thuẫn nhỏ, em sẽ phản ứng thế nào?",
         options: [
           { text: "A. Đi cùng bạn để thể hiện tình bạn thân thiết.", correct: false, feedback: "❌ Sai lầm! Tình bạn chân chính không bao giờ lôi kéo nhau vào hành vi vi phạm pháp luật." },
-          { text: "B. Khuyên bạn dừng lại, lắng nghe mâu thuẫn và đề xuất gặp Cô Ngọc Nga tư vấn hòa giải.", correct: true, feedback: "🎉 CHÍNH XÁC! Em là một người bạn tuyệt vời khi biết ngăn chặn bạn mình phạm sai lầm!" }
+          { text: "B. Khuyên bạn dừng lại, lắng nghe mâu thuẫn và đề xuất gặp Giáo viên tư vấn tâm lí để hòa giải.", correct: true, feedback: "🎉 CHÍNH XÁC! Em là một người bạn tuyệt vời khi biết ngăn chặn bạn mình phạm sai lầm!" }
         ]
       },
       {
@@ -49,7 +49,7 @@ const GAME_DATA = {
       {
         question: "Tình huống 6: Một bạn học bị người khác quay lén video xô xát và dọa đăng lên mạng nếu không nộp tiền. Bạn ấy rất sợ hãi. Em giúp bạn thế nào?",
         options: [
-          { text: "A. Động viên bạn bình tĩnh và cùng bạn đến gặp Cô Ngọc Nga để nhà trường bảo vệ và xử lý kẻ tống tiền.", correct: true, feedback: "🎉 CHÍNH XÁC! Hành vi cưỡng đoạt, tống tiền là vi phạm pháp luật nghiêm trọng, nhà trường sẽ can thiệp ngay!" },
+          { text: "A. Động viên bạn bình tĩnh và cùng bạn đến gặp Giáo viên tư vấn tâm lí để nhà trường bảo vệ và xử lý kẻ tống tiền.", correct: true, feedback: "🎉 CHÍNH XÁC! Hành vi cưỡng đoạt, tống tiền là vi phạm pháp luật nghiêm trọng, nhà trường sẽ can thiệp ngay!" },
           { text: "B. Khuyên bạn vay tiền nộp cho xong.", correct: false, feedback: "❌ Tống tiền sẽ không dừng lại nếu em tiếp tục nộp tiền cho kẻ xấu!" }
         ]
       },
@@ -221,7 +221,7 @@ const GAME_DATA = {
       {
         question: "Tình huống 8: Ai đó trên mạng nhắn tin yêu cầu em chụp và gửi hình ảnh/video không mặc quần áo của em để đổi lấy tài khoản game hay tiền bạc. Em làm gì?",
         options: [
-          { text: "A. Tuyệt đối không chụp gửi, chặn tài khoản đó và báo ngay cho cha mẹ/Cô Ngọc Nga.", correct: true, feedback: "🎉 CHÍNH XÁC! Yêu cầu gửi ảnh nhạy cảm là hành vi dụ dỗ xâm hại trẻ em qua mạng!" },
+          { text: "A. Tuyệt đối không chụp gửi, chặn tài khoản đó và báo ngay cho cha mẹ/Giáo viên tư vấn tâm lí.", correct: true, feedback: "🎉 CHÍNH XÁC! Yêu cầu gửi ảnh nhạy cảm là hành vi dụ dỗ xâm hại trẻ em qua mạng!" },
           { text: "B. Chụp gửi vì nghĩ chỉ có 1 tấm ảnh không sao.", correct: false, feedback: "❌ Kẻ xấu sẽ dùng hình ảnh đó để đe dọa tống tiền và xâm hại em kéo dài!" }
         ]
       },
@@ -338,7 +338,7 @@ const GAME_DATA = {
         question: "Tình huống 2: Khi bị điểm kém một bài kiểm tra toán, cảm xúc tiêu cực ùa về khiến em nghĩ 'Mình thật kém cỏi'. Em hãy thay đổi tư duy thế nào?",
         options: [
           { text: "A. Tự nhủ: 'Điểm kém lần này chỉ là cơ hội để mình nhận ra chỗ hổng kiến thức và sửa lại tốt hơn'.", correct: true, feedback: "🎉 CHÍNH XÁC! Tư duy phát triển (Growth Mindset) giúp em kiên cường trước thất bại!" },
-          { text: "B. Nhốt mình trong phòng và dằn vặt bản thân suốt tuần.", correct: false, feedback: "❌ Hãy cởi mở chia sẻ tâm sự với Cô Ngọc Nga để tìm cách gỡ rối nhé!" }
+          { text: "B. Nhốt mình trong phòng và dằn vặt bản thân suốt tuần.", correct: false, feedback: "❌ Hãy cởi mở chia sẻ tâm sự với Giáo viên tư vấn tâm lí để tìm cách gỡ rối nhé!" }
         ]
       },
       {
@@ -351,7 +351,7 @@ const GAME_DATA = {
       {
         question: "Tình huống 4: Cha mẹ đặt kỳ vọng quá cao vào kỳ thi tuyển sinh khiến em luôn sống trong sợ hãi làm cha mẹ thất vọng. Em nên làm gì?",
         options: [
-          { text: "A. Trò chuyện chân thành với cha mẹ về khả năng và áp lực của em, hoặc nhờ Giáo viên tư vấn tâm lí (Cô Ngọc Nga) hỗ trợ cầu nối.", correct: true, feedback: "🎉 CHÍNH XÁC! Sự chia sẻ gia đình giúp cha mẹ hiểu và giảm áp lực cho em!" },
+          { text: "A. Trò chuyện chân thành với cha mẹ về khả năng và áp lực của em, hoặc nhờ Giáo viên tư vấn tâm lí hỗ trợ cầu nối.", correct: true, feedback: "🎉 CHÍNH XÁC! Sự chia sẻ gia đình giúp cha mẹ hiểu và giảm áp lực cho em!" },
           { text: "B. Giấu kín cảm xúc tiêu cực và tự dằn vặt bản thân.", correct: false, feedback: "❌ Đồn nén cảm xúc kéo dài có thể dẫn tới trầm cảm học đường nghiêm trọng!" }
         ]
       },
@@ -393,7 +393,7 @@ const GAME_DATA = {
       {
         question: "Tình huống 10: Kênh hỗ trợ tâm lý giải tỏa áp lực thi cử ẩn danh an toàn nhất dành cho học sinh THCS Phước Hưng là gì?",
         options: [
-          { text: "A. Sử dụng Trợ lý AI 24/7 hoặc Đặt lịch hẹn ẩn danh với Cô Nguyễn Thị Ngọc Nga trên website.", correct: true, feedback: "🎉 CHÍNH XÁC! Cô Ngọc Nga và Trợ lý AI luôn sẵn sàng đồng hành chia sẻ mọi lo âu cùng em!" },
+          { text: "A. Sử dụng Trợ lý AI 24/7 hoặc Đặt lịch hẹn ẩn danh với Giáo viên tư vấn tâm lí trên website.", correct: true, feedback: "🎉 CHÍNH XÁC! Giáo viên tư vấn tâm lí và Trợ lý AI luôn sẵn sàng đồng hành chia sẻ mọi lo âu cùng em!" },
           { text: "B. Giấu kín trong lòng không bao giờ tâm sự với ai.", correct: false, feedback: "❌ Chia sẻ lo âu là bước đầu tiên để em giải tỏa 100% áp lực tinh thần!" }
         ]
       }

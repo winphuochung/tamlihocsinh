@@ -1,7 +1,7 @@
 /* ==========================================================================
    Advanced AI Psychological Counselor Client Engine (Chuyên Gia Tư Vấn Tâm Lý Học Đường)
    Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
-   Giáo viên TPT Đội: Cô Nguyễn Thị Ngọc Nga
+   Giáo viên tư vấn tâm lí - THCS Phước Hưng
    ========================================================================== */
 
 let counselingHistory = [];
@@ -114,7 +114,7 @@ function generateFallbackCounselingReply(userText) {
         </ul>
       </div>
       <p style="font-size: 13px; color: var(--text-main); line-height: 1.5;">
-        Em hãy nhấn ngay vào mục <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở thanh menu bên trái để Cô Nguyễn Thị Ngọc Nga trực tiếp hỗ trợ và bảo vệ an toàn cho em nhé!
+        Em hãy nhấn ngay vào mục <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở thanh menu bên trái để Giáo viên tư vấn tâm lí trực tiếp hỗ trợ và bảo vệ an toàn cho em nhé!
       </p>
     `;
   }
@@ -132,7 +132,7 @@ function generateFallbackCounselingReply(userText) {
       stepsPart = [
         "<strong>1. An toàn Thân thể là số 1:</strong> Tránh đi một mình ở hành lang vắng, khu vực tối hoặc cổng trường lúc tan học.",
         "<strong>2. Nguyên tắc 'Nhìn Thẳng & Nói Ngắn':</strong> Giữ thái độ bình tĩnh, nhìn thẳng, nói rõ <i>'Tôi không đồng ý'</i> và nhanh chóng di chuyển đến nơi có thầy cô hoặc đông bạn bè.",
-        "<strong>3. Báo Tin Bảo Vệ Ẩn Danh:</strong> Thu thập thông tin (ai đe dọa, ở đâu) và gửi ngay cho Giáo viên tư vấn tâm lí (Cô Ngọc Nga) qua trang web này."
+        "<strong>3. Báo Tin Bảo Vệ Ẩn Danh:</strong> Thu thập thông tin (ai đe dọa, ở đâu) và gửi ngay cho Giáo viên tư vấn tâm lí qua trang web này."
       ];
       questionPart = "Tình huống bắt nạt này xảy ra ở trong lớp hay ngoài cổng trường vậy em? Em đã kể điều này cho thầy cô hoặc cha mẹ nghe chưa?";
       break;
@@ -177,7 +177,7 @@ function generateFallbackCounselingReply(userText) {
     </div>
 
     <p style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">
-      🤝 <i>Em cũng có thể chọn <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở menu bên trái để gửi tin nhắn bí mật cho Cô Nguyễn Thị Ngọc Nga nhé!</i>
+      🤝 <i>Em cũng có thể chọn <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở menu bên trái để gửi tin nhắn bí mật cho Giáo viên tư vấn tâm lí nhé!</i>
     </p>
   `;
 }

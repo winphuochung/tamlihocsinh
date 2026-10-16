@@ -1,7 +1,7 @@
 /* ==========================================================================
    Anonymous Booking & Secret Lookup Engine (Synced with Supabase Cloud DB)
    Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
-   Giáo viên TPT Đội: Cô Nguyễn Thị Ngọc Nga
+   Giáo viên tư vấn tâm lí - THCS Phước Hưng
    ========================================================================== */
 
 const STORAGE_KEY = 'thcs_phuochung_bookings';
@@ -49,7 +49,7 @@ function getBookingsLocal() {
       time: "Giờ ra chơi sáng (9:15 - 9:30)",
       content: "Em cảm thấy bị một bạn học khác lớp liên tục chặn đường hù dọa mỗi khi tan học.",
       status: "APPROVED",
-      reply: "Chào em! Cô Ngọc Nga đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên phòng Tư vấn tâm lý gặp cô. Cô sẽ bảo vệ em an toàn!",
+      reply: "Chào em! Giáo viên tư vấn tâm lí đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên phòng Tư vấn tâm lý gặp cô. Cô sẽ bảo vệ em an toàn!",
       created_at: "2026-08-05"
     },
     {
@@ -263,9 +263,9 @@ async function executeLookup() {
       </div>
 
       <div style="background: linear-gradient(135deg, #FFF6E5 0%, #FFF0F5 100%); border-left: 4px solid var(--primary-pink); padding: 16px; border-radius: 8px; margin-top: 16px;">
-        <h4 style="font-size: 14px; font-weight: 800; color: #D97706; margin-bottom: 6px;">💌 Phản Hồi Từ Cô Nguyễn Thị Ngọc Nga (Giáo viên tư vấn tâm lí):</h4>
+        <h4 style="font-size: 14px; font-weight: 800; color: #D97706; margin-bottom: 6px;">💌 Phản Hồi Từ Giáo viên tư vấn tâm lí:</h4>
         <p style="font-size: 13px; color: var(--text-main); line-height: 1.5;">
-          ${match.reply ? match.reply : '<em>Cô Ngọc Nga đang rà soát và sẽ phản hồi sớm cho em tại đây. Em hãy giữ mã bí mật này để quay lại xem nhé!</em>'}
+          ${match.reply ? match.reply : '<em>Giáo viên tư vấn tâm lí đang rà soát và sẽ phản hồi sớm cho em tại đây. Em hãy giữ mã bí mật này để quay lại xem nhé!</em>'}
         </p>
       </div>
     </div>

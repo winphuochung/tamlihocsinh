@@ -1,6 +1,6 @@
 /* ==========================================================================
    Admin Dashboard & Database Exporter Engine (Supabase Auth & Cloud DB Synced)
-   Dành cho Giáo viên TPT Đội: Cô Nguyễn Thị Ngọc Nga
+   Dành cho Giáo viên tư vấn tâm lí - THCS Phước Hưng
    ========================================================================== */
 
 let activeReplyCode = null;
@@ -49,7 +49,7 @@ const DEFAULT_TEACHER_ADMIN_SEED = [
     time: "Giờ ra chơi sáng (9:15 - 9:30)",
     content: "Em cảm thấy bị một bạn học khác lớp liên tục chặn đường hù dọa mỗi khi tan học.",
     status: "APPROVED",
-    reply: "Chào em! Cô Ngọc Nga đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên phòng Tư vấn tâm lý gặp cô. Cô sẽ bảo vệ em an toàn!",
+    reply: "Chào em! Giáo viên tư vấn tâm lí đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên phòng Tư vấn tâm lý gặp cô. Cô sẽ bảo vệ em an toàn!",
     created_at: "2026-08-05"
   },
   {
@@ -244,13 +244,13 @@ async function authenticateAdminWithPassword() {
 }
 
 /**
- * HÀM ĐỔI MẬT KHẨU BẢO MẬT RÊNG DÀNH CHO CÔ NGỌC NGA
+ * HÀM ĐỔI MẬT KHẨU BẢO MẬT RIÊNG DÀNH CHO GIÁO VIÊN TƯ VẤN TÂM LÍ
  */
 function changeTeacherAdminPassword() {
-  const newPass = prompt("Nhập mật khẩu bí mật mới dành riêng cho Cô Ngọc Nga:");
+  const newPass = prompt("Nhập mật khẩu bí mật mới dành riêng cho Giáo viên tư vấn tâm lí:");
   if (newPass && newPass.trim().length >= 6) {
     localStorage.setItem('teacher_private_admin_pass', newPass.trim());
-    alert("✅ Đã đổi mật khẩu bảo mật riêng cho Cô Ngọc Nga thành công!");
+    alert("✅ Đã đổi mật khẩu bảo mật riêng cho Giáo viên tư vấn tâm lí thành công!");
   } else if (newPass) {
     alert("⚠️ Mật khẩu phải có ít nhất 6 ký tự!");
   }
@@ -265,7 +265,7 @@ async function sendSupabaseOtp() {
   const email = emailInput ? emailInput.value.trim() : '';
 
   if (!email) {
-    alert("Vui lòng nhập địa chỉ Email của Cô Ngọc Nga!");
+    alert("Vui lòng nhập địa chỉ Email của Giáo viên tư vấn tâm lí!");
     return;
   }
 
@@ -279,14 +279,14 @@ async function sendSupabaseOtp() {
         showAuthMsg(
           `⚠️ <strong>Email vừa được gửi trước đó!</strong><br>` +
           `Để tránh Spam, Supabase yêu cầu chờ 60 giây giữa các lần bấm.<br>` +
-          `Cô Ngọc Nga hãy mở Hộp thư đến / Spam hoặc <a href="javascript:void(0)" onclick="switchAuthMode('pass')" style="color:#8B73E6; font-weight:bold; text-decoration:underline;">👉 Bấm đây để Đăng Nhập Mật Khẩu Ngay</a>`,
+          `Giáo viên tư vấn tâm lí hãy mở Hộp thư đến / Spam hoặc <a href="javascript:void(0)" onclick="switchAuthMode('pass')" style="color:#8B73E6; font-weight:bold; text-decoration:underline;">👉 Bấm đây để Đăng Nhập Mật Khẩu Ngay</a>`,
           "#EF4444"
         );
       } else {
         showAuthMsg(`⚠️ ${errMsg}`, "#EF4444");
       }
     } else {
-      showAuthMsg(`💌 Đã gửi liên kết đính kèm Mã OTP đăng nhập tới <strong>${email}</strong>. Cô Ngọc Nga vui lòng kiểm tra Hộp thư đến / Spam nhé!`, "#10B981");
+      showAuthMsg(`💌 Đã gửi liên kết đính kèm Mã OTP đăng nhập tới <strong>${email}</strong>. Giáo viên tư vấn tâm lí vui lòng kiểm tra Hộp thư đến / Spam nhé!`, "#10B981");
 
       // Khóa nút 60s để chống bấm dồn dập dính Rate Limit
       if (sendBtn) {

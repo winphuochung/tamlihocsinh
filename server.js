@@ -23,7 +23,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
     school: 'Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang',
-    teacher: 'Cô Nguyễn Thị Ngọc Nga - Giáo viên tư vấn tâm lí',
+    teacher: 'Giáo viên tư vấn tâm lí',
     timestamp: new Date()
   });
 });
@@ -91,8 +91,8 @@ const serverBookingsStore = [
     preferred_time: "Giờ ra chơi sáng (9:15 - 9:30)",
     content: "Em cảm thấy bị một bạn học khác lớp liên tục chặn đường hù dọa mỗi khi tan học.",
     status: "APPROVED",
-    reply: "Chào em! Cô Ngọc Nga đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên văn phòng Đội gặp cô. Cô sẽ bảo vệ em an toàn!",
-    teacher_reply: "Chào em! Cô Ngọc Nga đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên văn phòng Đội gặp cô. Cô sẽ bảo vệ em an toàn!",
+    reply: "Chào em! Giáo viên tư vấn tâm lí đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên phòng Tư vấn tâm lý gặp cô. Cô sẽ bảo vệ em an toàn!",
+    teacher_reply: "Chào em! Giáo viên tư vấn tâm lí đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên phòng Tư vấn tâm lý gặp cô. Cô sẽ bảo vệ em an toàn!",
     created_at: "2026-08-05"
   },
   {
@@ -224,7 +224,7 @@ app.post('/api/ai-counselor', async (req, res) => {
             </ul>
           </div>
           <p style="font-size: 13px; color: #374151; line-height: 1.5;">
-            Em hãy nhấn ngay vào mục <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở thanh menu bên trái để Cô Nguyễn Thị Ngọc Nga trực tiếp hỗ trợ và bảo vệ an toàn cho em nhé!
+            Em hãy nhấn ngay vào mục <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở thanh menu bên trái để Giáo viên tư vấn tâm lí trực tiếp hỗ trợ và bảo vệ an toàn cho em nhé!
           </p>
         `
       });
@@ -234,7 +234,7 @@ app.post('/api/ai-counselor', async (req, res) => {
     const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     if (apiKey) {
       try {
-        const systemPrompt = `Bạn là Chuyên gia Tư vấn Tâm lý Học đường uy tín, ấm áp, thấu cảm thuộc Trường THCS Phước Hưng (Xã Nhơn Hội, An Giang), đồng hành cùng Cô Nguyễn Thị Ngọc Nga (Giáo viên tư vấn tâm lí).
+        const systemPrompt = `Bạn là Chuyên gia Tư vấn Tâm lý Học đường uy tín, ấm áp, thấu cảm thuộc Trường THCS Phước Hưng (Xã Nhơn Hội, An Giang), đảm nhận vai trò Giáo viên tư vấn tâm lí.
 Đối tượng tư vấn: Học sinh THCS (từ 11 đến 15 tuổi).
 Phong cách: Xưng "Thầy/Cô tư vấn" hoặc "Tớ", gọi "Em". Tuyệt đối chân thành, tôn trọng, không phán xét, không lên lớp.
 Mô hình tư vấn:
@@ -312,7 +312,7 @@ function buildExpertPsychologicalReply(userText) {
       steps = [
         "<strong>1. An toàn Thân thể là số 1:</strong> Tránh đi một mình ở hành lang vắng, khu vực tối hoặc cổng trường lúc tan học.",
         "<strong>2. Nguyên tắc 'Nhìn Thẳng & Nói Ngắn':</strong> Giữ thái độ bình tĩnh, nhìn thẳng, nói rõ <i>'Tôi không đồng ý'</i> và nhanh chóng di chuyển đến nơi có thầy cô hoặc đông bạn bè.",
-        "<strong>3. Báo Tin Bảo Vệ Ẩn Danh:</strong> Thu thập thông tin (ai đe dọa, ở đâu) và gửi ngay cho Giáo viên tư vấn tâm lí (Cô Ngọc Nga) qua kênh bảo mật trang web này."
+        "<strong>3. Báo Tin Bảo Vệ Ẩn Danh:</strong> Thu thập thông tin (ai đe dọa, ở đâu) và gửi ngay cho Giáo viên tư vấn tâm lí qua kênh bảo mật trang web này."
       ];
       openQuestion = "Tình huống này diễn ra ở trong lớp hay ngoài cổng trường vậy em? Em đã kể điều này cho ai lắng nghe chưa?";
       break;
@@ -379,7 +379,7 @@ function buildExpertPsychologicalReply(userText) {
     </div>
 
     <p style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">
-      🤝 <i>Em cũng có thể chọn <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở menu bên trái để gửi tin nhắn bí mật cho Cô Nguyễn Thị Ngọc Nga nhé!</i>
+      🤝 <i>Em cũng có thể chọn <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở menu bên trái để gửi tin nhắn bí mật cho Giáo viên tư vấn tâm lí nhé!</i>
     </p>
   `;
 }

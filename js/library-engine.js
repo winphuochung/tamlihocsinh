@@ -1,7 +1,7 @@
 /* ==========================================================================
    Thư Viện Kỹ Năng Sống & Tâm Lý Học Đường (Mental Health & Life Skills Library)
    Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang
-   Giáo viên TPT Đội: Cô Nguyễn Thị Ngọc Nga
+   Giáo viên tư vấn tâm lí - THCS Phước Hưng
    ========================================================================== */
 
 const LIBRARY_ARTICLES = [
@@ -12,7 +12,7 @@ const LIBRARY_ARTICLES = [
     badgeClass: "badge-approved",
     title: "Cẩm nang An toàn Phòng chống Đuối nước Vùng Sông Nước An Giang",
     icon: "🏊‍♂️",
-    author: "Cô Nguyễn Thị Ngọc Nga - Giáo viên tư vấn tâm lí",
+    author: "Giáo viên tư vấn tâm lí",
     excerpt: "Các quy tắc sinh tồn đặc biệt khi đi đò, tắm sông Nhơn Hội, cách sử dụng phao cứu sinh tự chế và kỹ năng ứng cứu gián tiếp an toàn.",
     content: `
       <h3>🌊 1. Thực trạng & Nguy cơ vùng sông nước An Giang</h3>
@@ -57,7 +57,7 @@ const LIBRARY_ARTICLES = [
         <li><strong>Bước 2 - Nói câu phản đối ngắn gọn:</strong> Nói rõ ràng <i>'Tôi không đồng ý'</i> hoặc <i>'Hãy dừng lại ngay'</i> với giọng kiên quyết.</li>
         <li><strong>Bước 3 - Nhanh chóng di chuyển:</strong> Nhanh chân bước về hướng phòng bảo vệ, văn phòng Đội hoặc khu vực đông thầy cô.</li>
         <li><strong>Bước 4 - Thu thập bằng chứng:</strong> Ghi nhớ thời gian, địa điểm, tên những người đe dọa.</li>
-        <li><strong>Bước 5 - Mở lòng báo tin:</strong> Nhắn tin ngay cho Cô Ngọc Nga hoặc gửi Yêu cầu Ẩn danh trên trang web này.</li>
+        <li><strong>Bước 5 - Mở lòng báo tin:</strong> Nhắn tin ngay cho Giáo viên tư vấn tâm lí hoặc gửi Yêu cầu Ẩn danh trên trang web này.</li>
       </ul>
     `,
     externalLinks: [
@@ -98,7 +98,7 @@ const LIBRARY_ARTICLES = [
     badgeClass: "badge-pending",
     title: "Quy Tắc 5 Ngón Tay & Ranh Giới An Toàn Cơ Thể Trẻ Em",
     icon: "🦺",
-    author: "Cô Nguyễn Thị Ngọc Nga",
+    author: "Giáo viên tư vấn tâm lí",
     excerpt: "Nhận biết vùng riêng tư, nhận diện các dấu hiệu đụng chạm nguy hiểm và hành động kiên quyết để bảo vệ bản thân.",
     content: `
       <h3>🖐️ 1. Quy tắc 5 Ngón Tay bảo vệ ranh giới cơ thể</h3>
@@ -111,7 +111,7 @@ const LIBRARY_ARTICLES = [
       </ul>
 
       <h3>🚨 2. Nguyên tắc "Bí mật Độc hại"</h3>
-      <p>Nếu ai đó bảo em giữ một "bí mật" khiến em sợ hãi, lo âu hoặc cảm thấy khó chịu, đó chính là <strong>Bí mật Độc hại</strong>. Em hãy dũng cảm kể ngay cho Cô Ngọc Nga hoặc gọi 111!</p>
+      <p>Nếu ai đó bảo em giữ một "bí mật" khiến em sợ hãi, lo âu hoặc cảm thấy khó chịu, đó chính là <strong>Bí mật Độc hại</strong>. Em hãy dũng cảm kể ngay cho Giáo viên tư vấn tâm lí hoặc gọi 111!</p>
     `,
     externalLinks: [
       { title: "🌐 Cục Trẻ em - Bộ Lao động Thương binh & Xã hội", url: "https://tongdai111.vn" },
@@ -181,7 +181,7 @@ const LIBRARY_ARTICLES = [
     badgeClass: "badge-completed",
     title: "Rèn Luyện Sự Tự Tin & Vượt Qua Cảm Giác Cô Đơn Tuổi Học Sinh",
     icon: "🌸",
-    author: "Cô Nguyễn Thị Ngọc Nga",
+    author: "Giáo viên tư vấn tâm lí",
     excerpt: "Bài tập Nhật ký 3 Điều Tích Cực mỗi ngày và phương pháp dừng so sánh bản thân trên mạng xã hội.",
     content: `
       <h3>✨ 1. Mọi người đều là phiên bản độc bản duy nhất</h3>
