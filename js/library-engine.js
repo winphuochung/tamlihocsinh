@@ -12,7 +12,7 @@ const LIBRARY_ARTICLES = [
     badgeClass: "badge-approved",
     title: "Cẩm nang An toàn Phòng chống Đuối nước Vùng Sông Nước An Giang",
     icon: "🏊‍♂️",
-    author: "Cô Nguyễn Thị Ngọc Nga - TPT Đội",
+    author: "Cô Nguyễn Thị Ngọc Nga - Giáo viên tư vấn tâm lí",
     excerpt: "Các quy tắc sinh tồn đặc biệt khi đi đò, tắm sông Nhơn Hội, cách sử dụng phao cứu sinh tự chế và kỹ năng ứng cứu gián tiếp an toàn.",
     content: `
       <h3>🌊 1. Thực trạng & Nguy cơ vùng sông nước An Giang</h3>

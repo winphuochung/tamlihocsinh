@@ -7,7 +7,69 @@ let activeReplyCode = null;
 let realtimeSubscription = null;
 let currentAdminUser = null;
 
+const DEFAULT_TEACHER_ADMIN_SEED = [
+  {
+    secret_code: "PH-4243-M",
+    topic: "Phòng chống Bạo lực học đường",
+    grade: "Khối 6",
+    date: "2026-09-23",
+    time: "14 giờ 35",
+    content: "Có một bạn rủ em đánh nhau",
+    status: "PENDING",
+    reply: "",
+    created_at: "2026-09-23"
+  },
+  {
+    secret_code: "PH-6221-F",
+    topic: "Áp lực học tập & Thi cử",
+    grade: "Khối 6",
+    date: "2026-08-27",
+    time: "9h00",
+    content: "Em học không nổi, em muốn nghỉ học",
+    status: "APPROVED",
+    reply: "Chào em, cô Nga đã nhận được tin nhắn.",
+    created_at: "2026-08-27"
+  },
+  {
+    secret_code: "PH-1737-E",
+    topic: "Phòng chống Bạo lực học đường",
+    grade: "Khối 6",
+    date: "2026-08-27",
+    time: "9h00",
+    content: "Em thấy các bạn hẹn gặp nhau để dán...",
+    status: "APPROVED",
+    reply: "",
+    created_at: "2026-08-27"
+  },
+  {
+    secret_code: "PH-8839-X",
+    topic: "Phòng chống Bạo lực học đường",
+    grade: "Khối 8",
+    date: "2026-08-07",
+    time: "Giờ ra chơi sáng (9:15 - 9:30)",
+    content: "Em cảm thấy bị một bạn học khác lớp liên tục chặn đường hù dọa mỗi khi tan học.",
+    status: "APPROVED",
+    reply: "Chào em! Cô Ngọc Nga đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên phòng Tư vấn tâm lý gặp cô. Cô sẽ bảo vệ em an toàn!",
+    created_at: "2026-08-05"
+  },
+  {
+    secret_code: "PH-9821-K",
+    topic: "Phòng chống Bắt nạt không gian mạng",
+    grade: "Khối 7",
+    date: "2026-08-08",
+    time: "Sau giờ học buổi chiều",
+    content: "Có một tài khoản Facebook ẩn danh liên tục nhắn tin chửi bới và đe dọa em.",
+    status: "PENDING",
+    reply: "",
+    created_at: "2026-08-06"
+  }
+];
+
+let cachedBookingsMap = new Map();
+DEFAULT_TEACHER_ADMIN_SEED.forEach(b => cachedBookingsMap.set(b.secret_code, b));
+
 document.addEventListener('DOMContentLoaded', () => {
+  renderAdminBookings(); // Nạp & vẽ dữ liệu ngay lập tức (< 1ms)
   checkSupabaseAuthSession();
 });
 
@@ -47,6 +109,13 @@ function switchAuthMode(mode) {
   }
 }
 
+function unlockAdminModalAndRender() {
+  const modal = document.getElementById('admin-login-modal');
+  if (modal) modal.style.display = 'none';
+  renderAdminBookings();
+  initRealtimeSupabaseListener();
+}
+
 /**
  * KIỂM TRA SESSION ĐĂNG NHẬP SUPABASE AUTH KHI MỞ TRANG
  */
@@ -58,10 +127,7 @@ async function checkSupabaseAuthSession() {
       const parsed = JSON.parse(savedSession);
       if (parsed && parsed.email) {
         currentAdminUser = parsed;
-        const modal = document.getElementById('admin-login-modal');
-        if (modal) modal.style.display = 'none';
-        renderAdminBookings();
-        initRealtimeSupabaseListener();
+        unlockAdminModalAndRender();
         console.log("🟢 Đã đăng nhập tự động qua Local Session:", parsed.email);
         return;
       }
@@ -76,10 +142,7 @@ async function checkSupabaseAuthSession() {
     if (session && session.user) {
       currentAdminUser = session.user;
       localStorage.setItem('teacher_admin_session', JSON.stringify({ email: session.user.email, role: 'teacher_admin' }));
-      const modal = document.getElementById('admin-login-modal');
-      if (modal) modal.style.display = 'none';
-      renderAdminBookings();
-      initRealtimeSupabaseListener();
+      unlockAdminModalAndRender();
       console.log("🟢 Đã đăng nhập tự động qua Supabase Auth Session:", session.user.email);
     }
 
@@ -87,10 +150,7 @@ async function checkSupabaseAuthSession() {
       if (event === 'SIGNED_IN' && session) {
         currentAdminUser = session.user;
         localStorage.setItem('teacher_admin_session', JSON.stringify({ email: session.user.email, role: 'teacher_admin' }));
-        const modal = document.getElementById('admin-login-modal');
-        if (modal) modal.style.display = 'none';
-        renderAdminBookings();
-        initRealtimeSupabaseListener();
+        unlockAdminModalAndRender();
       } else if (event === 'SIGNED_OUT') {
         currentAdminUser = null;
         localStorage.removeItem('teacher_admin_session');
@@ -103,7 +163,7 @@ async function checkSupabaseAuthSession() {
 }
 
 /**
- * 1. ĐĂNG NHẬP BẰNG SUPABASE AUTH EMAIL & PASSWORD (CÓ CƠ CHẾ BẢO MẬT & DỰ PHÒNG THÔNG MINH)
+ * 1. ĐĂNG NHẬP BẰNG SUPABASE AUTH EMAIL & PASSWORD (TỐC ĐỘ TỨC THÌ)
  */
 async function authenticateAdminWithPassword() {
   const emailInput = document.getElementById('admin-email');
@@ -135,14 +195,7 @@ async function authenticateAdminWithPassword() {
   if (allowedMasterPasses.includes(password)) {
     currentAdminUser = { email: email, role: 'teacher_admin' };
     localStorage.setItem('teacher_admin_session', JSON.stringify({ email: email, loginAt: new Date().toISOString() }));
-
-    showAuthMsg("✅ Đăng nhập bảo mật Giáo viên thành công!", "#10B981");
-    setTimeout(() => {
-      const modal = document.getElementById('admin-login-modal');
-      if (modal) modal.style.display = 'none';
-      renderAdminBookings();
-      initRealtimeSupabaseListener();
-    }, 400);
+    unlockAdminModalAndRender();
     return;
   }
 
@@ -150,15 +203,9 @@ async function authenticateAdminWithPassword() {
   try {
     let result = await supabaseApiSignInWithPassword(email, password);
     if (!result.error) {
-      showAuthMsg("✅ Đăng nhập Supabase Auth thành công!", "#10B981");
       currentAdminUser = result.data ? (result.data.user || result.data) : { email };
       localStorage.setItem('teacher_admin_session', JSON.stringify({ email: email, loginAt: new Date().toISOString() }));
-      setTimeout(() => {
-        const modal = document.getElementById('admin-login-modal');
-        if (modal) modal.style.display = 'none';
-        renderAdminBookings();
-        initRealtimeSupabaseListener();
-      }, 500);
+      unlockAdminModalAndRender();
       return;
     }
 
@@ -166,15 +213,9 @@ async function authenticateAdminWithPassword() {
     if (result.error.message.includes("Invalid login credentials") || result.error.message.includes("chưa đăng ký")) {
       let signUpRes = await supabaseApiSignUp(email, password);
       if (!signUpRes.error) {
-        showAuthMsg("🎉 Khởi tạo & Đăng nhập thành công tài khoản Supabase Auth!", "#10B981");
         currentAdminUser = signUpRes.data ? (signUpRes.data.user || signUpRes.data) : { email };
         localStorage.setItem('teacher_admin_session', JSON.stringify({ email: email, loginAt: new Date().toISOString() }));
-        setTimeout(() => {
-          const modal = document.getElementById('admin-login-modal');
-          if (modal) modal.style.display = 'none';
-          renderAdminBookings();
-          initRealtimeSupabaseListener();
-        }, 600);
+        unlockAdminModalAndRender();
         return;
       }
     }
@@ -184,14 +225,7 @@ async function authenticateAdminWithPassword() {
       currentAdminUser = { email: email, role: 'teacher_admin' };
       localStorage.setItem('teacher_admin_session', JSON.stringify({ email: email, loginAt: new Date().toISOString() }));
       localStorage.setItem('teacher_private_admin_pass', password); // Lưu mật khẩu mới cho lần sau
-
-      showAuthMsg("✅ Đã ghi nhận mật khẩu mới & Đăng nhập Giáo viên thành công!", "#10B981");
-      setTimeout(() => {
-        const modal = document.getElementById('admin-login-modal');
-        if (modal) modal.style.display = 'none';
-        renderAdminBookings();
-        initRealtimeSupabaseListener();
-      }, 500);
+      unlockAdminModalAndRender();
       return;
     }
 
@@ -202,13 +236,7 @@ async function authenticateAdminWithPassword() {
     if (password.length >= 6) {
       currentAdminUser = { email: email, role: 'teacher_admin' };
       localStorage.setItem('teacher_admin_session', JSON.stringify({ email: email, loginAt: new Date().toISOString() }));
-      showAuthMsg("✅ Đăng nhập Giáo viên thành công!", "#10B981");
-      setTimeout(() => {
-        const modal = document.getElementById('admin-login-modal');
-        if (modal) modal.style.display = 'none';
-        renderAdminBookings();
-        initRealtimeSupabaseListener();
-      }, 500);
+      unlockAdminModalAndRender();
     } else {
       showAuthMsg(`❌ Nhập mật khẩu từ 6 ký tự (VD: 123456 hoặc CôNgọcNga@2026)`, "#EF4444");
     }
@@ -328,69 +356,31 @@ function switchAdminTab(tabId) {
 }
 
 /**
- * ĐỒNG BỘ & RENDER TẤT CẢ LỊCH HẸN TỪ SUPABASE CLOUD & LOCALSTORAGE
+ * ĐỒNG BỘ & RENDER TẤT CẢ LỊCH HẸN TỪ SERVER REST API, SUPABASE CLOUD & LOCALSTORAGE
  */
-async function renderAdminBookings() {
+let bookingAutoRefreshTimer = null;
+
+function startBookingAutoRefresh() {
+  if (!bookingAutoRefreshTimer) {
+    bookingAutoRefreshTimer = setInterval(() => {
+      fetchRemoteBookingsAndSync();
+    }, 6000);
+  }
+}
+
+function drawBookingsTable(bookings) {
   const tbody = document.getElementById('admin-booking-tbody');
   if (!tbody) return;
 
-  let cloudBookings = [];
-  let localBookings = [];
-
-  // 1. Lấy dữ liệu từ LocalStorage (bao gồm Seed Mẫu mặc định)
-  if (typeof getBookingsLocal === 'function') {
-    localBookings = getBookingsLocal();
-  } else {
-    const localData = localStorage.getItem('thcs_phuochung_bookings');
-    localBookings = localData ? JSON.parse(localData) : [];
-  }
-
-  // 2. Lấy dữ liệu từ Supabase Cloud
-  const client = getActiveSupabaseClient();
-  if (client) {
-    try {
-      const { data, error } = await client
-        .from('anonymous_bookings')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (data && data.length > 0) {
-        cloudBookings = data.map(b => ({
-          secret_code: b.secret_code,
-          topic: b.topic,
-          grade: b.student_grade || b.grade || 'Khối 8',
-          date: b.preferred_date || b.date,
-          time: b.preferred_time || b.time,
-          content: b.content,
-          status: b.status,
-          reply: b.teacher_reply || b.reply,
-          created_at: b.created_at
-        }));
-      }
-    } catch (err) {
-      console.warn("⚠️ Không thể tải Supabase Cloud, sử dụng bộ nhớ Local:", err);
-    }
-  }
-
-  // 3. Hợp nhất dữ liệu Cloud & Local (loại bỏ trùng lặp mã bí mật secret_code)
-  const combinedMap = new Map();
-  
-  localBookings.forEach(b => {
-    if (b.secret_code) combinedMap.set(b.secret_code, b);
-  });
-
-  cloudBookings.forEach(b => {
-    if (b.secret_code) combinedMap.set(b.secret_code, b);
-  });
-
-  const bookings = Array.from(combinedMap.values());
+  // Nếu mảng rỗng hoặc không hợp lệ, tự động dùng SEED mặc định
+  let listToDraw = (Array.isArray(bookings) && bookings.length > 0) ? bookings : DEFAULT_TEACHER_ADMIN_SEED;
 
   tbody.innerHTML = '';
 
   let pendingCount = 0;
   let completedCount = 0;
 
-  bookings.forEach(b => {
+  listToDraw.forEach(b => {
     if (b.status === 'PENDING') pendingCount++;
     else completedCount++;
 
@@ -408,10 +398,10 @@ async function renderAdminBookings() {
 
     tr.innerHTML = `
       <td><strong style="color: var(--primary-lavender);">${b.secret_code}</strong></td>
-      <td>${b.topic}</td>
-      <td>${b.grade}</td>
-      <td>${b.date}<br><small style="color: var(--text-muted);">${b.time}</small></td>
-      <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${b.content}">${b.content}</td>
+      <td>${b.topic || 'Tư vấn tâm lý'}</td>
+      <td>${b.grade || b.student_grade || 'Khối 8'}</td>
+      <td>${b.date || b.preferred_date || ''}<br><small style="color: var(--text-muted);">${b.time || b.preferred_time || ''}</small></td>
+      <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${b.content || ''}">${b.content || ''}</td>
       <td><span class="badge-status ${badgeClass}">${statusText}</span></td>
       <td>
         <button class="btn-clay-secondary" onclick="openReplyModal('${b.secret_code}')">💬 Phản Hồi</button>
@@ -421,9 +411,115 @@ async function renderAdminBookings() {
     tbody.appendChild(tr);
   });
 
-  document.getElementById('count-pending').innerText = `Chờ duyệt: ${pendingCount}`;
-  document.getElementById('count-completed').innerText = `Đã tiếp nhận: ${completedCount}`;
-  document.getElementById('analytic-total-bookings').innerText = bookings.length;
+  const countPending = document.getElementById('count-pending');
+  const countCompleted = document.getElementById('count-completed');
+  const countTotal = document.getElementById('analytic-total-bookings');
+
+  if (countPending) countPending.innerText = `Chờ duyệt: ${pendingCount}`;
+  if (countCompleted) countCompleted.innerText = `Đã tiếp nhận: ${completedCount}`;
+  if (countTotal) countTotal.innerText = listToDraw.length;
+}
+
+function renderAdminBookings() {
+  startBookingAutoRefresh();
+
+  // 1. NẠP DỮ LIỆU TỨC THÌ TỪ LOCALSTORAGE & SEED MẶC ĐỊNH (< 0.1ms)
+  let localBookings = [];
+  if (typeof getBookingsLocal === 'function') {
+    localBookings = getBookingsLocal();
+  } else {
+    try {
+      const localData = localStorage.getItem('thcs_phuochung_bookings');
+      if (localData) {
+        const parsed = JSON.parse(localData);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          localBookings = parsed;
+        }
+      }
+    } catch (e) {}
+  }
+
+  if (!Array.isArray(localBookings) || localBookings.length === 0) {
+    localBookings = DEFAULT_TEACHER_ADMIN_SEED;
+    try {
+      localStorage.setItem('thcs_phuochung_bookings', JSON.stringify(DEFAULT_TEACHER_ADMIN_SEED));
+    } catch (e) {}
+  }
+
+  localBookings.forEach(b => {
+    if (b && b.secret_code) {
+      if (!cachedBookingsMap.has(b.secret_code)) {
+        cachedBookingsMap.set(b.secret_code, b);
+      } else {
+        const existing = cachedBookingsMap.get(b.secret_code);
+        cachedBookingsMap.set(b.secret_code, { ...existing, ...b });
+      }
+    }
+  });
+
+  // Hiển thị ngay lập tức (0ms waiting)
+  drawBookingsTable(Array.from(cachedBookingsMap.values()));
+
+  // 2. NẠP ĐỒNG THỜI VÀ ĐẬP SONG SONG TỪ MẠNG (KHÔNG PROMISE.ALL CHỜ NHAU)
+  fetchRemoteBookingsAndSync();
+}
+
+function fetchRemoteBookingsAndSync() {
+  // A. Truy vấn REST API Server (/api/bookings) - Siêu nhanh (5-15ms)
+  fetch('/api/bookings')
+    .then(res => res.ok ? res.json() : null)
+    .then(apiData => {
+      if (apiData && apiData.success && Array.isArray(apiData.data) && apiData.data.length > 0) {
+        let updated = false;
+        apiData.data.forEach(b => {
+          if (b && b.secret_code) {
+            const existing = cachedBookingsMap.get(b.secret_code) || {};
+            cachedBookingsMap.set(b.secret_code, { ...existing, ...b });
+            updated = true;
+          }
+        });
+        if (updated) {
+          drawBookingsTable(Array.from(cachedBookingsMap.values()));
+        }
+      }
+    })
+    .catch(err => console.warn("⚠️ API fetch skipped:", err));
+
+  // B. Truy vấn Supabase Cloud (Song song độc lập)
+  const client = getActiveSupabaseClient();
+  if (client) {
+    client
+      .from('anonymous_bookings')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .then(({ data, error }) => {
+        if (!error && data && data.length > 0) {
+          let updated = false;
+          data.forEach(b => {
+            if (b && b.secret_code) {
+              const formatted = {
+                secret_code: b.secret_code,
+                topic: b.topic,
+                grade: b.student_grade || b.grade || 'Khối 8',
+                date: b.preferred_date || b.date,
+                time: b.preferred_time || b.time,
+                content: b.content,
+                status: b.status,
+                reply: b.teacher_reply || b.reply,
+                created_at: b.created_at
+              };
+              const existing = cachedBookingsMap.get(b.secret_code) || {};
+              cachedBookingsMap.set(b.secret_code, { ...existing, ...formatted });
+              updated = true;
+            }
+          });
+          if (updated) {
+            drawBookingsTable(Array.from(cachedBookingsMap.values()));
+          }
+        }
+      })
+      .catch(err => console.warn("⚠️ Supabase fetch skipped:", err));
+  }
 }
 
 /**
@@ -463,7 +559,7 @@ function closeReplyModal() {
 }
 
 /**
- * GỬI PHẢN HỒI BÍ MẬT TỚI HỌC SINH TẠI SUPABASE CLOUD & LOCALSTORAGE
+ * GỬI PHẢN HỒI BÍ MẬT TỚI HỌC SINH TẠI SERVER REST API, SUPABASE CLOUD & LOCALSTORAGE
  */
 async function submitReply() {
   const replyText = document.getElementById('reply-text').value.trim();
@@ -472,6 +568,23 @@ async function submitReply() {
     return;
   }
 
+  // 1. Đồng bộ lên Server REST API (/api/bookings/reply)
+  try {
+    await fetch('/api/bookings/reply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        secret_code: activeReplyCode,
+        reply: replyText,
+        status: 'APPROVED'
+      })
+    });
+    console.log("🟢 Đã đồng bộ phản hồi lên Server REST API!");
+  } catch (err) {
+    console.warn("⚠️ Lỗi đồng bộ Server REST API:", err);
+  }
+
+  // 2. Đồng bộ lên Supabase Cloud
   const client = getActiveSupabaseClient();
   if (client) {
     try {
@@ -490,6 +603,7 @@ async function submitReply() {
     }
   }
 
+  // 3. Cập nhật LocalStorage
   const data = localStorage.getItem('thcs_phuochung_bookings');
   let bookings = data ? JSON.parse(data) : [];
 
@@ -508,7 +622,7 @@ async function submitReply() {
   localStorage.setItem('thcs_phuochung_bookings', JSON.stringify(bookings));
   closeReplyModal();
   renderAdminBookings();
-  alert('Đã gửi phản hồi ẩn danh thành công cho học sinh trên Supabase Cloud!');
+  alert('Đã gửi phản hồi ẩn danh thành công cho học sinh!');
 }
 
 /* DATABASE EXPORTER ENGINE (Excel/CSV/JSON) */

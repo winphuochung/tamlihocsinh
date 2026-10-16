@@ -7,12 +7,40 @@
 const STORAGE_KEY = 'thcs_phuochung_bookings';
 
 function getBookingsLocal() {
-  const data = localStorage.getItem(STORAGE_KEY);
-  if (data) {
-    return JSON.parse(data);
-  }
-
   const seed = [
+    {
+      secret_code: "PH-4243-M",
+      topic: "Phòng chống Bạo lực học đường",
+      grade: "Khối 6",
+      date: "2026-09-23",
+      time: "14 giờ 35",
+      content: "Có một bạn rủ em đánh nhau",
+      status: "PENDING",
+      reply: "",
+      created_at: "2026-09-23"
+    },
+    {
+      secret_code: "PH-6221-F",
+      topic: "Áp lực học tập & Thi cử",
+      grade: "Khối 6",
+      date: "2026-08-27",
+      time: "9h00",
+      content: "Em học không nổi, em muốn nghỉ học",
+      status: "APPROVED",
+      reply: "Chào em, cô Nga đã nhận được tin nhắn.",
+      created_at: "2026-08-27"
+    },
+    {
+      secret_code: "PH-1737-E",
+      topic: "Phòng chống Bạo lực học đường",
+      grade: "Khối 6",
+      date: "2026-08-27",
+      time: "9h00",
+      content: "Em thấy các bạn hẹn gặp nhau để dán...",
+      status: "APPROVED",
+      reply: "",
+      created_at: "2026-08-27"
+    },
     {
       secret_code: "PH-8839-X",
       topic: "Phòng chống Bạo lực học đường",
@@ -21,7 +49,7 @@ function getBookingsLocal() {
       time: "Giờ ra chơi sáng (9:15 - 9:30)",
       content: "Em cảm thấy bị một bạn học khác lớp liên tục chặn đường hù dọa mỗi khi tan học.",
       status: "APPROVED",
-      reply: "Chào em! Cô Ngọc Nga đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên văn phòng Đội gặp cô. Cô sẽ bảo vệ em an toàn!",
+      reply: "Chào em! Cô Ngọc Nga đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên phòng Tư vấn tâm lý gặp cô. Cô sẽ bảo vệ em an toàn!",
       created_at: "2026-08-05"
     },
     {
@@ -37,7 +65,20 @@ function getBookingsLocal() {
     }
   ];
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) {
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) {}
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
+  } catch (e) {}
+
   return seed;
 }
 
@@ -83,7 +124,17 @@ async function handleAnonymousBooking(e) {
   currentBookings.unshift(newBooking);
   saveBookingsLocal(currentBookings);
 
-  // 2. Đồng bộ trực tiếp lên Supabase Cloud Database
+  // 2. Gửi đồng bộ lên Server API (/api/bookings)
+  try {
+    await fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newBooking)
+    });
+    console.log("🟢 Đã lưu Lịch hẹn Ẩn danh lên Server API thành công!");
+  } catch (e) {}
+
+  // 3. Đồng bộ trực tiếp lên Supabase Cloud Database
   if (window.supabaseClient) {
     try {
       const { data, error } = await window.supabaseClient
@@ -119,7 +170,7 @@ async function handleAnonymousBooking(e) {
 }
 
 /**
- * TRA CỨU MÃ BÍ MẬT TỪ SUPABASE CLOUD & LOCALSTORAGE
+ * TRA CỨU MÃ BÍ MẬT TỪ SERVER API, SUPABASE CLOUD & LOCALSTORAGE
  */
 async function executeLookup() {
   const code = document.getElementById('lookup-input-code').value.trim().toUpperCase();
@@ -131,12 +182,23 @@ async function executeLookup() {
   }
 
   resultArea.style.display = 'block';
-  resultArea.innerHTML = `<div style="text-align:center; padding: 20px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; color: var(--primary-lavender);"></i><p style="margin-top:8px; font-size:13px; color:var(--text-muted);">Đang truy vấn dữ liệu đám mây Supabase...</p></div>`;
+  resultArea.innerHTML = `<div style="text-align:center; padding: 20px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; color: var(--primary-lavender);"></i><p style="margin-top:8px; font-size:13px; color:var(--text-muted);">Đang truy vấn dữ liệu...</p></div>`;
 
   let match = null;
 
-  // 1. Tra cứu trực tiếp từ Supabase Cloud
-  if (window.supabaseClient) {
+  // 1. Tra cứu từ Server API (/api/bookings/lookup/:code)
+  try {
+    const res = await fetch(`/api/bookings/lookup/${encodeURIComponent(code)}`);
+    if (res.ok) {
+      const json = await res.json();
+      if (json && json.success && json.data) {
+        match = json.data;
+      }
+    }
+  } catch (e) {}
+
+  // 2. Tra cứu trực tiếp từ Supabase Cloud
+  if (!match && window.supabaseClient) {
     try {
       const { data, error } = await window.supabaseClient
         .from('anonymous_bookings')
@@ -161,7 +223,7 @@ async function executeLookup() {
     }
   }
 
-  // 2. Nếu chưa có trên Supabase, tìm trong LocalStorage dự phòng
+  // 3. Nếu chưa có trên Server/Supabase, tìm trong LocalStorage dự phòng
   if (!match) {
     const localBookings = getBookingsLocal();
     match = localBookings.find(b => b.secret_code.toUpperCase() === code);
@@ -201,7 +263,7 @@ async function executeLookup() {
       </div>
 
       <div style="background: linear-gradient(135deg, #FFF6E5 0%, #FFF0F5 100%); border-left: 4px solid var(--primary-pink); padding: 16px; border-radius: 8px; margin-top: 16px;">
-        <h4 style="font-size: 14px; font-weight: 800; color: #D97706; margin-bottom: 6px;">💌 Phản Hồi Từ Cô Nguyễn Thị Ngọc Nga (TPT Đội):</h4>
+        <h4 style="font-size: 14px; font-weight: 800; color: #D97706; margin-bottom: 6px;">💌 Phản Hồi Từ Cô Nguyễn Thị Ngọc Nga (Giáo viên tư vấn tâm lí):</h4>
         <p style="font-size: 13px; color: var(--text-main); line-height: 1.5;">
           ${match.reply ? match.reply : '<em>Cô Ngọc Nga đang rà soát và sẽ phản hồi sớm cho em tại đây. Em hãy giữ mã bí mật này để quay lại xem nhé!</em>'}
         </p>

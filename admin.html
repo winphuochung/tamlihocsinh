@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản Lý Tư Vấn & CSDL - THCS Phước Hưng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="css/claymorphic-theme.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -15,8 +18,8 @@
       <div class="avatar-3d" style="width: 72px; height: 72px; margin: 0 auto 16px;">
         <img src="images/logo.png" alt="Logo Trường THCS Phước Hưng">
       </div>
-      <h2 style="font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Cổng Quản Lý Giáo Viên TPT</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Giáo viên Tổng phụ trách: <strong>Cô Nguyễn Thị Ngọc Nga</strong></p>
+      <h2 style="font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Cổng Quản Lý Giáo viên tư vấn tâm lí</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Giáo viên tư vấn tâm lí: <strong>Cô Nguyễn Thị Ngọc Nga</strong></p>
 
       <!-- AUTH MODE TOGGLE BUTTONS -->
       <div style="display: flex; background: var(--bg-app); padding: 4px; border-radius: var(--radius-pill); margin-bottom: 20px;">
@@ -28,12 +31,12 @@
       <div id="auth-form-pass">
         <div class="form-group" style="text-align: left;">
           <label>Email Giáo viên Quản trị:</label>
-          <input type="email" id="admin-email" class="form-control" placeholder="Nhập email giáo viên..." autocomplete="off">
+          <input type="email" id="admin-email" class="form-control" placeholder="Nhập email giáo viên..." autocomplete="off" onkeyup="if(event.key==='Enter') authenticateAdminWithPassword()">
         </div>
 
         <div class="form-group" style="text-align: left;">
           <label>Mật khẩu bảo mật riêng:</label>
-          <input type="password" id="admin-password" class="form-control" placeholder="Nhập mật khẩu bí mật..." autocomplete="off">
+          <input type="password" id="admin-password" class="form-control" placeholder="Nhập mật khẩu bí mật..." autocomplete="off" onkeyup="if(event.key==='Enter') authenticateAdminWithPassword()">
         </div>
 
         <button class="btn-clay" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px;" onclick="authenticateAdminWithPassword()">
@@ -75,7 +78,7 @@
           </div>
           <div class="profile-info">
             <h3>Cô Ngọc Nga</h3>
-            <p>TPT Đội THCS Phước Hưng</p>
+            <p>Giáo viên tư vấn tâm lí</p>
           </div>
         </div>
 
@@ -130,8 +133,8 @@
           <div class="card-header">
             <h2><i class="fa-solid fa-clipboard-list" style="color: var(--primary-lavender);"></i> Danh Sách Lịch Hẹn Tư Vấn Ẩn Danh</h2>
             <div>
-              <span class="badge-status badge-pending" id="count-pending">Chờ duyệt: 0</span>
-              <span class="badge-status badge-completed" id="count-completed">Đã tiếp nhận: 0</span>
+              <span class="badge-status badge-pending" id="count-pending">Chờ duyệt: 2</span>
+              <span class="badge-status badge-completed" id="count-completed">Đã tiếp nhận: 3</span>
             </div>
           </div>
 
@@ -149,7 +152,51 @@
                 </tr>
               </thead>
               <tbody id="admin-booking-tbody">
-                <!-- Dynamic items rendered via JS -->
+                <tr>
+                  <td><strong style="color: var(--primary-lavender);">PH-4243-M</strong></td>
+                  <td>Phòng chống Bạo lực học đường</td>
+                  <td>Khối 6</td>
+                  <td>2026-09-23<br><small style="color: var(--text-muted);">14 giờ 35</small></td>
+                  <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Có một bạn rủ em đánh nhau">Có một bạn rủ em đánh nhau</td>
+                  <td><span class="badge-status badge-pending">Chờ duyệt</span></td>
+                  <td><button class="btn-clay-secondary" onclick="openReplyModal('PH-4243-M')">💬 Phản Hồi</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--primary-lavender);">PH-6221-F</strong></td>
+                  <td>Áp lực học tập & Thi cử</td>
+                  <td>Khối 6</td>
+                  <td>2026-08-27<br><small style="color: var(--text-muted);">9h00</small></td>
+                  <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Em học không nổi, em muốn nghỉ học">Em học không nổi, em muốn nghỉ học</td>
+                  <td><span class="badge-status badge-approved">Đã hẹn gặp</span></td>
+                  <td><button class="btn-clay-secondary" onclick="openReplyModal('PH-6221-F')">💬 Phản Hồi</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--primary-lavender);">PH-1737-E</strong></td>
+                  <td>Phòng chống Bạo lực học đường</td>
+                  <td>Khối 6</td>
+                  <td>2026-08-27<br><small style="color: var(--text-muted);">9h00</small></td>
+                  <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Em thấy các bạn hẹn gặp nhau để dán...">Em thấy các bạn hẹn gặp nhau để dán...</td>
+                  <td><span class="badge-status badge-approved">Đã hẹn gặp</span></td>
+                  <td><button class="btn-clay-secondary" onclick="openReplyModal('PH-1737-E')">💬 Phản Hồi</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--primary-lavender);">PH-8839-X</strong></td>
+                  <td>Phòng chống Bạo lực học đường</td>
+                  <td>Khối 8</td>
+                  <td>2026-08-07<br><small style="color: var(--text-muted);">Giờ ra chơi sáng (9:15 - 9:30)</small></td>
+                  <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Em cảm thấy bị một bạn học khác lớp liên tục chặn đường hù dọa mỗi khi tan học.">Em cảm thấy bị một bạn học khác lớp...</td>
+                  <td><span class="badge-status badge-approved">Đã hẹn gặp</span></td>
+                  <td><button class="btn-clay-secondary" onclick="openReplyModal('PH-8839-X')">💬 Phản Hồi</button></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--primary-lavender);">PH-9821-K</strong></td>
+                  <td>Phòng chống Bắt nạt không gian mạng</td>
+                  <td>Khối 7</td>
+                  <td>2026-08-08<br><small style="color: var(--text-muted);">Sau giờ học buổi chiều</small></td>
+                  <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Có một tài khoản Facebook ẩn danh liên tục nhắn tin chửi bới và đe dọa em.">Có một tài khoản Facebook ẩn danh...</td>
+                  <td><span class="badge-status badge-pending">Chờ duyệt</span></td>
+                  <td><button class="btn-clay-secondary" onclick="openReplyModal('PH-9821-K')">💬 Phản Hồi</button></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -289,7 +336,7 @@
 
       <div class="form-group">
         <label>Nội dung phản hồi / Hướng dẫn của Cô Nga dành cho học sinh:</label>
-        <textarea id="reply-text" class="form-control" rows="5" placeholder="Ví dụ: Chào em, cô đã nhận được tâm sự. Em hãy đến phòng TPT Đội vào đúng 9:15 thứ Sáu tuần này nhé. Cô rất vui được hỗ trợ em!"></textarea>
+        <textarea id="reply-text" class="form-control" rows="5" placeholder="Ví dụ: Chào em, cô đã nhận được tâm sự. Em hãy đến phòng Tư vấn tâm lý vào đúng 9:15 thứ Sáu tuần này nhé. Cô rất vui được hỗ trợ em!"></textarea>
       </div>
 
       <div style="display: flex; gap: 10px; justify-content: flex-end;">
@@ -299,9 +346,12 @@
     </div>
   </div>
 
-  <!-- SUPABASE CLOUD DATABASE JS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-config.js?v=1.0.3"></script>
-  <script src="js/admin-dashboard.js?v=1.0.4"></script>
+  <!-- LOCAL FAST JS ENGINE (0ms RENDER) -->
+  <script src="js/anonymous-booking.js?v=1.0.5"></script>
+  <script src="js/admin-dashboard.js?v=1.0.6"></script>
+
+  <!-- SUPABASE CLOUD DATABASE JS SDK (DEFERRED) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="js/supabase-config.js?v=1.0.3" defer></script>
 </body>
 </html>

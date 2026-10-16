@@ -15,7 +15,7 @@ const GAME_DATA = {
         options: [
           { text: "A. Lao vào đánh nhau với nhóm bạn lớp trên để bảo vệ bạn.", correct: false, feedback: "❌ Chưa an toàn! Việc lao vào mâu thuẫn trực tiếp có thể khiến em bị tổn thương. Hãy tìm sự hỗ trợ từ người lớn!" },
           { text: "B. Bỏ đi coi như không thấy gì vì sợ bị trả thù.", correct: false, feedback: "❌ Chưa tối ưu! Thờ ơ với bạo lực khiến kẻ xấu càng lấn tới. Chúng ta có kênh báo cáo ẩn danh an toàn!" },
-          { text: "C. Báo ngay cho Cô Nguyễn Thị Ngọc Nga (TPT Đội) hoặc bảo vệ nhà trường.", correct: true, feedback: "🎉 CHÍNH XÁC! Đây là cách xử lý thông minh và an toàn nhất. Thầy cô sẽ bảo vệ danh tính của em!" }
+          { text: "C. Báo ngay cho Cô Nguyễn Thị Ngọc Nga (Giáo viên tư vấn tâm lí) hoặc bảo vệ nhà trường.", correct: true, feedback: "🎉 CHÍNH XÁC! Đây là cách xử lý thông minh và an toàn nhất. Thầy cô sẽ bảo vệ danh tính của em!" }
         ]
       },
       {
@@ -36,7 +36,7 @@ const GAME_DATA = {
         question: "Tình huống 4: Thấy hai bạn trong lớp hẹn nhau ra ngoài cổng trường sau giờ học để 'quyết đấu', em sẽ làm gì?",
         options: [
           { text: "A. Ra xem và hò reo cổ vũ.", correct: false, feedback: "❌ Cổ vũ bạo lực là hành vi vi phạm nội quy nhà trường và tiếp tay cho nguy hiểm!" },
-          { text: "B. Khuyên can hai bạn và báo ngay cho Giáo viên chủ nhiệm hoặc Cô TPT Đội.", correct: true, feedback: "🎉 CHÍNH XÁC! Kịp thời báo tin sẽ ngăn chặn những chấn thương đáng tiếc xảy ra!" }
+          { text: "B. Khuyên can hai bạn và báo ngay cho Giáo viên chủ nhiệm hoặc Giáo viên tư vấn tâm lí.", correct: true, feedback: "🎉 CHÍNH XÁC! Kịp thời báo tin sẽ ngăn chặn những chấn thương đáng tiếc xảy ra!" }
         ]
       },
       {
@@ -93,7 +93,7 @@ const GAME_DATA = {
         question: "Tình huống 1: Em phát hiện có người lập tài khoản giả mạo hình ảnh của em trên Facebook/TikTok và đăng những lời lẽ xúc phạm. Em nên xử lý như thế nào?",
         options: [
           { text: "A. Đăng bài chửi bới lại người đó trên mạng xã hội.", correct: false, feedback: "❌ Không nên! Đáp trả tiêu cực chỉ khiến cuộc chiến mạng leo thang và làm ảnh hưởng hình ảnh của em." },
-          { text: "B. Chụp màn hình bằng chứng, báo cáo tài khoản và chia sẻ với Cô TPT Đội.", correct: true, feedback: "🎉 CHÍNH XÁC! Chụp màn hình giữ lại bằng chứng và nhờ thầy cô hỗ trợ xử lý là quy trình chuẩn!" },
+          { text: "B. Chụp màn hình bằng chứng, báo cáo tài khoản và chia sẻ với Giáo viên tư vấn tâm lí.", correct: true, feedback: "🎉 CHÍNH XÁC! Chụp màn hình giữ lại bằng chứng và nhờ thầy cô hỗ trợ xử lý là quy trình chuẩn!" },
           { text: "C. Khóc một mình và khóa tài khoản vĩnh viễn.", correct: false, feedback: "❌ Em không hề có lỗi! Đừng gánh chịu một mình, luôn có thầy cô và gia đình bên cạnh em." }
         ]
       },
@@ -135,7 +135,7 @@ const GAME_DATA = {
       {
         question: "Tình huống 7: Một bạn rủ em tham gia nhóm chat kín có tên 'Bóc phốt thầy cô và các bạn trong trường'. Em phản ứng ra sao?",
         options: [
-          { text: "A. Từ chối tham gia, khuyên bạn dừng lại và báo cáo với Cô TPT Đội để ngăn chặn tin độc hại.", correct: true, feedback: "🎉 CHÍNH XÁC! Nói 'Không' với các hội nhóm nói xấu giúp môi trường học đường luôn lành mạnh!" },
+          { text: "A. Từ chối tham gia, khuyên bạn dừng lại và báo cáo với Giáo viên tư vấn tâm lí để ngăn chặn tin độc hại.", correct: true, feedback: "🎉 CHÍNH XÁC! Nói 'Không' với các hội nhóm nói xấu giúp môi trường học đường luôn lành mạnh!" },
           { text: "B. Tham gia ngay để hóng hớt thông tin giật gân.", correct: false, feedback: "❌ Tham gia nhóm bóc phốt khiến em dễ bị lôi kéo vào hành vi vu khống bạn bè!" }
         ]
       },
@@ -172,7 +172,7 @@ const GAME_DATA = {
         question: "Tình huống 1: Một người quen của gia đình cố tình đụng chạm vào vùng đồ lót của em và dặn 'Đây là bí mật của hai chú cháu'. Em sẽ làm gì?",
         options: [
           { text: "A. Giữ bí mật vì sợ người đó giận.", correct: false, feedback: "❌ Tuyệt đối KHÔNG! Không ai có quyền xâm phạm vùng riêng tư của em. Đó không bao giờ là lỗi của em." },
-          { text: "B. Hét to 'KHÔNG', bỏ chạy đến nơi đông người và kể ngay với bố mẹ/Cô TPT.", correct: true, feedback: "🎉 CHÍNH XÁC! Áp dụng quy tắc 5 ngón tay: Hét to, Bỏ chạy và Kể lại ngay với người tin cậy!" },
+          { text: "B. Hét to 'KHÔNG', bỏ chạy đến nơi đông người và kể ngay với bố mẹ/Giáo viên tư vấn tâm lí.", correct: true, feedback: "🎉 CHÍNH XÁC! Áp dụng quy tắc 5 ngón tay: Hét to, Bỏ chạy và Kể lại ngay với người tin cậy!" },
           { text: "C. Im lặng nhưng lần sau không gặp nữa.", correct: false, feedback: "❌ Chưa đủ! Em cần báo ngay cho người lớn để ngăn chặn hành vi nguy hiểm này lặp lại." }
         ]
       },
@@ -235,7 +235,7 @@ const GAME_DATA = {
       {
         question: "Tình huống 10: Em nghi ngờ một bạn cùng xóm đang bị hành hạ, đánh đập hoặc có dấu hiệu bị xâm hại gia đình. Em hỗ trợ bạn thế nào?",
         options: [
-          { text: "A. Báo ẩn danh cho Cô TPT Đội, Trưởng ấp hoặc gọi Tổng đài 111 để các cơ quan chuyên trách bảo vệ bạn.", correct: true, feedback: "🎉 CHÍNH XÁC! Sự dũng cảm lên tiếng của em có thể cứu sống một cuộc đời bạn nhỏ!" },
+          { text: "A. Báo ẩn danh cho Giáo viên tư vấn tâm lí, Trưởng ấp hoặc gọi Tổng đài 111 để các cơ quan chuyên trách bảo vệ bạn.", correct: true, feedback: "🎉 CHÍNH XÁC! Sự dũng cảm lên tiếng của em có thể cứu sống một cuộc đời bạn nhỏ!" },
           { text: "B. Bỏ qua vì nghĩ đó là chuyện riêng của gia đình bạn.", correct: false, feedback: "❌ Bảo vệ trẻ em khỏi xâm hại bạo hành là trách nhiệm chung của toàn xã hội!" }
         ]
       }
@@ -351,7 +351,7 @@ const GAME_DATA = {
       {
         question: "Tình huống 4: Cha mẹ đặt kỳ vọng quá cao vào kỳ thi tuyển sinh khiến em luôn sống trong sợ hãi làm cha mẹ thất vọng. Em nên làm gì?",
         options: [
-          { text: "A. Trò chuyện chân thành với cha mẹ về khả năng và áp lực của em, hoặc nhờ Cô TPT Ngọc Nga hỗ trợ cầu nối.", correct: true, feedback: "🎉 CHÍNH XÁC! Sổ chia sẻ gia đình giúp cha mẹ hiểu và giảm áp lực cho em!" },
+          { text: "A. Trò chuyện chân thành với cha mẹ về khả năng và áp lực của em, hoặc nhờ Giáo viên tư vấn tâm lí (Cô Ngọc Nga) hỗ trợ cầu nối.", correct: true, feedback: "🎉 CHÍNH XÁC! Sự chia sẻ gia đình giúp cha mẹ hiểu và giảm áp lực cho em!" },
           { text: "B. Giấu kín cảm xúc tiêu cực và tự dằn vặt bản thân.", correct: false, feedback: "❌ Đồn nén cảm xúc kéo dài có thể dẫn tới trầm cảm học đường nghiêm trọng!" }
         ]
       },

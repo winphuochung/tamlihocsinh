@@ -23,9 +23,167 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
     school: 'Trường THCS Phước Hưng - Xã Nhơn Hội - An Giang',
-    teacher: 'Cô Nguyễn Thị Ngọc Nga - TPT Đội',
+    teacher: 'Cô Nguyễn Thị Ngọc Nga - Giáo viên tư vấn tâm lí',
     timestamp: new Date()
   });
+});
+
+/**
+ * ==========================================================================
+ * ANONYMOUS BOOKINGS & SECRET LOOKUP SERVER API (/api/bookings)
+ * Đồng bộ dữ liệu lịch hẹn ẩn danh từ học sinh tới giáo viên trên mọi thiết bị
+ * ==========================================================================
+ */
+const serverBookingsStore = [
+  {
+    secret_code: "PH-4243-M",
+    topic: "Phòng chống Bạo lực học đường",
+    grade: "Khối 6",
+    student_grade: "Khối 6",
+    date: "2026-09-23",
+    preferred_date: "2026-09-23",
+    time: "14 giờ 35",
+    preferred_time: "14 giờ 35",
+    content: "Có một bạn rủ em đánh nhau",
+    status: "PENDING",
+    reply: "",
+    teacher_reply: "",
+    created_at: "2026-09-23"
+  },
+  {
+    secret_code: "PH-6221-F",
+    topic: "Áp lực học tập & Thi cử",
+    grade: "Khối 6",
+    student_grade: "Khối 6",
+    date: "2026-08-27",
+    preferred_date: "2026-08-27",
+    time: "9h00",
+    preferred_time: "9h00",
+    content: "Em học không nổi, em muốn nghỉ học",
+    status: "APPROVED",
+    reply: "Chào em, cô đã nhận được thông tin. Sáng thứ 5 tuần này giờ ra chơi em hãy lên phòng Tư vấn tâm lý gặp cô nhé!",
+    teacher_reply: "Chào em, cô đã nhận được thông tin. Sáng thứ 5 tuần này giờ ra chơi em hãy lên phòng Tư vấn tâm lý gặp cô nhé!",
+    created_at: "2026-08-25"
+  },
+  {
+    secret_code: "PH-1737-E",
+    topic: "Phòng chống Bạo lực học đường",
+    grade: "Khối 6",
+    student_grade: "Khối 6",
+    date: "2026-08-27",
+    preferred_date: "2026-08-27",
+    time: "9h00",
+    preferred_time: "9h00",
+    content: "Em thấy các bạn hẹn gặp nhau để dán xé đồ của bạn khác.",
+    status: "APPROVED",
+    reply: "Cô trân trọng tinh thần dũng cảm của em. Cô sẽ can thiệp để bảo vệ các bạn an toàn.",
+    teacher_reply: "Cô trân trọng tinh thần dũng cảm của em. Cô sẽ can thiệp để bảo vệ các bạn an toàn.",
+    created_at: "2026-08-25"
+  },
+  {
+    secret_code: "PH-8839-X",
+    topic: "Phòng chống Bạo lực học đường",
+    grade: "Khối 8",
+    student_grade: "Khối 8",
+    date: "2026-08-07",
+    preferred_date: "2026-08-07",
+    time: "Giờ ra chơi sáng (9:15 - 9:30)",
+    preferred_time: "Giờ ra chơi sáng (9:15 - 9:30)",
+    content: "Em cảm thấy bị một bạn học khác lớp liên tục chặn đường hù dọa mỗi khi tan học.",
+    status: "APPROVED",
+    reply: "Chào em! Cô Ngọc Nga đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên văn phòng Đội gặp cô. Cô sẽ bảo vệ em an toàn!",
+    teacher_reply: "Chào em! Cô Ngọc Nga đã nhận được thông tin. Em yên tâm nhé, thứ Sáu tuần này giờ ra chơi 9:15 em hãy lên văn phòng Đội gặp cô. Cô sẽ bảo vệ em an toàn!",
+    created_at: "2026-08-05"
+  },
+  {
+    secret_code: "PH-9821-K",
+    topic: "Phòng chống Bắt nạt không gian mạng",
+    grade: "Khối 7",
+    student_grade: "Khối 7",
+    date: "2026-08-08",
+    preferred_date: "2026-08-08",
+    time: "Sau giờ học buổi chiều",
+    preferred_time: "Sau giờ học buổi chiều",
+    content: "Có một tài khoản Facebook ẩn danh liên tục nhắn tin chửi bới và đe dọa em.",
+    status: "PENDING",
+    reply: "",
+    teacher_reply: "",
+    created_at: "2026-08-06"
+  }
+];
+
+// API Lấy toàn bộ danh sách lịch hẹn
+app.get('/api/bookings', (req, res) => {
+  res.json({ success: true, data: serverBookingsStore });
+});
+
+// API Học sinh gửi đăng ký hẹn mới
+app.post('/api/bookings', (req, res) => {
+  try {
+    const booking = req.body;
+    if (!booking || !booking.secret_code) {
+      return res.status(400).json({ success: false, error: 'Dữ liệu không hợp lệ' });
+    }
+
+    const existingIndex = serverBookingsStore.findIndex(b => b.secret_code === booking.secret_code);
+    if (existingIndex >= 0) {
+      serverBookingsStore[existingIndex] = { ...serverBookingsStore[existingIndex], ...booking };
+    } else {
+      serverBookingsStore.unshift({
+        secret_code: booking.secret_code,
+        topic: booking.topic || 'Tư vấn tâm lý',
+        grade: booking.grade || booking.student_grade || 'Khối 8',
+        student_grade: booking.grade || booking.student_grade || 'Khối 8',
+        date: booking.date || booking.preferred_date || new Date().toISOString().split('T')[0],
+        preferred_date: booking.date || booking.preferred_date || new Date().toISOString().split('T')[0],
+        time: booking.time || booking.preferred_time || 'Giờ ra chơi',
+        preferred_time: booking.time || booking.preferred_time || 'Giờ ra chơi',
+        content: booking.content || '',
+        status: booking.status || 'PENDING',
+        reply: booking.reply || booking.teacher_reply || '',
+        teacher_reply: booking.reply || booking.teacher_reply || '',
+        created_at: booking.created_at || new Date().toISOString().split('T')[0]
+      });
+    }
+
+    console.log(`📌 Đã nhận lịch hẹn mới từ học sinh: ${booking.secret_code} (${booking.topic})`);
+    res.json({ success: true, message: 'Đã lưu lịch hẹn thành công', data: booking });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// API Tra cứu phản hồi bí mật bằng mã bí mật
+app.get('/api/bookings/lookup/:code', (req, res) => {
+  const code = req.params.code ? req.params.code.trim().toUpperCase() : '';
+  const match = serverBookingsStore.find(b => b.secret_code.toUpperCase() === code);
+  if (match) {
+    res.json({ success: true, data: match });
+  } else {
+    res.status(404).json({ success: false, error: 'Không tìm thấy thông tin cho mã này' });
+  }
+});
+
+// API Giáo viên gửi phản hồi cho học sinh
+app.post('/api/bookings/reply', (req, res) => {
+  try {
+    const { secret_code, reply, status } = req.body;
+    if (!secret_code) {
+      return res.status(400).json({ success: false, error: 'Mã bí mật không hợp lệ' });
+    }
+
+    const match = serverBookingsStore.find(b => b.secret_code.toUpperCase() === secret_code.toUpperCase());
+    if (match) {
+      match.reply = reply || match.reply;
+      match.teacher_reply = reply || match.teacher_reply;
+      match.status = status || (reply ? 'APPROVED' : match.status);
+      res.json({ success: true, message: 'Đã cập nhật phản hồi thành công', data: match });
+    } else {
+      res.status(404).json({ success: false, error: 'Không tìm thấy mã đặt lịch' });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 /**
@@ -66,7 +224,7 @@ app.post('/api/ai-counselor', async (req, res) => {
             </ul>
           </div>
           <p style="font-size: 13px; color: #374151; line-height: 1.5;">
-            Em hãy nhấn ngay vào mục <strong>'Hẹn Gặp Cô TPT'</strong> ở thanh menu bên trái để Cô Nguyễn Thị Ngọc Nga trực tiếp hỗ trợ và bảo vệ an toàn cho em nhé!
+            Em hãy nhấn ngay vào mục <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở thanh menu bên trái để Cô Nguyễn Thị Ngọc Nga trực tiếp hỗ trợ và bảo vệ an toàn cho em nhé!
           </p>
         `
       });
@@ -76,7 +234,7 @@ app.post('/api/ai-counselor', async (req, res) => {
     const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     if (apiKey) {
       try {
-        const systemPrompt = `Bạn là Chuyên gia Tư vấn Tâm lý Học đường uy tín, ấm áp, thấu cảm thuộc Trường THCS Phước Hưng (Xã Nhơn Hội, An Giang), đồng hành cùng Cô Nguyễn Thị Ngọc Nga (TPT Đội).
+        const systemPrompt = `Bạn là Chuyên gia Tư vấn Tâm lý Học đường uy tín, ấm áp, thấu cảm thuộc Trường THCS Phước Hưng (Xã Nhơn Hội, An Giang), đồng hành cùng Cô Nguyễn Thị Ngọc Nga (Giáo viên tư vấn tâm lí).
 Đối tượng tư vấn: Học sinh THCS (từ 11 đến 15 tuổi).
 Phong cách: Xưng "Thầy/Cô tư vấn" hoặc "Tớ", gọi "Em". Tuyệt đối chân thành, tôn trọng, không phán xét, không lên lớp.
 Mô hình tư vấn:
@@ -154,7 +312,7 @@ function buildExpertPsychologicalReply(userText) {
       steps = [
         "<strong>1. An toàn Thân thể là số 1:</strong> Tránh đi một mình ở hành lang vắng, khu vực tối hoặc cổng trường lúc tan học.",
         "<strong>2. Nguyên tắc 'Nhìn Thẳng & Nói Ngắn':</strong> Giữ thái độ bình tĩnh, nhìn thẳng, nói rõ <i>'Tôi không đồng ý'</i> và nhanh chóng di chuyển đến nơi có thầy cô hoặc đông bạn bè.",
-        "<strong>3. Báo Tin Bảo Vệ Ẩn Danh:</strong> Thu thập thông tin (ai đe dọa, ở đâu) và gửi ngay cho Cô TPT Ngọc Nga qua kênh bảo mật trang web này."
+        "<strong>3. Báo Tin Bảo Vệ Ẩn Danh:</strong> Thu thập thông tin (ai đe dọa, ở đâu) và gửi ngay cho Giáo viên tư vấn tâm lí (Cô Ngọc Nga) qua kênh bảo mật trang web này."
       ];
       openQuestion = "Tình huống này diễn ra ở trong lớp hay ngoài cổng trường vậy em? Em đã kể điều này cho ai lắng nghe chưa?";
       break;
@@ -221,7 +379,7 @@ function buildExpertPsychologicalReply(userText) {
     </div>
 
     <p style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">
-      🤝 <i>Em cũng có thể chọn <strong>'Hẹn Gặp Cô TPT'</strong> ở menu bên trái để gửi tin nhắn bí mật cho Cô Nguyễn Thị Ngọc Nga nhé!</i>
+      🤝 <i>Em cũng có thể chọn <strong>'Hẹn Gặp Giáo viên tư vấn tâm lí'</strong> ở menu bên trái để gửi tin nhắn bí mật cho Cô Nguyễn Thị Ngọc Nga nhé!</i>
     </p>
   `;
 }
