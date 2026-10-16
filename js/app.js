@@ -203,6 +203,11 @@ function selectMood(moodKey) {
   const data = MOOD_DATA[moodKey];
   if (!data) return;
 
+  // Phát âm thanh chạm cảm xúc lấp lánh nhẹ nhàng
+  if (typeof playSparkleSound === 'function') {
+    playSparkleSound();
+  }
+
   // Active state on buttons
   const buttons = document.querySelectorAll('.mood-emoji-btn');
   buttons.forEach(b => b.classList.remove('active'));

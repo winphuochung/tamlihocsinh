@@ -718,12 +718,22 @@ function selectGameOption(optionIdx) {
     feedbackBox.style.background = '#DCFCE7';
     feedbackBox.style.color = '#15803D';
     feedbackBox.style.border = '2px solid #86EFAC';
-    feedbackBox.innerHTML = `${selected.feedback} <br><br><strong style="color:#059669;">+10 Điểm Kỹ Năng!</strong>`;
+    feedbackBox.innerHTML = `${selected.feedback} <br><br><strong style="color:#059669;">+10 Điểm Kỹ Năng! 🎉</strong>`;
+    
+    // Phát âm thanh chuông leng keng vui nhộn khen ngợi
+    if (typeof playCorrectSound === 'function') {
+      playCorrectSound();
+    }
   } else {
     feedbackBox.style.background = '#FEE2E2';
     feedbackBox.style.color = '#991B1B';
     feedbackBox.style.border = '2px solid #FCA5A5';
     feedbackBox.innerHTML = selected.feedback;
+
+    // Phát âm thanh nhắc nhở ấm áp, nhẹ nhàng động viên học sinh
+    if (typeof playEncouragingSound === 'function') {
+      playEncouragingSound();
+    }
   }
 
   // Bổ sung nút Tiếp Theo hoặc Hoàn Thành
@@ -755,6 +765,11 @@ async function finishGame() {
   const game = GAME_DATA[currentGameState.gameKey];
   const maxScore = currentGameState.totalQuestions * 10;
   const score = currentGameState.score;
+
+  // Phát âm thanh chiến thắng Fanfare vui mừng
+  if (typeof playVictorySound === 'function') {
+    playVictorySound();
+  }
 
   const gameBody = document.getElementById('game-body');
   gameBody.innerHTML = `
