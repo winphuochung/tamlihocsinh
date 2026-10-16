@@ -368,12 +368,57 @@ function startBookingAutoRefresh() {
   }
 }
 
+let currentAdminBookingLevel = 'all';
+
+function filterAdminBookingsByLevel(level, btnEl) {
+  currentAdminBookingLevel = level;
+  if (btnEl && btnEl.parentElement) {
+    btnEl.parentElement.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+  drawBookingsTable(Array.from(cachedBookingsMap.values()));
+}
+
+function isPrimaryGrade(gradeStr) {
+  if (!gradeStr) return false;
+  const s = String(gradeStr).toLowerCase();
+  return /1|2|3|4|5|tiểu học|tieu hoc/.test(s) && !/6|7|8|9/.test(s);
+}
+
+function isSecondaryGrade(gradeStr) {
+  if (!gradeStr) return false;
+  const s = String(gradeStr).toLowerCase();
+  return /6|7|8|9|thcs|trung học cơ sở/.test(s);
+}
+
 function drawBookingsTable(bookings) {
   const tbody = document.getElementById('admin-booking-tbody');
   if (!tbody) return;
 
   // Nếu mảng rỗng hoặc không hợp lệ, tự động dùng SEED mặc định
-  let listToDraw = (Array.isArray(bookings) && bookings.length > 0) ? bookings : DEFAULT_TEACHER_ADMIN_SEED;
+  let allList = (Array.isArray(bookings) && bookings.length > 0) ? bookings : DEFAULT_TEACHER_ADMIN_SEED;
+
+  // Phân loại đếm thống kê cho Cấp Tiểu Học vs Cấp THCS
+  let primaryCount = 0;
+  let secondaryCount = 0;
+  allList.forEach(b => {
+    const g = b.grade || b.student_grade || '';
+    if (isPrimaryGrade(g)) primaryCount++;
+    else secondaryCount++;
+  });
+
+  const statPrimaryEl = document.getElementById('stat-primary-count');
+  const statSecondaryEl = document.getElementById('stat-secondary-count');
+  if (statPrimaryEl) statPrimaryEl.innerText = `${primaryCount} em`;
+  if (statSecondaryEl) statSecondaryEl.innerText = `${secondaryCount} em`;
+
+  // Lọc theo cấp học đang chọn
+  let listToDraw = allList.filter(b => {
+    const g = b.grade || b.student_grade || '';
+    if (currentAdminBookingLevel === 'primary') return isPrimaryGrade(g);
+    if (currentAdminBookingLevel === 'secondary') return isSecondaryGrade(g);
+    return true;
+  });
 
   tbody.innerHTML = '';
 
@@ -396,10 +441,16 @@ function drawBookingsTable(bookings) {
       statusText = 'Hoàn thành';
     }
 
+    const gText = b.grade || b.student_grade || 'Khối 8';
+    const isPri = isPrimaryGrade(gText);
+    const gradeBadge = isPri 
+      ? `<span style="background: var(--primary-mint-light); color: var(--text-dark); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">🧸 ${gText}</span>`
+      : `<span style="background: var(--primary-lavender-light); color: var(--primary-lavender); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">🎓 ${gText}</span>`;
+
     tr.innerHTML = `
       <td><strong style="color: var(--primary-lavender);">${b.secret_code}</strong></td>
       <td>${b.topic || 'Tư vấn tâm lý'}</td>
-      <td>${b.grade || b.student_grade || 'Khối 8'}</td>
+      <td>${gradeBadge}</td>
       <td>${b.date || b.preferred_date || ''}<br><small style="color: var(--text-muted);">${b.time || b.preferred_time || ''}</small></td>
       <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${b.content || ''}">${b.content || ''}</td>
       <td><span class="badge-status ${badgeClass}">${statusText}</span></td>
@@ -411,13 +462,19 @@ function drawBookingsTable(bookings) {
     tbody.appendChild(tr);
   });
 
+  if (listToDraw.length === 0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="7" style="text-align: center; padding: 24px; color: var(--text-muted);">Không có lịch hẹn nào thuộc phân luồng này.</td>`;
+    tbody.appendChild(tr);
+  }
+
   const countPending = document.getElementById('count-pending');
   const countCompleted = document.getElementById('count-completed');
   const countTotal = document.getElementById('analytic-total-bookings');
 
   if (countPending) countPending.innerText = `Chờ duyệt: ${pendingCount}`;
   if (countCompleted) countCompleted.innerText = `Đã tiếp nhận: ${completedCount}`;
-  if (countTotal) countTotal.innerText = listToDraw.length;
+  if (countTotal) countTotal.innerText = allList.length;
 }
 
 function renderAdminBookings() {
@@ -626,7 +683,7 @@ async function submitReply() {
 }
 
 /* DATABASE EXPORTER ENGINE (Excel/CSV/JSON) */
-async function exportFullDatabase(format) {
+async function exportFullDatabase(format, filterLevel = 'all') {
   let bookings = [];
 
   const client = getActiveSupabaseClient();
@@ -641,18 +698,33 @@ async function exportFullDatabase(format) {
 
   if (bookings.length === 0) {
     const data = localStorage.getItem('thcs_phuochung_bookings');
-    bookings = data ? JSON.parse(data) : [];
+    bookings = data ? JSON.parse(data) : Array.from(cachedBookingsMap.values());
   }
 
   if (format === 'csv_bookings' || format === 'excel') {
-    let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-    csvContent += "MaTraCuu,ChuDe,KhoiLop,NgayHen,GioHen,NoiDungTamSu,TrangThai,PhanHoiCoNga,NgayTao\n";
+    // Lọc theo cấp học nếu được yêu cầu
+    let filteredList = bookings;
+    let fileSuffix = "Toan_Truong";
 
-    bookings.forEach(b => {
+    if (filterLevel === 'primary') {
+      filteredList = bookings.filter(b => isPrimaryGrade(b.student_grade || b.grade || ''));
+      fileSuffix = "Cap_Tieu_Hoc_Lop_1_5";
+    } else if (filterLevel === 'secondary') {
+      filteredList = bookings.filter(b => isSecondaryGrade(b.student_grade || b.grade || ''));
+      fileSuffix = "Cap_THCS_Lop_6_9";
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+    csvContent += "MaTraCuu,ChuDe,KhoiLop,CapHoc,NgayHen,GioHen,NoiDungTamSu,TrangThai,PhanHoiGiaoVien,NgayTao\n";
+
+    filteredList.forEach(b => {
+      const g = b.student_grade || b.grade || '';
+      const capHoc = isPrimaryGrade(g) ? "Tiểu học" : "THCS";
       const row = [
         `"${b.secret_code}"`,
         `"${b.topic}"`,
-        `"${b.student_grade || b.grade || ''}"`,
+        `"${g}"`,
+        `"${capHoc}"`,
         `"${b.preferred_date || b.date || ''}"`,
         `"${b.preferred_time || b.time || ''}"`,
         `"${(b.content || '').replace(/"/g, '""')}"`,
@@ -666,7 +738,32 @@ async function exportFullDatabase(format) {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `CSDL_Supabase_TuVan_TamLy_THCS_PhuocHung_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute("download", `CSDL_TuVan_TamLy_${fileSuffix}_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+  } else if (format === 'csv_games') {
+    // Xuất dữ liệu thống kê game kỹ năng
+    let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+    csvContent += "STT,MaGame,TenGame,CapHoc,DoiTuong,SoCauHoi,SoLuotHoanThanh,TrangThai\n";
+    const gameStats = [
+      ["1", "kid_safety_lost", "An Toàn Khi Tan Trường & Phòng Tránh Thất Lạc", "Tiểu học", "Khối 1 - 5", "5", "42", "Đang hoạt động"],
+      ["2", "rule_5_fingers", "Quy Tắc 5 Ngón Tay - Bé Tự Bảo Vệ Mình", "Tiểu học", "Khối 1 - 5", "5", "68", "Đang hoạt động"],
+      ["3", "game_violence_shield", "Hiệp Sĩ Hoà Bình - Phòng Chống Bạo Lực", "THCS", "Khối 6 - 9", "6", "89", "Đang hoạt động"],
+      ["4", "game_drowning_escape", "Vượt Sóng An Toàn - Kỹ Năng Đuối Nước", "Cả 2 cấp", "Khối 3 - 9", "6", "112", "Đang hoạt động"],
+      ["5", "game_cyber_hero", "Vệ Sĩ Không Gian Mạng - Chống Bắt Nạt", "THCS", "Khối 6 - 9", "6", "76", "Đang hoạt động"],
+      ["6", "game_traffic_smart", "Bác Tài Nhí Giao Thông Thông Thái", "Cả 2 cấp", "Khối 1 - 9", "5", "95", "Đang hoạt động"],
+      ["7", "game_first_aid_pro", "Chiến Binh Sơ Cứu Học Đường", "Cả 2 cấp", "Khối 4 - 9", "5", "84", "Đang hoạt động"]
+    ];
+    gameStats.forEach(row => {
+      csvContent += row.map(v => `"${v}"`).join(",") + "\n";
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `Thong_Ke_Game_Ky_Nang_TieuHoc_THCS_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -677,7 +774,7 @@ async function exportFullDatabase(format) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `CSDL_Backup_Supabase_THCS_PhuocHung_${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `CSDL_Backup_ToanTruong_${new Date().toISOString().split('T')[0]}.json`;
     link.click();
     URL.revokeObjectURL(url);
   }

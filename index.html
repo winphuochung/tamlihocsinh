@@ -95,7 +95,7 @@
           <div class="stat-card">
             <div class="stat-icon-box" style="background: var(--primary-pink-light); color: var(--primary-pink);">🎮</div>
             <div class="stat-info">
-              <div class="number" id="stat-games">5/5</div>
+              <div class="number" id="stat-games">7/7</div>
               <div class="label">Thử Thách Kỹ Năng</div>
               <div class="trend positive">✦ Hoàn toàn miễn phí</div>
             </div>
@@ -126,6 +126,49 @@
               <div class="trend pink" style="font-size: 13px; font-weight: 700;">✦ Sẵn sàng lắng nghe</div>
             </div>
           </div>
+        </div>
+
+        <!-- MINI-GAME TRẮC NGHIỆM CẢM XÚC ICON MẶT CƯỜI / MẶT MẾU (MOOD CHECK-IN) -->
+        <div class="mood-checkin-card" style="margin-top: 22px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 800; color: var(--primary-lavender); margin: 0; display: flex; align-items: center; gap: 8px;">
+                <span>🌈</span> Hôm nay cảm xúc của em như thế nào?
+              </h3>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin: 4px 0 0 0;">Chạm vào một biểu cảm khuôn mặt bên dưới để nhận lời nhắn ấm áp từ Giáo viên tư vấn nhé!</p>
+            </div>
+            <span class="badge-status badge-approved" style="font-size: 11px;">Trắc nghiệm 1 chạm</span>
+          </div>
+
+          <div class="mood-emoji-row">
+            <button type="button" class="mood-emoji-btn" onclick="selectMood('hao_hung')">
+              <span class="emoji-icon">🤩</span>
+              <span class="emoji-label">Hào Hứng</span>
+            </button>
+            <button type="button" class="mood-emoji-btn" onclick="selectMood('vui_ve')">
+              <span class="emoji-icon">😊</span>
+              <span class="emoji-label">Vui Vẻ</span>
+            </button>
+            <button type="button" class="mood-emoji-btn" onclick="selectMood('binh_thuong')">
+              <span class="emoji-icon">😐</span>
+              <span class="emoji-label">Bình Thường</span>
+            </button>
+            <button type="button" class="mood-emoji-btn" onclick="selectMood('buon_ba')">
+              <span class="emoji-icon">😢</span>
+              <span class="emoji-label">Buồn Bã</span>
+            </button>
+            <button type="button" class="mood-emoji-btn" onclick="selectMood('tuc_gian')">
+              <span class="emoji-icon">😡</span>
+              <span class="emoji-label">Tức Giận</span>
+            </button>
+            <button type="button" class="mood-emoji-btn" onclick="selectMood('lo_lang')">
+              <span class="emoji-icon">😰</span>
+              <span class="emoji-label">Lo Lắng</span>
+            </button>
+          </div>
+
+          <!-- MOOD FEEDBACK RESULT BOX -->
+          <div id="mood-feedback-box" class="mood-result-panel" style="display: none;"></div>
         </div>
 
         <div style="margin-top: 20px;" class="content-grid">
@@ -210,40 +253,75 @@
             <p style="font-size: 13px; color: var(--text-muted);">Vừa chơi vừa rèn luyện kỹ năng ứng phó tình huống thực tế</p>
           </div>
 
+          <!-- LEVEL FILTER BUTTONS FOR GAMES -->
+          <div class="filter-pills-bar" style="margin-top: 14px; margin-bottom: 20px;">
+            <button class="filter-pill active" onclick="filterGamesByLevel('all', this)">🌟 Tất Cả Trò Chơi (7)</button>
+            <button class="filter-pill" onclick="filterGamesByLevel('primary', this)">🧸 Dành Cho Tiểu Học (Lớp 1 - 5)</button>
+            <button class="filter-pill" onclick="filterGamesByLevel('secondary', this)">🎓 Dành Cho THCS (Lớp 6 - 9)</button>
+          </div>
+
           <div class="games-grid" id="games-grid">
-            <div class="game-card" onclick="startGame('school_violence')">
+            <!-- GAME 1 -->
+            <div class="game-card" data-level="secondary" onclick="startGame('school_violence')">
               <img src="images/game-thumb-1.jpg" alt="Phòng chống bạo lực học đường" class="game-thumb-badge" style="width: 80px; height: 80px; max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 20px; margin: 0 auto 12px; display: block; border: 3px solid #FFFFFF; box-shadow: 0 6px 18px rgba(139, 115, 230, 0.22);">
-              <h3>1. Phòng Chống Bạo Lực Học Đường</h3>
+              <span class="badge-status badge-approved" style="font-size: 11px;">🎓 Khối THCS</span>
+              <h3 style="margin-top: 8px;">1. Phòng Chống Bạo Lực Học Đường</h3>
               <p>Học cách hóa giải mâu thuẫn, từ chối tham gia xô xát và tìm sự trợ giúp an toàn.</p>
               <button class="btn-clay-secondary" onclick="event.stopPropagation(); startGame('school_violence')">Chơi Thử Thách 🎯</button>
             </div>
 
-            <div class="game-card" onclick="startGame('cyberbullying')">
+            <!-- GAME 2 -->
+            <div class="game-card" data-level="secondary" onclick="startGame('cyberbullying')">
               <img src="images/game-thumb-2.jpg" alt="Phòng chống bắt nạt mạng" class="game-thumb-badge" style="width: 80px; height: 80px; max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 20px; margin: 0 auto 12px; display: block; border: 3px solid #FFFFFF; box-shadow: 0 6px 18px rgba(139, 115, 230, 0.22);">
-              <h3>2. Phòng Chống Bắt Nạt Mạng</h3>
+              <span class="badge-status badge-approved" style="font-size: 11px;">🎓 Khối THCS</span>
+              <h3 style="margin-top: 8px;">2. Phòng Chống Bắt Nạt Mạng</h3>
               <p>Ứng phó khi bị nói xấu trực tuyến, bảo mật tài khoản mạng xã hội.</p>
               <button class="btn-clay-secondary" onclick="event.stopPropagation(); startGame('cyberbullying')">Chơi Thử Thách 🎯</button>
             </div>
 
-            <div class="game-card" onclick="startGame('child_abuse')">
+            <!-- GAME 3 -->
+            <div class="game-card" data-level="all" onclick="startGame('child_abuse')">
               <img src="images/game-thumb-3.jpg" alt="Phòng chống xâm hại trẻ em" class="game-thumb-badge" style="width: 80px; height: 80px; max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 20px; margin: 0 auto 12px; display: block; border: 3px solid #FFFFFF; box-shadow: 0 6px 18px rgba(139, 115, 230, 0.22);">
-              <h3>3. Phòng Chống Xâm Hại Trẻ Em</h3>
+              <span class="badge-status badge-completed" style="font-size: 11px;">🌈 Cả 2 Cấp Học</span>
+              <h3 style="margin-top: 8px;">3. Phòng Chống Xâm Hại Trẻ Em</h3>
               <p>Quy tắc 5 ngón tay bảo vệ cơ thể, nhận diện hành vi nguy hiểm.</p>
               <button class="btn-clay-secondary" onclick="event.stopPropagation(); startGame('child_abuse')">Chơi Thử Thách 🎯</button>
             </div>
 
-            <div class="game-card" onclick="startGame('drowning_prevention')">
+            <!-- GAME 4 -->
+            <div class="game-card" data-level="all" onclick="startGame('drowning_prevention')">
               <img src="images/game-thumb-4.jpg" alt="Phòng chống đuối nước" class="game-thumb-badge" style="width: 80px; height: 80px; max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 20px; margin: 0 auto 12px; display: block; border: 3px solid #FFFFFF; box-shadow: 0 6px 18px rgba(139, 115, 230, 0.22);">
-              <h3>4. Phòng Chống Đuối Nước & Thương Tích</h3>
+              <span class="badge-status badge-completed" style="font-size: 11px;">🌈 Cả 2 Cấp Học</span>
+              <h3 style="margin-top: 8px;">4. Phòng Chống Đuối Nước & Thương Tích</h3>
               <p>Kỹ năng sông nước an toàn tại xã Nhơn Hội, An Giang & sơ cứu tai nạn.</p>
               <button class="btn-clay-secondary" onclick="event.stopPropagation(); startGame('drowning_prevention')">Chơi Thử Thách 🎯</button>
             </div>
 
-            <div class="game-card" onclick="startGame('mental_health')">
+            <!-- GAME 5 -->
+            <div class="game-card" data-level="secondary" onclick="startGame('mental_health')">
               <img src="images/game-thumb-5.jpg" alt="Giải tỏa áp lực học tập" class="game-thumb-badge" style="width: 80px; height: 80px; max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 20px; margin: 0 auto 12px; display: block; border: 3px solid #FFFFFF; box-shadow: 0 6px 18px rgba(139, 115, 230, 0.22);">
-              <h3>5. Giải Tỏa Áp Lực Học Tập</h3>
+              <span class="badge-status badge-approved" style="font-size: 11px;">🎓 Khối THCS</span>
+              <h3 style="margin-top: 8px;">5. Giải Tỏa Áp Lực Học Tập</h3>
               <p>Phương pháp điều hòa cảm xúc, giải tỏa căng thẳng trước kỳ thi.</p>
               <button class="btn-clay-secondary" onclick="event.stopPropagation(); startGame('mental_health')">Chơi Thử Thách 🎯</button>
+            </div>
+
+            <!-- GAME 6 (MỚI: DÀNH CHO TIỂU HỌC) -->
+            <div class="game-card" data-level="primary" onclick="startGame('kid_safety_lost')">
+              <img src="images/game-thumb-1.jpg" alt="An toàn khi tan trường" class="game-thumb-badge" style="width: 80px; height: 80px; max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 20px; margin: 0 auto 12px; display: block; border: 3px solid #FFFFFF; box-shadow: 0 6px 18px rgba(139, 115, 230, 0.22);">
+              <span class="badge-status badge-pending" style="font-size: 11px;">🧸 Dành Cho Tiểu Học</span>
+              <h3 style="margin-top: 8px;">6. An Toàn Khi Tan Trường & Phòng Tránh Thất Lạc</h3>
+              <p>Kỹ năng ghi nhớ thông tin ba mẹ, cảnh giác người lạ cho quà và tìm sự trợ giúp an toàn.</p>
+              <button class="btn-clay-secondary" onclick="event.stopPropagation(); startGame('kid_safety_lost')">Chơi Thử Thách 🎯</button>
+            </div>
+
+            <!-- GAME 7 (MỚI: DÀNH CHO TIỂU HỌC) -->
+            <div class="game-card" data-level="primary" onclick="startGame('rule_5_fingers')">
+              <img src="images/game-thumb-3.jpg" alt="Quy tắc 5 ngón tay" class="game-thumb-badge" style="width: 80px; height: 80px; max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 20px; margin: 0 auto 12px; display: block; border: 3px solid #FFFFFF; box-shadow: 0 6px 18px rgba(139, 115, 230, 0.22);">
+              <span class="badge-status badge-pending" style="font-size: 11px;">🧸 Dành Cho Tiểu Học</span>
+              <h3 style="margin-top: 8px;">7. Quy Tắc 5 Ngón Tay - Bé Tự Bảo Vệ Mình</h3>
+              <p>Quy tắc đồ bơi, nhận diện ranh giới tiếp xúc an toàn và dũng cảm nói "KHÔNG".</p>
+              <button class="btn-clay-secondary" onclick="event.stopPropagation(); startGame('rule_5_fingers')">Chơi Thử Thách 🎯</button>
             </div>
           </div>
 
@@ -280,10 +358,26 @@
             <span class="badge-status badge-approved">● Trực tuyến - Thấu cảm & Bí mật</span>
           </div>
 
+          <!-- LEVEL SELECTION FOR AI COUNSELOR -->
+          <div style="background: #FFFFFF; padding: 12px 18px; border-radius: var(--radius-md); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border: 1.5px solid #EAE3F7; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+            <div style="font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 18px;">🎓</span> Chọn cấp học để AI tư vấn phù hợp nhất:
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" id="ai-level-btn-tieuhoc" class="btn-clay-secondary" style="font-size: 12px; padding: 6px 14px; border-radius: var(--radius-pill);" onclick="setAiLevel('tieuhoc')">🧸 Cấp Tiểu Học (Lớp 1 - 5)</button>
+              <button type="button" id="ai-level-btn-thcs" class="btn-clay" style="font-size: 12px; padding: 6px 14px; border-radius: var(--radius-pill);" onclick="setAiLevel('thcs')">🎓 Cấp THCS (Lớp 6 - 9)</button>
+            </div>
+          </div>
+
           <div class="chat-box">
             <div class="chat-messages" id="chat-messages">
               <div class="chat-bubble bot">
                 👋 Chào em! Tớ là Trợ Lý AI Tư Vấn Tâm Lý Học Đường của Trường Tiểu học và THCS Phước Hưng. Tớ ở đây để lắng nghe, thấu cảm và cùng em giải quyết những khó khăn tâm lý một cách <strong>hoàn toàn riêng tư và bảo mật</strong>. Em hãy chọn hoặc gõ điều em đang trăn trở nhé! 🌿
+                <div style="margin-top: 10px;">
+                  <button type="button" class="btn-tts" onclick="toggleTtsSpeech(this)" title="Bấm để nghe đọc to câu chào">
+                    <i class="fa-solid fa-volume-high"></i> Nghe đọc
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -304,7 +398,7 @@
         </div>
       </section>
 
-      <!-- TAB 4: ANONYMOUS DIRECT BOOKING WITH TEACHER NGA -->
+      <!-- TAB 4: ANONYMOUS DIRECT BOOKING WITH COUNSELOR -->
       <section id="tab-booking" class="tab-view">
         <div class="card-section" style="max-width: 720px; margin: 0 auto;">
           <div class="card-header">
@@ -331,10 +425,19 @@
             <div class="form-group">
               <label>2. Em đang là học sinh Khối lớp nào?</label>
               <select id="book-grade" class="form-control" required>
-                <option value="Khối 6">Khối 6</option>
-                <option value="Khối 7">Khối 7</option>
-                <option value="Khối 8">Khối 8</option>
-                <option value="Khối 9">Khối 9</option>
+                <optgroup label="🧸 CẤP TIỂU HỌC (LỚP 1 - LỚP 5)">
+                  <option value="Khối 1">Khối 1 (Tiểu học)</option>
+                  <option value="Khối 2">Khối 2 (Tiểu học)</option>
+                  <option value="Khối 3">Khối 3 (Tiểu học)</option>
+                  <option value="Khối 4">Khối 4 (Tiểu học)</option>
+                  <option value="Khối 5">Khối 5 (Tiểu học)</option>
+                </optgroup>
+                <optgroup label="🎓 CẤP THCS (LỚP 6 - LỚP 9)">
+                  <option value="Khối 6" selected>Khối 6 (THCS)</option>
+                  <option value="Khối 7">Khối 7 (THCS)</option>
+                  <option value="Khối 8">Khối 8 (THCS)</option>
+                  <option value="Khối 9">Khối 9 (THCS)</option>
+                </optgroup>
               </select>
             </div>
 
@@ -363,7 +466,7 @@
             <h3 style="color: var(--text-main); font-size: 18px;">✅ Đăng Ký Thành Công!</h3>
             <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Đây là <strong>Mã Tra Cứu Bí Mật</strong> duy nhất của em. Hãy lưu lại mã này nhé!</p>
             <div class="secret-code-value" id="generated-secret-code">PH-8839-X</div>
-            <p style="font-size: 12px; color: var(--primary-pink); font-weight: 700;">⚠️ Em hãy chụp màn hình hoặc ghi lại mã này để tra cứu kết quả từ Cô Nga!</p>
+            <p style="font-size: 12px; color: var(--primary-pink); font-weight: 700;">⚠️ Em hãy chụp màn hình hoặc ghi lại mã này để tra cứu kết quả từ Giáo viên tư vấn tâm lí!</p>
           </div>
         </div>
       </section>
@@ -394,9 +497,16 @@
             <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Trang bị cẩm nang sinh tồn, an toàn sông nước & chăm sóc sức khỏe tinh thần 24/7</p>
           </div>
 
+          <!-- LEVEL FILTER BUTTONS FOR LIBRARY -->
+          <div class="filter-pills-bar" style="margin-top: 14px; margin-bottom: 12px;">
+            <button class="filter-pill active" onclick="filterLibraryByLevel('all', this)">🌟 Tất Cả Cấp Học</button>
+            <button class="filter-pill" onclick="filterLibraryByLevel('primary', this)">🧸 Dành Cho Tiểu Học (Lớp 1 - 5)</button>
+            <button class="filter-pill" onclick="filterLibraryByLevel('secondary', this)">🎓 Dành Cho THCS (Lớp 6 - 9)</button>
+          </div>
+
           <!-- CATEGORY FILTER BUTTONS -->
           <div class="lib-filter-container">
-            <button class="btn-clay lib-filter-btn" onclick="filterLibrary('all', this)">🌐 Tất Cả Bài Viết</button>
+            <button class="btn-clay lib-filter-btn" onclick="filterLibrary('all', this)">🌐 Tất Cả Chủ Đề</button>
             <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('water_safety', this)">🏊 An Toàn Sông Nước</button>
             <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('bullying', this)">🛡️ Ứng Xử Bắt Nạt</button>
             <button class="btn-clay-secondary lib-filter-btn" onclick="filterLibrary('cyber', this)">💻 An Toàn Số</button>

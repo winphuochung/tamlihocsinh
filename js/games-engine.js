@@ -398,6 +398,92 @@ const GAME_DATA = {
         ]
       }
     ]
+  },
+  kid_safety_lost: {
+    key: "kid_safety_lost",
+    title: "🎒 An Toàn Khi Tan Trường & Phòng Tránh Thất Lạc",
+    badge: "Bé An Toàn Khi Đến Trường 🎒",
+    thumb: "images/game-thumb-1.jpg",
+    questions: [
+      {
+        question: "Tình huống 1: Giờ tan học, bé đứng trước cổng trường chờ nhưng chưa thấy ba mẹ đến đón. Một người lạ chạy xe máy lại nói: 'Ba con bị bận nhờ chú đến đón về, lên xe chú chở'. Bé nên làm gì?",
+        options: [
+          { text: "A. Tuyệt đối không lên xe, chạy ngay vào phòng bảo vệ hoặc gặp thầy cô báo tin.", correct: true, feedback: "🎉 CHÍNH XÁC! Tuyệt đối không bao giờ đi theo người lạ dù họ nói bất cứ lý do gì!" },
+          { text: "B. Lên xe ngay để về nhà cho kịp giờ xem phim hoạt hình.", correct: false, feedback: "❌ Rất nguy hiểm! Đây là thủ đoạn kẻ xấu thường dùng để dụ dỗ và bắt cóc trẻ em!" }
+        ]
+      },
+      {
+        question: "Tình huống 2: Khi đi siêu thị hoặc chợ đông người cùng cha mẹ, bé mải xem đồ chơi và bị lạc mất gia đình. Bé cần tìm ai để nhờ trợ giúp?",
+        options: [
+          { text: "A. Tìm chú bảo vệ, cô thu ngân hoặc nhân viên mặc đồng phục của siêu thị để nhờ gọi loa.", correct: true, feedback: "🎉 CHÍNH XÁC! Nhân viên đồng phục hoặc chú bảo vệ là những người an toàn và đáng tin cậy nhất!" },
+          { text: "B. Chạy ra ngoài đường lớn tìm ba mẹ hoặc đi theo bất kỳ ai bảo dẫn đi tìm.", correct: false, feedback: "❌ Sai lầm! Đi ra đường lớn rất dễ bị tai nạn giao thông hoặc gặp kẻ xấu!" }
+        ]
+      },
+      {
+        question: "Tình huống 3: Điều quan trọng nhất bé phải luôn học thuộc lòng để tự bảo vệ mình khi bị lạc là gì?",
+        options: [
+          { text: "A. Học thuộc số điện thoại của ba hoặc mẹ và nhớ địa chỉ nhà mình.", correct: true, feedback: "🎉 CHÍNH XÁC! Nhớ số điện thoại của ba mẹ giúp mọi người có thể gọi điện đón bé ngay lập tức!" },
+          { text: "B. Nhớ tên các nhân vật siêu nhân trong phim hoạt hình.", correct: false, feedback: "❌ Chưa đúng! Nhớ số điện thoại của cha mẹ mới là thông tin cứu nguy quan trọng nhất!" }
+        ]
+      },
+      {
+        question: "Tình huống 4: Trên đường đi bộ từ trường về nhà, một người lạ đi ô tô dừng lại và đưa cho bé một hộp kẹo sô-cô-la ngon cùng món đồ chơi đẹp. Bé phản ứng thế nào?",
+        options: [
+          { text: "A. Lễ phép xua tay: 'Dạ con cảm ơn nhưng con không lấy ạ' và nhanh chân đi đến chỗ đông người.", correct: true, feedback: "🎉 CHÍNH XÁC! Kẹo hoặc đồ chơi của người lạ có thể tẩm thuốc mê hoặc bẫy bắt cóc!" },
+          { text: "B. Nhận kẹo ăn ngay và đứng lại trò chuyện cùng người đó.", correct: false, feedback: "❌ Rất nguy hiểm! Tuyệt đối không nhận đồ ăn uống hay quà tặng từ người lạ mặt!" }
+        ]
+      },
+      {
+        question: "Tình huống 5: Trời mưa to sấm chớp dữ dội lúc tan học, bé đang ở sân trường chờ mẹ. Bé nên đứng chờ ở đâu an toàn nhất?",
+        options: [
+          { text: "A. Đứng trong hành lang có mái che kiên cố của trường học.", correct: true, feedback: "🎉 CHÍNH XÁC! Tránh mưa dưới mái che kiên cố bảo vệ bé khỏi sấm sét và ướt lạnh!" },
+          { text: "B. Chạy ra đứng trú dưới gốc cây bàng to ngoài sân trường.", correct: false, feedback: "❌ Nguy hiểm chết người! Gốc cây to là nơi sét rất dễ đánh trúng khi trời mưa dông!" }
+        ]
+      }
+    ]
+  },
+  rule_5_fingers: {
+    key: "rule_5_fingers",
+    title: "🖐️ Quy Tắc 5 Ngón Tay - Bé Tự Bảo Vệ Mình",
+    badge: "Dũng Sĩ Tự Vệ 5 Ngón Tay 🖐️",
+    thumb: "images/game-thumb-3.jpg",
+    questions: [
+      {
+        question: "Tình huống 1: Theo 'Quy tắc 5 ngón tay', Ngón cái (ngón gần bé nhất) đại diện cho những ai và được phép làm gì?",
+        options: [
+          { text: "A. Ba, mẹ, ông bà, anh chị em ruột - được ôm hôn, yêu thương và tắm rửa khi bé còn nhỏ.", correct: true, feedback: "🎉 CHÍNH XÁC! Đây là những người ruột thịt thân yêu nhất trong gia đình của bé!" },
+          { text: "B. Bất kỳ ai quen biết ngoài đường phố.", correct: false, feedback: "❌ Sai rồi! Người lạ hoặc người quen bình thường không được phép ôm hôn tùy tiện!" }
+        ]
+      },
+      {
+        question: "Tình huống 2: 'Vùng đồ bơi' (ngực, mông và giữa hai đùi) của bé có ai được quyền nhìn hoặc chạm vào không?",
+        options: [
+          { text: "A. Tuyệt đối KHÔNG ai được chạm vào, trừ bác sĩ khám bệnh khi có ba mẹ đứng bên cạnh.", correct: true, feedback: "🎉 CHÍNH XÁC! Đây là vùng thiêng liêng và bất khả xâm phạm trên cơ thể của bé!" },
+          { text: "B. Ai thích chạm vào cũng được vì bé còn nhỏ.", correct: false, feedback: "❌ Tuyệt đối không! Bất kỳ ai đòi chạm vào vùng đồ bơi đều là hành vi xâm hại nghiêm trọng!" }
+        ]
+      },
+      {
+        question: "Tình huống 3: Nếu có người quen hoặc người lạ cố tình đụng chạm vào cơ thể bé và dọa: 'Cấm mách ba mẹ, nếu nói sẽ bị phạt'. Bé phải làm gì?",
+        options: [
+          { text: "A. Hét thật to 'CỨU CON VỚI!', chạy đến nơi đông người và kể ngay cho ba mẹ, thầy cô nghe.", correct: true, feedback: "🎉 CHÍNH XÁC! Bé không hề có lỗi, dũng cảm tố cáo sẽ giúp bé được bảo vệ an toàn!" },
+          { text: "B. Sợ hãi im lặng và giấu kín trong lòng.", correct: false, feedback: "❌ Không nên! Im lặng sẽ khiến kẻ xấu tiếp tục đe dọa và làm tổn thương bé nhiều hơn!" }
+        ]
+      },
+      {
+        question: "Tình huống 4: Ngón út (ngón xa nhất) trong quy tắc 5 ngón tay nhắc nhở bé điều gì đối với người hoàn toàn xa lạ?",
+        options: [
+          { text: "A. Xua tay từ chối, giữ khoảng cách tối thiểu 2 mét và không cho người lạ chạm vào người.", correct: true, feedback: "🎉 CHÍNH XÁC! Luôn giữ khoảng cách an toàn với người không quen biết!" },
+          { text: "B. Chạy lại ôm và cho người lạ bế bồng.", correct: false, feedback: "❌ Rất nguy hiểm! Với người lạ, bé tuyệt đối không cho ôm hay bế!" }
+        ]
+      },
+      {
+        question: "Tình huống 5: Một người hàng xóm rủ bé vào phòng đóng kín cửa để xem phim hoạt hình hoặc cho tiền và bảo không được cho ai biết. Bé nên ứng phó thế nào?",
+        options: [
+          { text: "A. Lập tức từ chối, không vào phòng kín và kể lại ngay sự việc cho ba mẹ.", correct: true, feedback: "🎉 CHÍNH XÁC! Không bao giờ vào phòng đóng kín cửa một mình với người lớn!" },
+          { text: "B. Vào ngay phòng kín vì được xem hoạt hình và có tiền tiêu vặt.", correct: false, feedback: "❌ Rất nguy hiểm! Phòng kín là môi trường dễ xảy ra nguy cơ xâm hại trẻ em!" }
+        ]
+      }
+    ]
   }
 };
 
@@ -478,6 +564,46 @@ function startGame(gameKey) {
 }
 
 /**
+ * BỘ LỌC TRÒ CHƠI KỸ NĂNG THEO CẤP HỌC (TIỂU HỌC HOẶC THCS)
+ */
+function filterGamesByLevel(level, btnEl) {
+  // Cập nhật trạng thái active cho các nút bấm
+  const bar = btnEl ? btnEl.parentElement : null;
+  if (bar) {
+    bar.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+
+  const cards = document.querySelectorAll('#games-grid .game-card');
+  cards.forEach(card => {
+    const cardLevel = card.getAttribute('data-level') || 'all';
+    if (level === 'all' || cardLevel === 'all' || cardLevel === level) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+/**
+ * ĐỌC TO CÂU HỎI TRÒ CHƠI KỸ NĂNG CHO HỌC SINH (TEXT-TO-SPEECH)
+ */
+function speakGameQuestion(text) {
+  if (!('speechSynthesis' in window)) {
+    alert('Trình duyệt chưa hỗ trợ tính năng Đọc giọng nói!');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'vi-VN';
+  utterance.rate = 0.95;
+  const voices = window.speechSynthesis.getVoices();
+  const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang === 'vi_VN' || (v.lang && v.lang.startsWith('vi')));
+  if (viVoice) utterance.voice = viVoice;
+  window.speechSynthesis.speak(utterance);
+}
+
+/**
  * RENDER CÂU HỎI HIỆN TẠI
  */
 function renderCurrentQuestion() {
@@ -485,7 +611,18 @@ function renderCurrentQuestion() {
   const qData = game.questions[currentGameState.questionIndex];
 
   document.getElementById('game-title').innerText = `${game.title} (Câu ${currentGameState.questionIndex + 1}/${currentGameState.totalQuestions})`;
-  document.getElementById('game-question').innerText = qData.question;
+  
+  const questionEl = document.getElementById('game-question');
+  if (questionEl) {
+    questionEl.innerHTML = `
+      <div>${qData.question}</div>
+      <div style="margin-top: 10px;">
+        <button type="button" class="btn-tts" onclick="speakGameQuestion(\`${qData.question.replace(/[`\\]/g, '')}\`)" title="Bấm để nghe cô đọc câu hỏi này">
+          <i class="fa-solid fa-volume-high"></i> Nghe đọc câu hỏi
+        </button>
+      </div>
+    `;
+  }
 
   const optionsBox = document.getElementById('game-options');
   optionsBox.innerHTML = '';

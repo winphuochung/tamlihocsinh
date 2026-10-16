@@ -224,19 +224,88 @@ const LIBRARY_ARTICLES = [
       { title: "🌐 Hội Chữ Thập Đỏ Việt Nam - Hướng dẫn Sơ cấp cứu", url: "https://redcross.org.vn" },
       { title: "🌐 Bộ Y tế Việt Nam - Trang tin Cổng Thông tin Điện tử", url: "https://moh.gov.vn" }
     ]
+  },
+  {
+    id: "art-kids-lost-prevention",
+    category: "protection",
+    level: "primary",
+    badgeText: "🧸 Dành Cho Tiểu Học",
+    badgeClass: "badge-approved",
+    title: "Bé Làm Gì Khi Bị Lạc Ở Siêu Thị, Chợ Đông Người Hoặc Cổng Trường?",
+    icon: "🎒",
+    author: "Giáo viên tư vấn tâm lí",
+    excerpt: "Quy tắc đứng yên tại chỗ, ghi nhớ số điện thoại gia đình và cách tìm người mặc đồng phục để nhờ sự giúp đỡ an toàn.",
+    content: `
+      <h3>🎒 1. Giữ bình tĩnh & Quy tắc đứng yên tại chỗ</h3>
+      <p>Khi phát hiện mình không thấy ba mẹ, bé <strong>tuyệt đối KHÔNG chạy lung tung</strong> ra ngoài đường lớn. Hãy đứng yên tại vị trí sáng sủa, an toàn gần đó.</p>
+
+      <h3>📞 2. Tìm người đáng tin cậy để nhờ gọi điện</h3>
+      <ul>
+        <li><strong>Ưu tiên số 1:</strong> Chú bảo vệ, cô thu ngân hoặc nhân viên mặc đồng phục của siêu thị, cửa hàng.</li>
+        <li><strong>Ưu tiên số 2:</strong> Chú công an hoặc chú dân phòng đang làm nhiệm vụ.</li>
+        <li><strong>Đọc rõ ràng:</strong> Họ tên của bé, tên trường học và số điện thoại của ba mẹ mà bé đã học thuộc lòng.</li>
+      </ul>
+
+      <h3>🚫 3. Tuyệt đối KHÔNG đi theo người lạ</h3>
+      <p>Nếu có người lạ bảo <i>'Đi theo cô/chú để tìm ba mẹ'</i>, bé hãy từ chối dứt khoát và chỉ đồng ý đứng đợi tại quầy dịch vụ hoặc phòng bảo vệ.</p>
+    `,
+    externalLinks: [
+      { title: "🌐 Tổng đài Quốc gia Bảo vệ Trẻ em 111 (Miễn phí)", url: "https://tongdai111.vn" }
+    ]
+  },
+  {
+    id: "art-kids-school-habits",
+    category: "bullying",
+    level: "primary",
+    badgeText: "🧸 Dành Cho Tiểu Học",
+    badgeClass: "badge-pending",
+    title: "4 Thói Quen An Toàn Giúp Bé Vui Khỏe Mỗi Ngày Đến Trường Tiểu Học",
+    icon: "🏫",
+    author: "Giáo viên tư vấn tâm lí",
+    excerpt: "Hòa đồng cùng bạn bè, không nhận quà từ người lạ, cẩn thận cầu thang và cách mách thầy cô khi gặp nguy hiểm.",
+    content: `
+      <h3>🌸 1. Hòa đồng & Yêu thương bạn bè</h3>
+      <p>Chia sẻ đồ dùng học tập, cùng chơi trò chơi lành mạnh trong giờ ra chơi và không trêu chọc hay đặt biệt danh xấu cho bạn.</p>
+
+      <h3>🚨 2. Cẩn thận khi lên xuống cầu thang</h3>
+      <p>Đi nhẹ nhàng, bám vào tay vịn, không xô đẩy hay nhảy bậc thang để tránh tai nạn té ngã.</p>
+
+      <h3>🛡️ 3. Mách ngay với Thầy Cô giáo</h3>
+      <p>Khi thấy bạn bị ngã, bị thương tích hoặc có bạn bắt nạt, đòi đồ chơi của mình, bé hãy đến phòng Giáo viên tư vấn tâm lí hoặc báo cô chủ nhiệm ngay nhé!</p>
+    `,
+    externalLinks: [
+      { title: "🌐 Cổng thông tin Bộ Giáo dục & Đào tạo", url: "https://moet.gov.vn" }
+    ]
   }
 ];
 
+let currentLibraryCategory = 'all';
+let currentLibraryLevel = 'all';
+
 /**
- * HIỂN THỊ DANH SÁCH BÀI VIẾT THƯ VIỆN
+ * HIỂN THỊ DANH SÁCH BÀI VIẾT THƯ VIỆN THEO CHỦ ĐỀ & CẤP HỌC
  */
-function renderLibraryArticles(category = 'all') {
+function renderLibraryArticles() {
   const container = document.getElementById('library-articles-grid');
   if (!container) return;
 
-  const filtered = category === 'all' 
-    ? LIBRARY_ARTICLES 
-    : LIBRARY_ARTICLES.filter(a => a.category === category);
+  const filtered = LIBRARY_ARTICLES.filter(art => {
+    const matchCat = (currentLibraryCategory === 'all' || art.category === currentLibraryCategory);
+    const artLevel = art.level || 'secondary';
+    const matchLevel = (currentLibraryLevel === 'all' || artLevel === 'all' || artLevel === currentLibraryLevel);
+    return matchCat && matchLevel;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #FFFFFF; border-radius: var(--radius-lg); border: 2px dashed #EAE3F7;">
+        <span style="font-size: 40px;">📚</span>
+        <h3 style="color: var(--text-main); margin-top: 10px;">Chưa có bài viết phù hợp</h3>
+        <p style="color: var(--text-muted); font-size: 13px;">Hãy chọn chủ đề hoặc cấp học khác để xem cẩm nang kỹ năng nhé!</p>
+      </div>
+    `;
+    return;
+  }
 
   container.innerHTML = filtered.map(art => `
     <div class="game-card" style="text-align: left; display: flex; flex-direction: column; justify-content: space-between;">
@@ -261,10 +330,10 @@ function renderLibraryArticles(category = 'all') {
 }
 
 /**
- * LỌC BÀI VIẾT THEO DANH MỤC
+ * LỌC BÀI VIẾT THEO DANH MỤC CHỦ ĐỀ
  */
 function filterLibrary(category, btnEl) {
-  // Reset active buttons
+  currentLibraryCategory = category;
   const buttons = document.querySelectorAll('.lib-filter-btn');
   buttons.forEach(b => {
     b.classList.remove('btn-clay');
@@ -276,11 +345,25 @@ function filterLibrary(category, btnEl) {
     btnEl.classList.add('btn-clay');
   }
 
-  renderLibraryArticles(category);
+  renderLibraryArticles();
 }
 
 /**
- * MỞ MODAL ĐỌC BÀI VIẾT CHI TIẾT (CHUẨN SMARTPHONE READER MODE)
+ * LỌC BÀI VIẾT THEO CẤP HỌC (TIỂU HỌC HOẶC THCS)
+ */
+function filterLibraryByLevel(level, btnEl) {
+  currentLibraryLevel = level;
+  const bar = btnEl ? btnEl.parentElement : null;
+  if (bar) {
+    bar.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+
+  renderLibraryArticles();
+}
+
+/**
+ * MỞ MODAL ĐỌC BÀI VIẾT CHI TIẾT (CHUẨN SMARTPHONE READER MODE VỚI ĐỌC GIỌNG NÓI TTS)
  */
 function openArticleModal(articleId) {
   const art = LIBRARY_ARTICLES.find(a => a.id === articleId);
@@ -289,7 +372,6 @@ function openArticleModal(articleId) {
   const modal = document.getElementById('article-modal');
   const modalBody = document.getElementById('article-modal-body');
 
-  // Khóa cuộn trang nền để trải nghiệm đọc trên điện thoại mượt mà
   document.body.style.overflow = 'hidden';
 
   modalBody.innerHTML = `
@@ -300,9 +382,15 @@ function openArticleModal(articleId) {
       <span class="badge-status ${art.badgeClass}" style="margin-top: 4px; font-size: 12px; padding: 6px 14px;">${art.badgeText}</span>
       <h2 style="font-size: 20px; color: var(--text-main); margin-top: 12px; line-height: 1.45; font-weight: 800;">${art.title}</h2>
       <p style="font-size: 13px; color: var(--primary-lavender); font-weight: 700; margin-top: 6px;">✍️ Tác giả: ${art.author}</p>
+      
+      <div style="margin-top: 10px;">
+        <button type="button" class="btn-tts" onclick="speakArticleContent(this)" title="Bấm để nghe đọc to bài viết này">
+          <i class="fa-solid fa-volume-high"></i> Nghe đọc bài viết
+        </button>
+      </div>
     </div>
 
-    <div class="article-detail-body">
+    <div class="article-detail-body" id="article-read-content">
       ${art.content}
     </div>
 
@@ -331,11 +419,58 @@ function openArticleModal(articleId) {
 }
 
 /**
+ * ĐỌC TO TOÀN BỘ NỘI DUNG BÀI VIẾT (TEXT-TO-SPEECH)
+ */
+function speakArticleContent(btn) {
+  if (!('speechSynthesis' in window)) {
+    alert('Trình duyệt chưa hỗ trợ tính năng Đọc giọng nói!');
+    return;
+  }
+
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Nghe đọc bài viết';
+    btn.classList.remove('speaking');
+    return;
+  }
+
+  const contentBox = document.getElementById('article-read-content');
+  if (!contentBox) return;
+
+  const plainText = contentBox.innerText.trim();
+  if (!plainText) return;
+
+  const utterance = new SpeechSynthesisUtterance(plainText);
+  utterance.lang = 'vi-VN';
+  utterance.rate = 0.95;
+  const voices = window.speechSynthesis.getVoices();
+  const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang === 'vi_VN' || (v.lang && v.lang.startsWith('vi')));
+  if (viVoice) utterance.voice = viVoice;
+
+  btn.classList.add('speaking');
+  btn.innerHTML = '<i class="fa-solid fa-circle-stop"></i> Dừng đọc';
+
+  utterance.onend = () => {
+    btn.classList.remove('speaking');
+    btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Nghe đọc bài viết';
+  };
+  utterance.onerror = () => {
+    btn.classList.remove('speaking');
+    btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Nghe đọc bài viết';
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+/**
  * ĐÓNG MODAL ĐỌC BÀI VIẾT
  */
 function closeArticleModal(event) {
   if (event && event.target && !event.target.classList.contains('modal-overlay') && !event.target.classList.contains('modal-close-btn')) {
     return;
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
   }
   const modal = document.getElementById('article-modal');
   if (modal) {
@@ -346,5 +481,5 @@ function closeArticleModal(event) {
 
 // Tự động khởi tạo khi tải trang
 document.addEventListener('DOMContentLoaded', () => {
-  renderLibraryArticles('all');
+  renderLibraryArticles();
 });

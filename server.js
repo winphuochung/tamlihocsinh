@@ -195,13 +195,14 @@ app.post('/api/bookings/reply', (req, res) => {
  */
 app.post('/api/ai-counselor', async (req, res) => {
   try {
-    const { message, history } = req.body;
+    const { message, history, level } = req.body;
     if (!message || typeof message !== 'string') {
       return res.status(400).json({ success: false, error: 'Tin nhắn không hợp lệ' });
     }
 
     const userText = message.trim();
     const t = userText.toLowerCase();
+    const isPrimary = (level === 'tieuhoc');
 
     // 1. KIỂM TRA BÁO ĐỘNG NGUY CƠ KHẨN CẤP (CRISIS EMERGENCY CHECK)
     const crisisKeywords = ["muốn chết", "tự tử", "rạch tay", "kết thúc cuộc sống", "bớt đau khổ", "không muốn sống", "tự hại", "uống thuốc tử", "buông xuôi", "chết đi cho xong", "nhảy cầu"];
@@ -234,8 +235,20 @@ app.post('/api/ai-counselor', async (req, res) => {
     const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     if (apiKey) {
       try {
-        const systemPrompt = `Bạn là Chuyên gia Tư vấn Tâm lý Học đường uy tín, ấm áp, thấu cảm thuộc Trường Tiểu học và THCS Phước Hưng (Xã Nhơn Hội, An Giang), đảm nhận vai trò Giáo viên tư vấn tâm lí.
-Đối tượng tư vấn: Học sinh Tiểu học và THCS (từ 6 đến 15 tuổi).
+        let systemPrompt = "";
+        if (isPrimary) {
+          systemPrompt = `Bạn là Cô Giáo Viên Tư Vấn Tâm Lý Học Đường hiền hậu, ấm áp thuộc Trường Tiểu học và THCS Phước Hưng (Xã Nhơn Hội, An Giang).
+Đối tượng tư vấn: Học sinh CẤP TIỂU HỌC (từ 6 đến 10 tuổi, Khối Lớp 1 đến Lớp 5).
+Phong cách: Xưng "Cô" hoặc "Tớ", gọi "Em" hoặc "Bé". Dùng từ ngữ rất đơn giản, ngọt ngào, dỗ dành, câu ngắn dễ hiểu, nhiều biểu tượng icon dễ thương (🧸, 🌸, ⭐, 💖).
+Nguyên tắc:
+1. Khen ngợi và cảm ơn bé vì đã dũng cảm kể cho cô nghe.
+2. Dỗ dành, giúp bé an tâm rằng bé luôn được bảo vệ và yêu thương.
+3. Chỉ cho bé 2-3 việc bé có thể làm ngay (mách ba mẹ, chạy đến chú bảo vệ hoặc cô giáo, hít thở sâu).
+4. Khuyến khích bé gặp Giáo viên tư vấn tâm lí để được ôm và chia sẻ thêm.
+Định dạng HTML đẹp, sinh động, dễ đọc cho trẻ em.`;
+        } else {
+          systemPrompt = `Bạn là Chuyên gia Tư vấn Tâm lý Học đường uy tín, ấm áp, thấu cảm thuộc Trường Tiểu học và THCS Phước Hưng (Xã Nhơn Hội, An Giang), đảm nhận vai trò Giáo viên tư vấn tâm lí.
+Đối tượng tư vấn: Học sinh THCS (từ 11 đến 15 tuổi, Khối Lớp 6 đến Lớp 9).
 Phong cách: Xưng "Thầy/Cô tư vấn" hoặc "Tớ", gọi "Em". Tuyệt đối chân thành, tôn trọng, không phán xét, không lên lớp.
 Mô hình tư vấn:
 1. Lắng nghe và phản chiếu cảm xúc (trích dẫn nhẹ lời em vừa nói).
@@ -243,6 +256,7 @@ Mô hình tư vấn:
 3. Đưa ra 3 bước hành động cụ thể, khả thi với học sinh THCS.
 4. Đặt 1 câu hỏi mở nhẹ nhàng để mời em tiếp tục chia sẻ.
 Hãy trả lời bằng định dạng HTML đẹp (dùng <p>, <strong>, <i>, <ul>, <li>, <div> có inline style tinh tế).`;
+        }
 
         const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         const response = await fetch(geminiUrl, {
@@ -268,7 +282,7 @@ Hãy trả lời bằng định dạng HTML đẹp (dùng <p>, <strong>, <i>, <u
     }
 
     // 3. ĐỘNG CƠ PHÂN TÍCH TÂM LÝ CHUYÊN SÂU NỘI BỘ (ADVANCED NLP SYNTHESIS ENGINE)
-    const replyHtml = buildExpertPsychologicalReply(userText);
+    const replyHtml = buildExpertPsychologicalReply(userText, isPrimary);
     return res.json({ success: true, reply: replyHtml, source: 'expert-engine' });
 
   } catch (err) {
@@ -280,7 +294,7 @@ Hãy trả lời bằng định dạng HTML đẹp (dùng <p>, <strong>, <i>, <u
 /**
  * ĐỘNG CƠ TỔNG HỢP TÂM LÝ CHUYÊN GIA DYNAMIC NLP
  */
-function buildExpertPsychologicalReply(userText) {
+function buildExpertPsychologicalReply(userText, isPrimary = false) {
   const t = userText.toLowerCase();
 
   // Trích xuất từ ngữ cảm xúc
@@ -362,19 +376,22 @@ function buildExpertPsychologicalReply(userText) {
       break;
   }
 
+  const stepTitle = isPrimary ? "🧸 Việc bé có thể làm ngay lúc này:" : "💡 Định hướng liệu pháp 3 bước dành cho em:";
+  const questionTitle = isPrimary ? "🌸 Cô luôn ở đây bên bé, bé kể thêm cho cô nghe nhé:" : "💬 Thầy/Cô muốn lắng nghe em nhiều hơn:";
+
   return `
     <p style="margin-bottom: 10px; font-size: 14px; line-height: 1.6;">${titleEmpathy}</p>
     <p style="margin-bottom: 12px; font-size: 13.5px; line-height: 1.6;">${cbtAnalysis}</p>
     
     <div style="background: #F8F5FE; padding: 14px 18px; border-radius: 16px; margin: 12px 0; border-left: 4px solid var(--primary-lavender); box-shadow: 0 2px 8px rgba(139, 115, 230, 0.08);">
-      <p style="font-size: 13.5px; font-weight: 800; color: var(--primary-lavender); margin-bottom: 8px;">💡 Định hướng liệu pháp 3 bước dành cho em:</p>
+      <p style="font-size: 13.5px; font-weight: 800; color: var(--primary-lavender); margin-bottom: 8px;">${stepTitle}</p>
       <ul style="font-size: 13px; color: var(--text-main); margin-left: 18px; line-height: 1.65;">
         ${steps.map(s => `<li style="margin-bottom: 6px;">${s}</li>`).join('')}
       </ul>
     </div>
 
     <div style="background: linear-gradient(135deg, #FFF5F7 0%, #F5F1FA 100%); padding: 12px 16px; border-radius: 14px; margin-top: 12px; border: 1px dashed var(--primary-pink);">
-      <p style="font-size: 13.5px; font-weight: 700; color: var(--primary-pink); margin-bottom: 4px;">💬 Thầy/Cô muốn lắng nghe em nhiều hơn:</p>
+      <p style="font-size: 13.5px; font-weight: 700; color: var(--primary-pink); margin-bottom: 4px;">${questionTitle}</p>
       <p style="font-size: 13px; color: var(--text-main); line-height: 1.5; margin: 0;">${openQuestion}</p>
     </div>
 

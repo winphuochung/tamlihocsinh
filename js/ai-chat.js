@@ -5,6 +5,28 @@
    ========================================================================== */
 
 let counselingHistory = [];
+let currentAiLevel = 'thcs';
+let activeTtsButton = null;
+
+/**
+ * CHỌN CẤP HỌC CHO TRỢ LÝ AI (TIỂU HỌC HOẶC THCS)
+ */
+function setAiLevel(level) {
+  currentAiLevel = level;
+  const btnTieuHoc = document.getElementById('ai-level-btn-tieuhoc');
+  const btnThcs = document.getElementById('ai-level-btn-thcs');
+  const inputEl = document.getElementById('chat-input');
+
+  if (level === 'tieuhoc') {
+    if (btnTieuHoc) { btnTieuHoc.className = 'btn-clay'; }
+    if (btnThcs) { btnThcs.className = 'btn-clay-secondary'; }
+    if (inputEl) { inputEl.placeholder = "Bé muốn tâm sự điều gì với Cô tư vấn nè..."; }
+  } else {
+    if (btnTieuHoc) { btnTieuHoc.className = 'btn-clay-secondary'; }
+    if (btnThcs) { btnThcs.className = 'btn-clay'; }
+    if (inputEl) { inputEl.placeholder = "Nhập tâm sự hoặc câu hỏi của em ở đây..."; }
+  }
+}
 
 /**
  * BỘ TỪ KHÓA BÁO ĐỘNG KHẨN CẤP (CRISIS RED FLAGS)
@@ -49,7 +71,8 @@ async function sendChatMessage() {
       },
       body: JSON.stringify({
         message: messageText,
-        history: counselingHistory.slice(-6)
+        history: counselingHistory.slice(-6),
+        level: currentAiLevel
       })
     });
 
@@ -183,7 +206,7 @@ function generateFallbackCounselingReply(userText) {
 }
 
 /**
- * HIỂN THỊ BONG BÓNG CHAT (HỖ TRỢ HTML RICH FORMAT)
+ * HIỂN THỊ BONG BÓNG CHAT (HỖ TRỢ HTML RICH FORMAT & ĐỌC GIỌNG NÓI TTS)
  */
 function appendBubble(content, sender, isHtml = false) {
   const messagesBox = document.getElementById('chat-messages');
@@ -195,9 +218,99 @@ function appendBubble(content, sender, isHtml = false) {
   } else {
     bubble.innerText = content;
   }
+
+  // Nếu là câu trả lời của Trợ lý AI (bot), gắn thêm nút Loa Đọc To (Text-to-Speech)
+  if (sender === 'bot') {
+    const ttsWrapper = document.createElement('div');
+    ttsWrapper.style.marginTop = '10px';
+    ttsWrapper.style.display = 'flex';
+    ttsWrapper.style.alignItems = 'center';
+    ttsWrapper.style.gap = '8px';
+
+    const ttsBtn = document.createElement('button');
+    ttsBtn.type = 'button';
+    ttsBtn.className = 'btn-tts';
+    ttsBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Nghe đọc';
+    ttsBtn.title = 'Bấm để nghe đọc to câu trả lời bằng tiếng Việt';
+    ttsBtn.onclick = function() {
+      toggleTtsSpeech(this);
+    };
+
+    ttsWrapper.appendChild(ttsBtn);
+    bubble.appendChild(ttsWrapper);
+  }
   
   messagesBox.appendChild(bubble);
   messagesBox.scrollTop = messagesBox.scrollHeight;
+}
+
+/**
+ * ĐỘNG CƠ ĐỌC GIỌNG NÓI TIẾNG VIỆT (WEB SPEECH SYNTHESIS TTS ENGINE)
+ */
+function toggleTtsSpeech(btn) {
+  if (!('speechSynthesis' in window)) {
+    alert('Trình duyệt của em chưa hỗ trợ tính năng Đọc giọng nói (Text-to-Speech). Hãy thử trình duyệt Chrome, Edge hoặc Safari nhé!');
+    return;
+  }
+
+  // Nếu nút này đang nói mà bấm tiếp -> Dừng lại
+  if (window.speechSynthesis.speaking && activeTtsButton === btn) {
+    window.speechSynthesis.cancel();
+    resetTtsButton(btn);
+    activeTtsButton = null;
+    return;
+  }
+
+  // Hủy các câu đang phát dở trước đó
+  window.speechSynthesis.cancel();
+  if (activeTtsButton) {
+    resetTtsButton(activeTtsButton);
+  }
+
+  const bubble = btn.closest('.chat-bubble') || btn.closest('.article-detail-body') || btn.parentElement;
+  if (!bubble) return;
+
+  // Lấy văn bản sạch (bỏ các nút bấm và mã thừa)
+  const clone = bubble.cloneNode(true);
+  clone.querySelectorAll('.btn-tts, button, script, style').forEach(el => el.remove());
+  let plainText = clone.innerText.trim();
+
+  if (!plainText) return;
+
+  // Tạo ngữ điệu đọc Web Speech API
+  const utterance = new SpeechSynthesisUtterance(plainText);
+  utterance.lang = 'vi-VN';
+  utterance.rate = (currentAiLevel === 'tieuhoc') ? 0.9 : 1.0; // Đọc chậm rãi, ấm áp hơn cho học sinh tiểu học
+
+  // Ưu tiên chọn giọng đọc Tiếng Việt chuẩn nếu hệ điều hành có sẵn
+  const voices = window.speechSynthesis.getVoices();
+  const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang === 'vi_VN' || (v.lang && v.lang.startsWith('vi')));
+  if (viVoice) {
+    utterance.voice = viVoice;
+  }
+
+  btn.classList.add('speaking');
+  btn.innerHTML = '<i class="fa-solid fa-circle-stop"></i> Dừng đọc';
+  activeTtsButton = btn;
+
+  utterance.onend = function() {
+    resetTtsButton(btn);
+    activeTtsButton = null;
+  };
+
+  utterance.onerror = function() {
+    resetTtsButton(btn);
+    activeTtsButton = null;
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function resetTtsButton(btn) {
+  if (btn) {
+    btn.classList.remove('speaking');
+    btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> Nghe đọc';
+  }
 }
 
 /**

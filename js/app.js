@@ -142,3 +142,127 @@ document.addEventListener('DOMContentLoaded', () => {
   initRealtimeWeeklyCalendar();
   console.log('🟢 Hệ thống Tư vấn Tâm lý Tiểu học và THCS Phước Hưng & Lịch thực tế đã sẵn sàng!');
 });
+
+/**
+ * ==========================================================================
+ * MINI-GAME TRẮC NGHIỆM CẢM XÚC ICON MẶT CƯỜI / MẶT MẾU (MOOD CHECK-IN)
+ * ==========================================================================
+ */
+const MOOD_DATA = {
+  hao_hung: {
+    emoji: "🤩",
+    title: "Tuyệt vời! Em đang tràn đầy năng lượng & hào hứng!",
+    color: "#8B73E6",
+    message: "Thầy/Cô rất vui khi thấy em có một ngày phấn chấn như vậy! Hãy giữ nụ cười rạng rỡ này để cùng học tập thật tốt và lan tỏa niềm vui đến các bạn xung quanh nhé! 🌟",
+    isNegative: false,
+    suggestedAction: "Chơi thử thách kỹ năng để ghi điểm cao nào!"
+  },
+  vui_ve: {
+    emoji: "😊",
+    title: "Thật ấm áp! Hôm nay là một ngày vui vẻ & bình yên!",
+    color: "#10B981",
+    message: "Một tinh thần thoải mái, an nhiên là chìa khóa vàng giúp em học bài nhanh thuộc và gắn kết bạn bè. Chúc em có thêm nhiều kỷ niệm đẹp trong ngày hôm nay! 🍀",
+    isNegative: false,
+    suggestedAction: "Đọc cẩm nang kỹ năng sống để tích lũy thêm mẹo hay!"
+  },
+  binh_thuong: {
+    emoji: "😐",
+    title: "Tâm trạng ổn định, nhẹ nhàng!",
+    color: "#6B7280",
+    message: "Mọi thứ diễn ra êm ả cũng là một điều đáng trân quý. Nếu có điều gì bất ngờ hay câu chuyện nhỏ trong lớp, em luôn có thể chia sẻ cùng Giáo viên tư vấn tâm lí nhé! ☕",
+    isNegative: false,
+    suggestedAction: "Thử tài Game Kỹ năng để kích hoạt sự hứng khởi nào!"
+  },
+  buon_ba: {
+    emoji: "😢",
+    title: "Thầy/Cô ở đây bên em - Mọi chuyện rồi sẽ ổn thôi!",
+    color: "#3B82F6",
+    message: "Có những ngày mây đen kéo đến khiến em thấy buồn bã, mệt mỏi. Không sao cả, việc em cảm thấy buồn là hoàn toàn bình thường. Em hãy cho phép bản thân nghỉ ngơi một chút và đừng ôm nỗi buồn một mình nhé! 🫂",
+    isNegative: true,
+    suggestedAction: "Tâm sự ngay với Trợ lý AI hoặc Giáo viên tư vấn tâm lí"
+  },
+  tuc_gian: {
+    emoji: "😡",
+    title: "Bình tĩnh một chút nào - Đừng để cơn giận làm tổn thương em!",
+    color: "#EF4444",
+    message: "Khi tức giận, lồng ngực em có thể đang nóng lên. Hãy dừng lại 5 giây, không vội nói hay hành động gì lúc này. Hãy hít thật sâu theo vòng tròn thở bên dưới để hạ nhiệt cơn giận nhé! 🔥",
+    isNegative: true,
+    suggestedAction: "Hạ hỏa bằng bài tập thở và chia sẻ gỡ rối"
+  },
+  lo_lang: {
+    emoji: "😰",
+    title: "Em đang thấy lo âu hoặc bất an? Thầy/Cô lắng nghe em đây!",
+    color: "#F59E0B",
+    message: "Nỗi lo bài vở, điểm số hay mâu thuẫn bạn bè đang đè nặng lên em đúng không? Em rất dũng cảm khi nhận diện được cảm xúc này. Hãy thở đều và cùng Thầy/Cô gỡ từng nút thắt một nhé! 🕊️",
+    isNegative: true,
+    suggestedAction: "Gửi tâm sự ẩn danh để được định hướng an toàn"
+  }
+};
+
+function selectMood(moodKey) {
+  const data = MOOD_DATA[moodKey];
+  if (!data) return;
+
+  // Active state on buttons
+  const buttons = document.querySelectorAll('.mood-emoji-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+
+  const clickedBtn = event?.currentTarget;
+  if (clickedBtn) clickedBtn.classList.add('active');
+
+  const feedbackBox = document.getElementById('mood-feedback-box');
+  if (!feedbackBox) return;
+
+  let breatheHtml = '';
+  if (data.isNegative) {
+    breatheHtml = `
+      <div style="text-align: center; margin: 12px 0;">
+        <div class="breathe-circle">🌸 Hít Thở 🌸</div>
+        <p style="font-size: 11.5px; color: #065F46; font-weight: 700; margin: 4px 0 0 0;">
+          Hít vào chậm 4 giây ➔ Giữ hơi 4 giây ➔ Thở ra nhẹ nhàng 4 giây
+        </p>
+      </div>
+    `;
+  }
+
+  feedbackBox.style.display = 'block';
+  feedbackBox.innerHTML = `
+    <div style="display: flex; align-items: flex-start; gap: 14px;">
+      <span style="font-size: 40px; line-height: 1;">${data.emoji}</span>
+      <div style="flex: 1;">
+        <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: 800; color: ${data.color};">${data.title}</h4>
+        <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: var(--text-main);">${data.message}</p>
+        
+        ${breatheHtml}
+
+        <div style="margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn-clay" style="font-size: 12px; padding: 7px 14px;" onclick="openMoodAiCounselor('${data.emoji}', '${data.title}')">
+            <i class="fa-solid fa-robot"></i> Trò Chuyện Cùng AI Về Cảm Xúc Này
+          </button>
+          <button class="btn-clay-secondary" style="font-size: 12px; padding: 7px 14px;" onclick="switchTab('booking')">
+            <i class="fa-solid fa-calendar-check"></i> Hẹn Gặp Giáo viên tư vấn tâm lí
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Tự động lưu nhật ký cảm xúc vào LocalStorage
+  try {
+    const log = { mood: moodKey, timestamp: new Date().toISOString() };
+    const history = JSON.parse(localStorage.getItem('mood_history') || '[]');
+    history.push(log);
+    if (history.length > 30) history.shift();
+    localStorage.setItem('mood_history', JSON.stringify(history));
+  } catch (e) {}
+}
+
+function openMoodAiCounselor(emoji, title) {
+  switchTab('ai-counselor');
+  const inputEl = document.getElementById('chat-input');
+  if (inputEl) {
+    inputEl.value = `Hôm nay tớ cảm thấy ${title}`;
+    inputEl.focus();
+  }
+}
+
