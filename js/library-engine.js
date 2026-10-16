@@ -45,7 +45,7 @@ const LIBRARY_ARTICLES = [
     badgeClass: "badge-pending",
     title: "5 Bước Xử Lý Thông Minh Khi Bị Bắt Nạt Học Đường",
     icon: "🛡️",
-    author: "Liên Đội Tiểu học và THCS Phước Hưng",
+    author: "Trường Tiểu học và THCS Phước Hưng",
     excerpt: "Hướng dẫn chi tiết từ góc nhìn tâm lý học đường giúp học sinh bình tĩnh ứng phó, bảo vệ an toàn thân thể và nhờ sự can thiệp chính thức.",
     content: `
       <h3>🛡️ 1. Hiểu đúng về Bắt nạt Học đường</h3>
