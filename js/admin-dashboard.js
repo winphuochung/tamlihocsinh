@@ -27,7 +27,7 @@ const DEFAULT_TEACHER_ADMIN_SEED = [
     time: "9h00",
     content: "Em học không nổi, em muốn nghỉ học",
     status: "APPROVED",
-    reply: "Chào em, cô Nga đã nhận được tin nhắn.",
+    reply: "Chào em, Giáo viên tư vấn tâm lí đã nhận được tin nhắn.",
     created_at: "2026-08-27"
   },
   {
@@ -654,7 +654,7 @@ async function submitReply() {
         .eq('secret_code', activeReplyCode);
 
       if (error) console.warn("⚠️ Lỗi cập nhật Supabase:", error.message);
-      else console.log("🟢 Đã cập nhật phản hồi của Cô Nga lên Supabase!");
+      else console.log("🟢 Đã cập nhật phản hồi của Giáo viên tư vấn tâm lí lên Supabase!");
     } catch (err) {
       console.warn("⚠️ Lỗi kết nối Supabase:", err);
     }

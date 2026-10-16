@@ -8,6 +8,7 @@ const LIBRARY_ARTICLES = [
   {
     id: "art-drowning-safety",
     category: "water_safety",
+    level: "all",
     badgeText: "🏊 An toàn sông nước",
     badgeClass: "badge-approved",
     title: "Cẩm nang An toàn Phòng chống Đuối nước Vùng Sông Nước An Giang",
@@ -94,6 +95,7 @@ const LIBRARY_ARTICLES = [
   {
     id: "art-child-protection",
     category: "protection",
+    level: "all",
     badgeText: "🦺 Bảo vệ trẻ em",
     badgeClass: "badge-pending",
     title: "Quy Tắc 5 Ngón Tay & Ranh Giới An Toàn Cơ Thể Trẻ Em",
@@ -203,6 +205,7 @@ const LIBRARY_ARTICLES = [
   {
     id: "art-first-aid-school",
     category: "water_safety",
+    level: "all",
     badgeText: "🚑 Sơ cấp cứu",
     badgeClass: "badge-pending",
     title: "Kỹ Năng Sơ Cấp Cứu Khi Thấy Bạn Gặp Tai Nạn Thương Tích Trong Trường Học",
@@ -357,6 +360,27 @@ function filterLibraryByLevel(level, btnEl) {
   if (bar) {
     bar.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
     btnEl.classList.add('active');
+  }
+
+  // Nếu chuyên mục hiện tại không có bài nào cho cấp học này, tự động chuyển về 'all' để luôn có bài hiển thị
+  const matchesInCurrentCat = LIBRARY_ARTICLES.filter(art => {
+    const artLevel = art.level || 'secondary';
+    const matchLvl = (level === 'all' || artLevel === 'all' || artLevel === level);
+    return (currentLibraryCategory === 'all' || art.category === currentLibraryCategory) && matchLvl;
+  });
+
+  if (matchesInCurrentCat.length === 0) {
+    currentLibraryCategory = 'all';
+    const buttons = document.querySelectorAll('.lib-filter-btn');
+    buttons.forEach((b, idx) => {
+      if (idx === 0) {
+        b.classList.remove('btn-clay-secondary');
+        b.classList.add('btn-clay');
+      } else {
+        b.classList.remove('btn-clay');
+        b.classList.add('btn-clay-secondary');
+      }
+    });
   }
 
   renderLibraryArticles();

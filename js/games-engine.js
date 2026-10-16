@@ -331,7 +331,7 @@ const GAME_DATA = {
         options: [
           { text: "A. Uống cà phê đậm đặc và thức trắng đêm học vẹt.", correct: false, feedback: "❌ Thức đêm làm brain kiệt sức, gây hoảng loạn khi vào phòng thi." },
           { text: "B. Dừng lại 10 phút, tập bài thở sâu 4-7-8, uống 1 ly nước ấm và đi ngủ sớm.", correct: true, feedback: "🎉 CHÍNH XÁC! Giữ cho tâm trí thư thái và ngủ đủ giấc giúp bộ nào ghi nhớ tốt gấp 3 lần!" },
-          { text: "C. Bỏ thi luôn vì nghĩ mình chắc chắn làm không được.", correct: false, feedback: "❌ Đừng tự giảm giá trị bản thân! Hãy trò chuyện với AI hoặc Cô Nga để lấy lại tinh thần nhé!" }
+          { text: "C. Bỏ thi luôn vì nghĩ mình chắc chắn làm không được.", correct: false, feedback: "❌ Đừng tự giảm giá trị bản thân! Hãy trò chuyện với AI hoặc Giáo viên tư vấn tâm lí để lấy lại tinh thần nhé!" }
         ]
       },
       {
@@ -516,19 +516,18 @@ function startGame(gameKey) {
     totalQuestions: game.questions.length
   };
 
-  // 1. Lấy tab đang hiển thị active
-  let activeTab = document.querySelector('.tab-view.active');
-  if (!activeTab) {
-    activeTab = document.getElementById('tab-dashboard');
-    if (activeTab) activeTab.classList.add('active');
+  // 1. Tự động chuyển sang tab Trò Chơi Kỹ Năng nếu đang ở tab khác
+  const activeTab = document.querySelector('.tab-view.active');
+  if (!activeTab || activeTab.id !== 'tab-games') {
+    if (typeof switchTab === 'function') {
+      switchTab('games');
+    }
   }
 
-  // 2. Ẩn toàn bộ lưới các thẻ game ở tab active
-  if (activeTab) {
-    const grids = activeTab.querySelectorAll('.games-grid');
-    grids.forEach(grid => {
-      grid.style.display = 'none';
-    });
+  // 2. Ẩn lưới các thẻ game ở tab games
+  const gamesGrid = document.getElementById('games-grid');
+  if (gamesGrid) {
+    gamesGrid.style.display = 'none';
   }
 
   // 3. Lấy khung game container
@@ -538,10 +537,10 @@ function startGame(gameKey) {
     return;
   }
 
-  // Di chuyển container vào trong card-section của activeTab
-  const cardSection = activeTab ? activeTab.querySelector('.card-section') : null;
-  if (cardSection) {
-    cardSection.appendChild(container);
+  // Đảm bảo container nằm đúng trong card-section của tab-games
+  const tabGamesSection = document.querySelector('#tab-games .card-section');
+  if (tabGamesSection && container.parentElement !== tabGamesSection) {
+    tabGamesSection.appendChild(container);
   }
 
   // Reset cấu trúc nội dung game
@@ -560,29 +559,75 @@ function startGame(gameKey) {
   // Cuộn trang mượt trực tiếp tới khung game
   setTimeout(() => {
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 80);
+  }, 60);
 }
 
 /**
  * BỘ LỌC TRÒ CHƠI KỸ NĂNG THEO CẤP HỌC (TIỂU HỌC HOẶC THCS)
  */
 function filterGamesByLevel(level, btnEl) {
-  // Cập nhật trạng thái active cho các nút bấm
-  const bar = btnEl ? btnEl.parentElement : null;
+  // 1. Cập nhật trạng thái active cho các nút bấm
+  const bar = btnEl ? btnEl.parentElement : document.querySelector('.filter-pills-bar');
   if (bar) {
     bar.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-    btnEl.classList.add('active');
+    if (btnEl) btnEl.classList.add('active');
   }
 
+  // 2. Đóng khung chơi game nếu đang mở, khôi phục lại lưới cards
+  const container = document.getElementById('game-container');
+  if (container) {
+    container.style.display = 'none';
+  }
+
+  const grid = document.getElementById('games-grid');
+  if (grid) {
+    grid.style.display = 'grid';
+  }
+
+  // 3. Lọc hiển thị các thẻ trò chơi theo cấp học (display: flex để giữ trọn vẹn claymorphic layout)
   const cards = document.querySelectorAll('#games-grid .game-card');
+  let visibleCount = 0;
   cards.forEach(card => {
     const cardLevel = card.getAttribute('data-level') || 'all';
     if (level === 'all' || cardLevel === 'all' || cardLevel === level) {
-      card.style.display = 'block';
+      card.style.display = 'flex';
+      visibleCount++;
     } else {
       card.style.display = 'none';
     }
   });
+
+  // 4. Cập nhật banner thông tin trực quan cho học sinh
+  updateGameLevelBanner(level, visibleCount);
+}
+
+/**
+ * CẬP NHẬT BANNER HƯỚNG DẪN TRỰC QUAN THEO CẤP HỌC
+ */
+function updateGameLevelBanner(level, count) {
+  const bannerIcon = document.getElementById('game-banner-icon');
+  const bannerTitle = document.getElementById('game-banner-title');
+  const bannerDesc = document.getElementById('game-banner-desc');
+  const bannerCount = document.getElementById('game-banner-count');
+
+  if (!bannerTitle) return;
+
+  if (level === 'primary') {
+    if (bannerIcon) bannerIcon.innerText = '🧸';
+    bannerTitle.innerText = 'Cấp Tiểu học (Lớp 1 - 5):';
+    if (bannerDesc) bannerDesc.innerText = '4 Trò chơi tình huống sinh tồn, phòng tránh thất lạc & quy tắc 5 ngón tay bảo vệ bản thân.';
+    if (bannerCount) bannerCount.innerText = `${count} Trò Chơi`;
+  } else if (level === 'secondary') {
+    if (bannerIcon) bannerIcon.innerText = '🎓';
+    bannerTitle.innerText = 'Cấp THCS (Lớp 6 - 9):';
+    if (bannerDesc) bannerDesc.innerText = '5 Trò chơi phòng chống bạo lực, bắt nạt không gian mạng, an toàn sông nước & giải tỏa thi cử.';
+    if (bannerCount) bannerCount.innerText = `${count} Trò Chơi`;
+  } else {
+    if (bannerIcon) bannerIcon.innerText = '🌟';
+    bannerTitle.innerText = 'Tất cả cấp học:';
+    if (bannerDesc) bannerDesc.innerText = 'Trọn bộ 7 trò chơi kỹ năng sống & tương tác tâm lý dành cho toàn trường.';
+    if (bannerCount) bannerCount.innerText = `${count} Trò Chơi`;
+  }
 }
 
 /**
@@ -601,6 +646,17 @@ function speakGameQuestion(text, btn = null) {
 }
 
 /**
+ * HÀM ĐỌC CÂU HỎI HIỆN TẠI (AN TOÀN TUYỆT ĐỐI KHÔNG BỊ LỖI KÝ TỰ ĐẶC BIỆT)
+ */
+function speakCurrentGameQuestion(btn) {
+  const game = GAME_DATA[currentGameState.gameKey];
+  if (!game) return;
+  const qData = game.questions[currentGameState.questionIndex];
+  if (!qData) return;
+  speakGameQuestion(qData.question, btn);
+}
+
+/**
  * RENDER CÂU HỎI HIỆN TẠI
  */
 function renderCurrentQuestion() {
@@ -614,7 +670,7 @@ function renderCurrentQuestion() {
     questionEl.innerHTML = `
       <div>${qData.question}</div>
       <div style="margin-top: 10px;">
-        <button type="button" class="btn-tts" onclick="speakGameQuestion(\`${qData.question.replace(/[`\\]/g, '')}\`, this)" title="Bấm để nghe cô đọc câu hỏi này">
+        <button type="button" class="btn-tts" onclick="speakCurrentGameQuestion(this)" title="Bấm để nghe đọc to câu hỏi này">
           <i class="fa-solid fa-volume-high"></i> Nghe đọc câu hỏi
         </button>
       </div>
@@ -744,6 +800,23 @@ function closeGame() {
   // Khôi phục hiển thị lại tất cả .games-grid ở các tab
   const grids = document.querySelectorAll('.games-grid');
   grids.forEach(grid => grid.style.display = 'grid');
+
+  // Khôi phục đúng trạng thái hiển thị của các thẻ cards theo bộ lọc hiện tại
+  const activePill = document.querySelector('.filter-pills-bar .filter-pill.active');
+  const level = activePill ? (activePill.getAttribute('data-level') || 'all') : 'all';
+  const cards = document.querySelectorAll('#games-grid .game-card');
+  let visibleCount = 0;
+  cards.forEach(card => {
+    const cardLevel = card.getAttribute('data-level') || 'all';
+    if (level === 'all' || cardLevel === 'all' || cardLevel === level) {
+      card.style.display = 'flex';
+      visibleCount++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  updateGameLevelBanner(level, visibleCount);
 
   // Reset game body cho nhẹ DOM
   const gameBody = document.getElementById('game-body');

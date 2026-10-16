@@ -254,10 +254,22 @@
           </div>
 
           <!-- LEVEL FILTER BUTTONS FOR GAMES -->
-          <div class="filter-pills-bar" style="margin-top: 14px; margin-bottom: 20px;">
-            <button class="filter-pill active" onclick="filterGamesByLevel('all', this)">🌟 Tất Cả Trò Chơi (7)</button>
-            <button class="filter-pill" onclick="filterGamesByLevel('primary', this)">🧸 Dành Cho Tiểu Học (Lớp 1 - 5)</button>
-            <button class="filter-pill" onclick="filterGamesByLevel('secondary', this)">🎓 Dành Cho THCS (Lớp 6 - 9)</button>
+          <div class="filter-pills-bar" style="margin-top: 14px; margin-bottom: 12px;">
+            <button class="filter-pill active" data-level="all" onclick="filterGamesByLevel('all', this)">🌟 Tất Cả Trò Chơi (7)</button>
+            <button class="filter-pill" data-level="primary" onclick="filterGamesByLevel('primary', this)">🧸 Dành Cho Tiểu Học (Lớp 1 - 5)</button>
+            <button class="filter-pill" data-level="secondary" onclick="filterGamesByLevel('secondary', this)">🎓 Dành Cho THCS (Lớp 6 - 9)</button>
+          </div>
+
+          <!-- DYNAMIC LEVEL BANNER FOR CLARITY -->
+          <div id="game-filter-banner" style="background: #F8F5FE; border: 1.5px solid #EAE3F7; border-radius: var(--radius-md); padding: 12px 18px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--text-main); flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span id="game-banner-icon" style="font-size: 20px;">🌟</span>
+              <div>
+                <strong id="game-banner-title">Tất cả cấp học:</strong>
+                <span id="game-banner-desc" style="color: var(--text-muted); margin-left: 4px;">Trọn bộ 7 trò chơi kỹ năng sống & tương tác tâm lý dành cho toàn trường.</span>
+              </div>
+            </div>
+            <span class="badge-status badge-approved" id="game-banner-count" style="font-size: 11px;">7 Trò Chơi</span>
           </div>
 
           <div class="games-grid" id="games-grid">
@@ -531,12 +543,12 @@
 
   <!-- SUPABASE CLOUD DATABASE JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-config.js?v=1.0.2"></script>
-  <script src="js/vietnamese-tts.js?v=1.0.0"></script>
-  <script src="js/app.js?v=1.0.3"></script>
-  <script src="js/games-engine.js?v=1.0.3"></script>
-  <script src="js/ai-chat.js?v=1.0.6"></script>
-  <script src="js/anonymous-booking.js?v=1.0.2"></script>
-  <script src="js/library-engine.js?v=1.0.4"></script>
+  <script src="js/supabase-config.js?v=1.0.3"></script>
+  <script src="js/vietnamese-tts.js?v=1.0.1"></script>
+  <script src="js/app.js?v=1.0.4"></script>
+  <script src="js/games-engine.js?v=1.0.4"></script>
+  <script src="js/ai-chat.js?v=1.0.7"></script>
+  <script src="js/anonymous-booking.js?v=1.0.3"></script>
+  <script src="js/library-engine.js?v=1.0.5"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@ function getBookingsLocal() {
       time: "9h00",
       content: "Em học không nổi, em muốn nghỉ học",
       status: "APPROVED",
-      reply: "Chào em, cô Nga đã nhận được tin nhắn.",
+      reply: "Chào em, Giáo viên tư vấn tâm lí đã nhận được tin nhắn.",
       created_at: "2026-08-27"
     },
     {
