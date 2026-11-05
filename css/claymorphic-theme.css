@@ -1151,3 +1151,336 @@ img {
   color: var(--primary-lavender);
 }
 
+/* ==========================================================================
+   TỔNG ĐÀI QUỐC GIA BẢO VỆ TRẺ EM 111 (HOTLINE EMERGENCY BUTTONS & MODAL)
+   ========================================================================== */
+
+/* 1. Nút Hotline trên Top Bar */
+.btn-topbar-hotline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #FF4B4B 0%, #E11D48 100%);
+  color: #FFFFFF !important;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.btn-topbar-hotline:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.45);
+  color: #FFFFFF !important;
+}
+
+.btn-topbar-hotline:active {
+  transform: translateY(1px);
+}
+
+.hotline-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  display: inline-block;
+  animation: hotlineDotPulse 1.5s infinite;
+}
+
+@keyframes hotlineDotPulse {
+  0% { transform: scale(0.9); opacity: 1; box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+  70% { transform: scale(1.2); opacity: 0.8; box-shadow: 0 0 0 6px rgba(255, 255, 255, 0); }
+  100% { transform: scale(0.9); opacity: 1; box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+/* 2. Thẻ Hotline trong Sidebar */
+.sidebar-hotline-box {
+  background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 100%);
+  border: 2px solid #FDA4AF;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-top: 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.12);
+}
+
+.sidebar-hotline-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(244, 63, 94, 0.2);
+  border-color: #FB7185;
+}
+
+.hotline-badge {
+  display: inline-block;
+  background: #E11D48;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.hotline-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #9F1239;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hotline-sub {
+  font-size: 11.5px;
+  color: #BE123C;
+  margin: 4px 0 10px 0;
+  line-height: 1.4;
+}
+
+.btn-sidebar-call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #E11D48 0%, #BE123C 100%);
+  color: #FFFFFF !important;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(225, 29, 72, 0.3);
+  transition: var(--transition-smooth);
+  border: 1.5px solid #FFFFFF;
+}
+
+.btn-sidebar-call:hover {
+  background: linear-gradient(135deg, #BE123C 0%, #9F1239 100%);
+  transform: scale(1.02);
+}
+
+/* 3. Nút Hotline Nổi Cố Định (Floating SOS Widget) */
+.floating-hotline-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+}
+
+.floating-hotline-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FF3366 0%, #E11D48 100%);
+  color: #FFFFFF;
+  border: 3px solid #FFFFFF;
+  border-radius: var(--radius-pill);
+  padding: 12px 20px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.42), var(--shadow-clay);
+  transition: var(--transition-smooth);
+  font-family: inherit;
+  outline: none;
+}
+
+.floating-hotline-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(225, 29, 72, 0.55);
+}
+
+.floating-hotline-btn:active {
+  transform: translateY(1px);
+}
+
+.hotline-btn-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.hotline-btn-content .hotline-icon {
+  font-size: 20px;
+  animation: phoneRingShake 2s infinite ease-in-out;
+}
+
+@keyframes phoneRingShake {
+  0%, 100% { transform: rotate(0); }
+  10%, 30% { transform: rotate(-18deg); }
+  20%, 40% { transform: rotate(18deg); }
+  50% { transform: rotate(0); }
+}
+
+.hotline-btn-label {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.hotline-wave-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  border: 2px solid #E11D48;
+  transform: translate(-50%, -50%) scale(1);
+  animation: hotlineWave 2s infinite ease-out;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.hotline-wave-ring.ring-2 {
+  animation-delay: 0.6s;
+}
+
+@keyframes hotlineWave {
+  0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(1.4, 1.6); opacity: 0; }
+}
+
+/* 4. Modal Chi Tiết Tổng Đài 111 */
+.hotline-modal-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 28px;
+  max-width: 520px;
+  width: 90%;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.35);
+  border: 4px solid #FFF1F2;
+  position: relative;
+  text-align: center;
+  animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPopIn {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.hotline-modal-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FFE4E6 0%, #FECDD3 100%);
+  color: #E11D48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.2);
+  border: 3px solid #FFFFFF;
+}
+
+.hotline-modal-card h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #9F1239;
+  margin-bottom: 8px;
+}
+
+.hotline-info-list {
+  text-align: left;
+  background: #FFF1F2;
+  padding: 16px 20px;
+  border-radius: 16px;
+  margin: 18px 0;
+  font-size: 13.5px;
+  color: #881337;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #FFE4E6;
+}
+
+.hotline-info-list div {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.hotline-info-list i {
+  color: #E11D48;
+  margin-top: 3px;
+  font-size: 14px;
+}
+
+.hotline-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-modal-call-111 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #FF3366 0%, #E11D48 100%);
+  color: #FFFFFF !important;
+  font-size: 16px;
+  font-weight: 800;
+  padding: 14px 24px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.4);
+  border: 2px solid #FFFFFF;
+  transition: var(--transition-smooth);
+}
+
+.btn-modal-call-111:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(225, 29, 72, 0.5);
+}
+
+.btn-modal-close {
+  background: #F1F5F9;
+  color: #475569;
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-modal-close:hover {
+  background: #E2E8F0;
+  color: #1E293B;
+}
+
+@media (max-width: 768px) {
+  .btn-topbar-hotline .hotline-text {
+    display: none;
+  }
+  .btn-topbar-hotline {
+    padding: 8px 12px;
+  }
+  .floating-hotline-container {
+    bottom: 18px;
+    right: 18px;
+  }
+  .floating-hotline-btn {
+    padding: 10px 16px;
+  }
+  .hotline-btn-label {
+    font-size: 13px;
+  }
+}
+

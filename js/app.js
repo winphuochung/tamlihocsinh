@@ -276,3 +276,34 @@ function openMoodAiCounselor(emoji, title) {
   }
 }
 
+/**
+ * ==========================================================================
+ * HỆ THỐNG ĐƯỜNG DÂY NÓNG CỨU TRỢ KHẨN CẤP: TỔNG ĐÀI QUỐC GIA 111
+ * ==========================================================================
+ */
+function openHotlineModal() {
+  const modal = document.getElementById('hotline-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+function closeHotlineModal(e) {
+  if (!e || e.target.id === 'hotline-modal' || e.target.classList.contains('close-hotline-btn')) {
+    const modal = document.getElementById('hotline-modal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+}
+
+function handleHotlineClick(e) {
+  // Nhận diện thiết bị di động hay máy tính
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  if (!isMobile) {
+    // Trên máy tính không thể quay số tự động, hiển thị Modal hướng dẫn chi tiết
+    if (e) e.preventDefault();
+    openHotlineModal();
+  }
+}
+

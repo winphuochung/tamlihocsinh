@@ -57,6 +57,16 @@
             <span>Cổng Giáo Viên</span>
           </li>
         </ul>
+
+        <!-- THẺ CỨU TRỢ KHẨN CẤP: TỔNG ĐÀI 111 -->
+        <div class="sidebar-hotline-box" onclick="openHotlineModal()" title="Bấm để xem hướng dẫn gọi Tổng đài 111">
+          <div class="hotline-badge">🚨 KHẨN CẤP 24/7</div>
+          <div class="hotline-title"><i class="fa-solid fa-shield-heart"></i> Tổng Đài <strong>111</strong></div>
+          <p class="hotline-sub">Bảo vệ & Tư vấn trẻ em hoàn toàn miễn phí</p>
+          <a href="tel:111" class="btn-sidebar-call" onclick="handleHotlineClick(event); event.stopPropagation();" title="Bấm gọi 111 ngay">
+            <i class="fa-solid fa-phone-volume"></i> Gọi 111 Ngay
+          </a>
+        </div>
       </div>
 
       <div class="sidebar-footer-card">
@@ -76,6 +86,13 @@
         </div>
 
         <div class="top-bar-actions">
+          <!-- NÚT GỌI TỔNG ĐÀI 111 NHANH TRÊN HEADER -->
+          <a href="tel:111" class="btn-topbar-hotline" onclick="handleHotlineClick(event)" title="Tổng đài Quốc gia Bảo vệ Trẻ em 111 (Miễn phí 24/7)">
+            <span class="hotline-pulse-dot"></span>
+            <i class="fa-solid fa-phone-volume"></i>
+            <span class="hotline-text">Tổng đài <strong>111</strong></span>
+          </a>
+
           <div class="search-box">
             <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
             <input type="text" placeholder="Tìm trò chơi, bài viết...">
@@ -606,6 +623,62 @@
   <div id="article-modal" class="modal-overlay" style="display: none;" onclick="closeArticleModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div id="article-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- FLOATING EMERGENCY HOTLINE 111 WIDGET (NÚT NỔI GỌI 111 KHẨN CẤP TOÀN TRANG) -->
+  <div class="floating-hotline-container" id="floating-hotline-111">
+    <button type="button" class="floating-hotline-btn" onclick="openHotlineModal()" title="Cần trợ giúp khẩn cấp? Bấm xem Tổng đài 111 (Miễn phí 24/7)">
+      <span class="hotline-wave-ring"></span>
+      <span class="hotline-wave-ring ring-2"></span>
+      <div class="hotline-btn-content">
+        <i class="fa-solid fa-phone-volume hotline-icon"></i>
+        <span class="hotline-btn-label">SOS <strong>111</strong></span>
+      </div>
+    </button>
+  </div>
+
+  <!-- POPUP MODAL HƯỚNG DẪN CỨU TRỢ KHẨN CẤP TỔNG ĐÀI 111 -->
+  <div id="hotline-modal" class="modal-overlay" style="display: none;" onclick="closeHotlineModal(event)">
+    <div class="hotline-modal-card" onclick="event.stopPropagation()">
+      <div class="hotline-modal-icon">
+        <i class="fa-solid fa-shield-heart"></i>
+      </div>
+      <h2>Tổng Đài Quốc Gia Bảo Vệ Trẻ Em</h2>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 4px;">
+        Đường dây nóng của Cục Trẻ em • Bộ Lao động - Thương binh & Xã hội
+      </p>
+
+      <div class="hotline-info-list">
+        <div>
+          <i class="fa-solid fa-phone"></i>
+          <span><strong>Số điện thoại:</strong> <span style="font-size: 16px; font-weight: 800; color: #E11D48;">111</span> (Hoàn toàn <strong>MIỄN PHÍ</strong> cước gọi)</span>
+        </div>
+        <div>
+          <i class="fa-solid fa-clock"></i>
+          <span><strong>Thời gian hoạt động:</strong> Trực liên tục <strong>24/24 giờ</strong>, tất cả các ngày trong tuần (kể cả lễ, Tết).</span>
+        </div>
+        <div>
+          <i class="fa-solid fa-user-shield"></i>
+          <span><strong>Hỗ trợ:</strong> Tiếp nhận tin báo bạo lực, xâm hại, bắt nạt nguy hiểm và hỗ trợ tư vấn tâm lý khẩn cấp cho học sinh.</span>
+        </div>
+        <div>
+          <i class="fa-solid fa-lock"></i>
+          <span><strong>Bảo mật:</strong> Tuyệt đối giữ kín thông tin và danh tính của người gọi theo quy định pháp luật.</span>
+        </div>
+      </div>
+
+      <div class="hotline-modal-actions">
+        <a href="tel:111" class="btn-modal-call-111" title="Bấm gọi 111 ngay bây giờ">
+          <i class="fa-solid fa-phone-volume"></i> Gọi Ngay 111 (Miễn Phí)
+        </a>
+        <a href="https://tongdai111.vn" target="_blank" rel="noopener noreferrer" class="btn-clay-secondary" style="font-size: 13px; text-decoration: none; padding: 10px;">
+          <i class="fa-solid fa-globe"></i> Truy cập Website tongdai111.vn ↗
+        </a>
+        <button type="button" class="btn-modal-close close-hotline-btn" onclick="closeHotlineModal()">
+          Đã Hiểu, Đóng Lại
+        </button>
+      </div>
     </div>
   </div>
 
