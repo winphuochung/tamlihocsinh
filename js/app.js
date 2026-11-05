@@ -9,6 +9,11 @@ function switchTab(tabId) {
     closeGame();
   }
 
+  // Tạm dừng mọi video đang phát khi chuyển tab để tránh ồn ngầm
+  document.querySelectorAll('video').forEach(v => {
+    try { v.pause(); } catch(e) {}
+  });
+
   // Hide all tab views
   const views = document.querySelectorAll('.tab-view');
   views.forEach(view => view.classList.remove('active'));

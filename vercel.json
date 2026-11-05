@@ -18,6 +18,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "*.mp4",
+      "use": "@vercel/static"
+    },
+    {
       "src": "*.html",
       "use": "@vercel/static"
     }

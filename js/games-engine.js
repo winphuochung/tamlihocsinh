@@ -507,6 +507,11 @@ function startGame(gameKey) {
     return;
   }
 
+  // Tạm dừng mọi video đang phát để không bị lẫn âm thanh
+  document.querySelectorAll('video').forEach(v => {
+    try { v.pause(); } catch(e) {}
+  });
+
   const game = GAME_DATA[gameKey];
 
   currentGameState = {
@@ -594,6 +599,8 @@ function filterGamesByLevel(level, btnEl) {
       visibleCount++;
     } else {
       card.style.display = 'none';
+      const v = card.querySelector('video');
+      if (v && !v.paused) v.pause();
     }
   });
 
@@ -828,6 +835,8 @@ function closeGame() {
       visibleCount++;
     } else {
       card.style.display = 'none';
+      const v = card.querySelector('video');
+      if (v && !v.paused) v.pause();
     }
   });
 
@@ -843,3 +852,14 @@ function closeGame() {
     `;
   }
 }
+
+// Tự động tạm dừng các video khác khi có một video bắt đầu phát
+document.addEventListener('play', function(e) {
+  if (e.target && e.target.tagName === 'VIDEO') {
+    document.querySelectorAll('video').forEach(video => {
+      if (video !== e.target && !video.paused) {
+        video.pause();
+      }
+    });
+  }
+}, true);

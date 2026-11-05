@@ -698,6 +698,59 @@ img {
   transform: scale(1.03);
 }
 
+/* 3D Claymorphic Video Player trong Thẻ Trò Chơi */
+.game-card-video-wrap {
+  width: 100%;
+  margin: 0 auto 12px auto;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(139, 115, 230, 0.22);
+  border: 3px solid #FFFFFF;
+  background: #0f172a;
+  cursor: default;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.game-card-video-wrap video {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: block;
+  object-fit: cover;
+  border-radius: 15px;
+  outline: none;
+  background: #000000;
+}
+
+.video-pill-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(6px);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.video-pill-tag i {
+  color: #F43F5E;
+}
+
+.game-card:hover .game-card-video-wrap {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(139, 115, 230, 0.32);
+}
+
 /* INTEGRATED GAME PLAY PANEL (TÍCH HỢP GIAO DIỆN TRONG TRANG - CHUẨN MOBI/DESKTOP) */
 .game-play-panel {
   background: #FFFFFF;
