@@ -9,6 +9,9 @@ const GAME_DATA = {
     title: "🛡️ Phòng Chống Bạo Lực Học Đường",
     badge: "Hiệp Sĩ An Toàn Trường Học 🛡️",
     thumb: "images/game-thumb-1.jpg",
+    video: "Video_01_Phong_Chong_Bao_Luc_Hoc_Duong.mp4",
+    videoTitle: "Kỹ Năng Phòng Chống Bạo Lực Học Đường",
+    poster: "images/game-thumb-1.jpg",
     questions: [
       {
         question: "Tình huống 1: Trong giờ ra chơi, em thấy một nhóm bạn lớp trên đang vây quanh một bạn lớp 6, đe dọa và bắt nộp tiền tiêu vặt. Em sẽ làm gì?",
@@ -88,6 +91,9 @@ const GAME_DATA = {
     title: "🌐 Phòng Chống Bắt Nạt Mạng (Cyberbullying)",
     badge: "Dũng Sĩ An Ninh Mạng 🌐",
     thumb: "images/game-thumb-2.jpg",
+    video: "Video_02_Phong_Chong_Bat_Nat_Mang.mp4",
+    videoTitle: "Kỹ Năng Phòng Chống Bắt Nạt Không Gian Mạng",
+    poster: "images/game-thumb-2.jpg",
     questions: [
       {
         question: "Tình huống 1: Em phát hiện có người lập tài khoản giả mạo hình ảnh của em trên Facebook/TikTok và đăng những lời lẽ xúc phạm. Em nên xử lý như thế nào?",
@@ -167,6 +173,9 @@ const GAME_DATA = {
     title: "🦺 Quy Tắc 5 Ngón Tay Bảo Vệ Cơ Thể",
     badge: "Chuyên Gia Bảo Vệ Cơ Thể 🛡️",
     thumb: "images/game-thumb-3.jpg",
+    video: "Video_03_Phong_Chong_Xam_Hai_Tre_Em.mp4",
+    videoTitle: "Kỹ Năng Phòng Chống Xâm Hại Trẻ Em",
+    poster: "images/game-thumb-3.jpg",
     questions: [
       {
         question: "Tình huống 1: Một người quen của gia đình cố tình đụng chạm vào vùng đồ lót của em và dặn 'Đây là bí mật của hai chú cháu'. Em sẽ làm gì?",
@@ -246,6 +255,9 @@ const GAME_DATA = {
     title: "🏊 An Toàn Vùng Sông Nước An Giang",
     badge: "Dũng Sĩ Sông Nước An Giang 🏊",
     thumb: "images/game-thumb-4.jpg",
+    video: "Video_04_Phong_Chong_Duoi_Nuoc_Thuong_Tich_v2.mp4",
+    videoTitle: "Kỹ Năng Phòng Chống Đuối Nước & Thương Tích",
+    poster: "images/game-thumb-4.jpg",
     questions: [
       {
         question: "Tình huống 1: Em cùng các bạn đi học về qua kênh/sông ở xã Nhơn Hội. Một bạn rủ nhảy xuống tắm sông dù không ai biết bơi. Em xử lý ra sao?",
@@ -325,6 +337,9 @@ const GAME_DATA = {
     title: "💖 Giải Tỏa Áp Lực Học Tập & Thi Cử",
     badge: "Bậc Thầy Cân Bằng Cảm Xúc 🧘",
     thumb: "images/game-thumb-5.jpg",
+    video: "Video_05_Giai_Toa_Ap_Luc_Hoc_Tap.mp4",
+    videoTitle: "Kỹ Năng Giải Tỏa Áp Lực Học Tập & Thi Cử",
+    poster: "images/game-thumb-5.jpg",
     questions: [
       {
         question: "Tình huống 1: Ngày mai có bài kiểm tra quan trọng nhưng em cảm thấy dồn dập, tim đập nhanh và không thể tập trung học tiếp. Em nên làm gì?",
@@ -404,6 +419,9 @@ const GAME_DATA = {
     title: "🎒 An Toàn Khi Tan Trường & Phòng Tránh Thất Lạc",
     badge: "Bé An Toàn Khi Đến Trường 🎒",
     thumb: "images/game-thumb-1.jpg",
+    video: "Video_06_An_Toan_Khi_Tan_Truong.mp4",
+    videoTitle: "Kỹ Năng An Toàn Khi Tan Trường & Phòng Tránh Thất Lạc",
+    poster: "images/game-thumb-1.jpg",
     questions: [
       {
         question: "Tình huống 1: Giờ tan học, bé đứng trước cổng trường chờ nhưng chưa thấy ba mẹ đến đón. Một người lạ chạy xe máy lại nói: 'Ba con bị bận nhờ chú đến đón về, lên xe chú chở'. Bé nên làm gì?",
@@ -447,6 +465,9 @@ const GAME_DATA = {
     title: "🖐️ Quy Tắc 5 Ngón Tay - Bé Tự Bảo Vệ Mình",
     badge: "Dũng Sĩ Tự Vệ 5 Ngón Tay 🖐️",
     thumb: "images/game-thumb-3.jpg",
+    video: "Video_07_Quy_Tac_5_Ngon_Tay.mp4",
+    videoTitle: "Quy Tắc 5 Ngón Tay - Bé Tự Bảo Vệ Mình",
+    poster: "images/game-thumb-3.jpg",
     questions: [
       {
         question: "Tình huống 1: Theo 'Quy tắc 5 ngón tay', Ngón cái (ngón gần bé nhất) đại diện cho những ai và được phép làm gì?",
@@ -556,6 +577,34 @@ function startGame(gameKey) {
       <div id="game-options" style="display: flex; flex-direction: column; gap: 12px;"></div>
       <div id="game-feedback" style="margin-top: 20px; padding: 18px; border-radius: var(--radius-md); display: none;"></div>
     `;
+  }
+
+  // 4. Hiển thị khối Video Kỹ Năng bài giảng trực quan ngay trong khung chơi game
+  const videoContainer = document.getElementById('game-active-video-container');
+  if (videoContainer) {
+    if (game.video) {
+      videoContainer.innerHTML = `
+        <div class="active-game-video-card" style="background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); border-radius: 20px; padding: 16px; border: 3px solid #FFFFFF; box-shadow: 0 10px 25px rgba(139, 115, 230, 0.25); margin-top: 16px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; color: #FFFFFF; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="background: #F43F5E; color: #FFFFFF; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-circle-play"></i> VIDEO BÀI HỌC KỸ NĂNG
+              </span>
+              <strong style="font-size: 14px; color: #F8FAFC;">${game.videoTitle || game.title}</strong>
+            </div>
+            <span style="font-size: 12px; color: #CBD5E1;"><i class="fa-solid fa-lightbulb" style="color: #FBBF24;"></i> Em hãy xem video để tìm gợi ý cho các câu hỏi bên dưới nhé!</span>
+          </div>
+          <div style="border-radius: 14px; overflow: hidden; background: #000; box-shadow: 0 4px 14px rgba(0,0,0,0.4); max-width: 800px; margin: 0 auto;">
+            <video id="game-main-video-player" controls playsinline preload="auto" poster="${game.poster || game.thumb}" style="width: 100%; aspect-ratio: 16/9; display: block; object-fit: cover;">
+              <source src="${game.video}" type="video/mp4">
+              Trình duyệt của em không hỗ trợ phát video này.
+            </video>
+          </div>
+        </div>
+      `;
+    } else {
+      videoContainer.innerHTML = '';
+    }
   }
 
   container.style.display = 'block';
@@ -814,6 +863,16 @@ async function finishGame() {
 }
 
 function closeGame() {
+  // Dừng và dọn dẹp video bài học đang phát trong khung game
+  const mainVideo = document.getElementById('game-main-video-player');
+  if (mainVideo) {
+    try { mainVideo.pause(); } catch(e) {}
+  }
+  const videoContainer = document.getElementById('game-active-video-container');
+  if (videoContainer) {
+    videoContainer.innerHTML = '';
+  }
+
   const container = document.getElementById('game-container');
   if (container) {
     container.style.display = 'none';
