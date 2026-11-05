@@ -85,7 +85,7 @@ function getActiveSupabaseClient() {
 }
 
 /**
- * CHUYỂN ĐỔI CHẾ ĐỘ ĐĂNG NHẬP (PASSWORD VS OTP/EMAIL MAGIC LINK)
+ * CHẾ ĐỘ ĐĂNG NHẬP MẬT KHẨU BẢO MẬT GIÁO VIÊN
  */
 function switchAuthMode(mode) {
   const formPass = document.getElementById('auth-form-pass');
@@ -96,17 +96,10 @@ function switchAuthMode(mode) {
 
   if (msgBox) msgBox.style.display = 'none';
 
-  if (mode === 'pass') {
-    formPass.style.display = 'block';
-    formOtp.style.display = 'none';
-    tabPass.className = 'btn-clay';
-    tabOtp.className = 'btn-clay-secondary';
-  } else {
-    formPass.style.display = 'none';
-    formOtp.style.display = 'block';
-    tabPass.className = 'btn-clay-secondary';
-    tabOtp.className = 'btn-clay';
-  }
+  if (formPass) formPass.style.display = 'block';
+  if (formOtp) formOtp.style.display = 'none';
+  if (tabPass) tabPass.className = 'btn-clay';
+  if (tabOtp) tabOtp.className = 'btn-clay-secondary';
 }
 
 function unlockAdminModalAndRender() {
